@@ -27,13 +27,14 @@ const Email = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://example.com/check-email', { email });
+      const response = await axios.post('http://127.0.0.1:8000/timeapp/api/pass_mail/', { email: email });
 
-      if (response.data.exists) {
+      if (response) {
         setEmailExists(true);
-        setError('');
+        // setError('Check your email.');
       } else {
         setEmailExists(false);
+        // console.log(response)
         setError('Email does not exist. Please enter a valid email.');
       }
     } catch (error) {
@@ -50,6 +51,7 @@ const Email = () => {
 
         <div className="input-box">
           <input
+            name="email"
             type="email"
             placeholder="Email"
             value={email}

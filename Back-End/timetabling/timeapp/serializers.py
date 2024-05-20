@@ -29,7 +29,7 @@ class UserLoginSerializer(serializers.Serializer):
         potential_user = UserData.objects.get(email=data["email"])
         u_email = data["email"]
         u_id = potential_user.id
-        print("theud-",u_email)
+        # print("theud-",u_email)
         user_isactive = potential_user.is_active
         if user_isactive:
             user = authenticate(**data)
@@ -38,6 +38,7 @@ class UserLoginSerializer(serializers.Serializer):
             if user:
                 return user
         else:
-            send_email(u_email, "Did You Create A Tabler Account",f"To Whom It May Concern, \n Did you create a new account on Tabler? If so activate your account by clicking the link below \n http://localhost:8000/activate/{u_id} \n Not You? Please Ignore This Email",)
+            send_email(u_email, "Did You Create A Tabler Account",f"To Whom It May Concern, \n Did you create a new account on Tabler? If so activate your account by clicking the link below \n http://localhost:8000/timeapp/api/activate/{u_id} \n Not You? Please Ignore This Email",)
             return potential_user
         raise serializers.ValidationError("Incorrect Credentials")
+    

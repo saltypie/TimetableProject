@@ -17,7 +17,7 @@ const Activate = () => {
                 <FaLock className='icon'/>
              </div>
              
-             <button type="submit" onclick="">Activate</button>
+             <button type="submit" onClick="">Activate</button>
         </form>    
     </div>
   )

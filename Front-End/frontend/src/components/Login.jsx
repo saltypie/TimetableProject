@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 import Navbar from './navigation.jsx';
 
 const Login = () => {
+   if(localStorage.getItem('isLogged')){
+      window.location.href = '/Home';
+   }
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
    const [errorMessage, setErrorMessage] = useState('');
@@ -61,7 +64,7 @@ const Login = () => {
                </div>
 
                <div className="forgot">
-                  <a href="#">Forgot password?</a>
+                  <a href="/email">Forgot password?</a>
                </div>
                
                <button type="submit">Login</button>

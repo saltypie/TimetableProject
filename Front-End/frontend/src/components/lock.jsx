@@ -17,7 +17,7 @@ const Lock = () => {
                 <FaLock className='icon'/>
              </div>
              
-             <button type="submit" onclick="">Unlock</button>
+             <button type="submit" onClick="">Unlock</button>
         </form>    
     </div>
   )

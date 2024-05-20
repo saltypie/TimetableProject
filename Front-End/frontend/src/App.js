@@ -57,8 +57,8 @@ useEffect(()=>{
      <BrowserRouter>
      
         <Routes>
-        <Route path="/email" element={<Email/>}/>
-        <Route path="/ResetPassword" element={<ResetPassword/>}/>
+          <Route path="/email" element={<Email/>}/>
+          <Route path="/ResetPassword/:id" element={<ResetPassword/>}/>
           <Route path="/Home" element={<Home/>}/>
           <Route path="/Activate" element={<Activate/>}/>
           <Route path="/LandingPage" element={<LandingPage/>}/>

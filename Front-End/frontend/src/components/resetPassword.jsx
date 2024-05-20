@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import './Login.css';
 import { FaLock } from "react-icons/fa";
 import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
-
+  const {id} = useParams();
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
@@ -24,12 +25,13 @@ const ResetPassword = () => {
 
     const data = {
       password: password,
+      id:id
     };
 
     try {
       console.log('Submitting data:', data);
 
-      const response = await axios.post('http://example.com', data, {
+      const response = await axios.post(`http://127.0.0.1:8000/timeapp/api/new_pass/`, data, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -39,6 +41,7 @@ const ResetPassword = () => {
 
       
       console.log('Password reset successful!');
+      window.location.href='/login'
     } catch (error) {
       
       console.error('Error:', error);
@@ -52,6 +55,7 @@ const ResetPassword = () => {
 
         <div className="input-box">
           <input 
+            name="password"
             type="password" 
             placeholder="Password" 
             value={password} 

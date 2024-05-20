@@ -46,7 +46,7 @@ class UserData(AbstractUser):
     is_active = models.BooleanField(default=True)
     # is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    role=models.OneToOneField(Role, on_delete=models.RESTRICT)
+    role=models.ForeignKey(Role, on_delete=models.RESTRICT)
 
     objects = UserManager()
     
