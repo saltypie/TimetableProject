@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
-const Navbar = ({ title, isLoggedIn, userName }) => {
+const Navbar = ({ title, isLoggedIn, fname }) => {
   const renderActions = () => {
     if (title === "Home") {
       return (
         <div className="navbar-actions">
-          <span>{`Logged in as ${userName}`}</span>
+          <span>{`Logged in as ${fname}`}</span>
           <Link to="/Lock">Lock</Link>
           <Link to="/Logout">Logout</Link>
         </div>
