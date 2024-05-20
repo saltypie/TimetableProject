@@ -4,12 +4,18 @@ import { Link } from 'react-router-dom';
 import {FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import Navbar from './navigation.jsx';
+import axios from "axios";
+
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [lname, setLname] = useState('');
+  const [fname, setFname] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -30,20 +36,53 @@ const Signup = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+  const handleLnameChange = (e) => {
+    setLname(e.target.value);
+  } 
+
+  const handleFnameChange = (e) => {
+    setFname(e.target.value);
+  }
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     setPasswordMatch(e.target.value === password);
   };
 
+
+  const submit = async e => {
+    e.preventDefault();
+    const body = {
+          email: email,
+          fname: fname,
+          lname: lname,
+          password: password
+         };
+    // Create the POST requuest
+    try {
+       const {data} = await                                                                            
+                      axios.post('http://127.0.0.1:8000/timeapp/api/register/', body ,{headers: {'Content-Type': 'application/json'}}, {withCredentials: true});
+        if(data.Message){
+          alert(data["Message"]);
+          setErrorMessage(data.Message);
+        }else{
+          window.location.href = '/login/';
+        }
+    } catch (error) {
+       setErrorMessage("Incorrect Details");
+    }
+       
+ }  
+
   return (
     <div>
       <Navbar />
       <div className='wrapper'>
-        <form action="">
+        <form action="" onSubmit={submit}>
           <h1>Signup</h1>
           <div className="input-box">
             <input 
+              name="email"
               type="email" 
               placeholder="Email" 
               value={email} 
@@ -55,15 +94,16 @@ const Signup = () => {
           </div>
 
           <div className="input-box">
-            <input type="text" placeholder="First Name" required />
+            <input name="fname" value={fname} onChange={handleFnameChange} type="text" placeholder="First Name" required />
           </div>
 
           <div className="input-box">
-            <input type="text" placeholder="Last Name" required />
+            <input name="lname" value={lname} onChange={handleLnameChange} type="text" placeholder="Last Name" required />
           </div>
 
           <div className="input-box">
             <input 
+              name="password"
               type="password" 
               placeholder="Password" 
               value={password} 
@@ -91,6 +131,10 @@ const Signup = () => {
 
           <div className="register-link">
             <p>Already have an account?<Link to="/Login">Login</Link></p>
+          </div>
+
+          <div className="warning centerholder">
+                  {errorMessage}
           </div>
         </form>    
       </div>

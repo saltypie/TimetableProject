@@ -212,5 +212,12 @@
     background-color: #555;
   }
   
-
-  
+  .centerholder{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .warning{
+    color:red;
+  }

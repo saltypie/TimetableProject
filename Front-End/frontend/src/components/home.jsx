@@ -6,7 +6,10 @@ import Navbar from './navigation.jsx';
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-
+  
+  if(!localStorage.getItem('isLogged')){
+    window.location.href = '/login';
+  }
   useEffect(() => {
     let timeoutId;
 
@@ -46,7 +49,7 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar title="Home" isLoggedIn={isLoggedIn} />
+      <Navbar title="Home" isLoggedIn={localStorage.getItem('isLoggedIn')} fname={localStorage.getItem('fname')} />
       <div className='wrapper'>
         <h1>Welcome</h1>
       </div>

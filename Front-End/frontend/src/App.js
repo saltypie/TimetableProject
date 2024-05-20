@@ -4,6 +4,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from "./components/Login.jsx";
 import Lock from "./components/lock.jsx";
 import LandingPage from "./components/landingpage.jsx";
+import Logout from "./components/Logout.jsx";
 import Activate from "./components/Activate.jsx";
 import Home from "./components/home.jsx";
 import{useEffect, useState} from 'react';
@@ -56,6 +57,7 @@ useEffect(()=>{
           <Route path="/Home" element={<Home/>}/>
           <Route path="/Activate" element={<Activate/>}/>
           <Route path="/LandingPage" element={<LandingPage/>}/>
+          <Route path="/Logout" element={<Logout/>}/>
           <Route path="/Login" element={<Login/>}/>
           <Route path="/SignUp" element={<Signup/>}/>
           <Route path="/Lock" element={<Lock/>}/>
