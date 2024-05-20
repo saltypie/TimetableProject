@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './Login.css';
 import { FaLock } from "react-icons/fa";
 import Navbar from './navigation.jsx';
+import axios from "axios";
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -10,6 +11,19 @@ const Home = () => {
   if(!localStorage.getItem('isLogged')){
     window.location.href = '/login';
   }
+  const checkRefresh = async() => {
+    try {
+      const {data} = await                                                                            
+                     axios.post('http://127.0.0.1:8000/timeapp/api/login/refresh/', {refresh:localStorage.getItem('refresh_token')} ,{headers: {'Content-Type': 'application/json'}}, {withCredentials: true});
+
+      localStorage.setItem('access_token', data["access"]);
+      localStorage.setItem('refresh_token', data["refresh"]);
+      console.log(localStorage.getItem('refresh_token'));
+   } catch (error) {
+      window.location.href='/logout';
+   }
+  }
+  setInterval(checkRefresh, 20*1000);
   useEffect(() => {
     let timeoutId;
 

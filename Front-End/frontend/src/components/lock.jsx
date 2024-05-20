@@ -50,6 +50,7 @@ const Lock = () => {
                </div>
           
              <button type="submit" >Unlock</button>
+
         </form>    
     </div>
   )
