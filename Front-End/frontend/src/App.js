@@ -5,6 +5,7 @@ import Login from "./components/Login.jsx";
 import Logout from "./components/Logout.jsx";
 import Lock from "./components/lock.jsx";
 import LandingPage from "./components/landingpage.jsx";
+import Logout from "./components/Logout.jsx";
 import Activate from "./components/Activate.jsx";
 import Home from "./components/home.jsx";
 import ResetPassword from "./components/resetPassword.jsx";
@@ -62,6 +63,7 @@ useEffect(()=>{
           <Route path="/Home" element={<Home/>}/>
           <Route path="/Activate" element={<Activate/>}/>
           <Route path="/LandingPage" element={<LandingPage/>}/>
+          <Route path="/Logout" element={<Logout/>}/>
           <Route path="/Login" element={<Login/>}/>
           <Route path="/Logout" element={<Logout/>}/>
           <Route path="/SignUp" element={<Signup/>}/>

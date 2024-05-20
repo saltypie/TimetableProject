@@ -22,3 +22,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#for backend
+*.pyc
+__pycache__
+db.sqlite3
+Backend/timetabling/env
+*.env
+Backend/timetabling/timetabling/.env
+.vscode
+Back-End/timetabling/venv/

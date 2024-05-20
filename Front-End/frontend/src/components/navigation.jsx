@@ -3,21 +3,11 @@ import { Link, Redirect } from 'react-router-dom';
 import './Login.css';
 
 const Navbar = ({ title, isLoggedIn, userName }) => {
-  const [logoutConfirmed, setLogoutConfirmed] = useState(false);
-
-  const handleLogout = () => {
-    const confirmLogout = window.confirm('Are you sure you want to logout?');
-    if (confirmLogout) {
-
-      setLogoutConfirmed(true);
-    }
-  };
-
   const renderActions = () => {
     if (title === "Home") {
       return (
         <div className="navbar-actions">
-          <span>{`Logged in as ${userName}`}</span>
+          <span>{`Logged in as ${fname}`}</span>
           <Link to="/Lock">Lock</Link>
           <button onClick={handleLogout}>Logout</button>
         </div>
