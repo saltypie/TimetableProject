@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './Login.css';
 
-const Navbar = ({ title, isLoggedIn, userName }) => {
+const Navbar = ({ title, isLoggedIn, fname }) => {
   const renderActions = () => {
     if (title === "Home") {
       return (
         <div className="navbar-actions">
           <span>{`Logged in as ${fname}`}</span>
           <Link to="/Lock">Lock</Link>
-          <button onClick={handleLogout}>Logout</button>
+          <Link to="/Logout">Logout</Link>
         </div>
       );
     } else if (title === "Landing Page") {
@@ -32,10 +32,6 @@ const Navbar = ({ title, isLoggedIn, userName }) => {
       );
     }
   };
-
-  if (logoutConfirmed) {
-    return <Link to="/Logout" />;
-  }
 
   return (
     <nav className="navbar">
