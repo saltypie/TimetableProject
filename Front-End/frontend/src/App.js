@@ -6,6 +6,7 @@ import Lock from "./components/lock.jsx";
 import LandingPage from "./components/landingpage.jsx";
 import Activate from "./components/Activate.jsx";
 import Home from "./components/home.jsx";
+import ResetPassword from "./components/resetPassword.jsx";
 import{useEffect, useState} from 'react';
 
 function App() {
@@ -53,6 +54,7 @@ useEffect(()=>{
      <BrowserRouter>
      
         <Routes>
+        <Route path="/ResetPassword" element={<ResetPassword/>}/>
           <Route path="/Home" element={<Home/>}/>
           <Route path="/Activate" element={<Activate/>}/>
           <Route path="/LandingPage" element={<LandingPage/>}/>
