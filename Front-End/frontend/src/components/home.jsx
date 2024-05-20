@@ -6,10 +6,13 @@ import Navbar from './navigation.jsx';
 import axios from "axios";
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  
+  // const [isLoggedIn, setIsLoggedIn] = useState(true);
+
   if(!localStorage.getItem('isLogged')){
     window.location.href = '/login';
+  }
+  if(localStorage.getItem('isLockedOut')=="true"){
+    window.location.href = '/Lock';
   }
   const checkRefresh = async() => {
     try {
@@ -28,7 +31,8 @@ const Home = () => {
     let timeoutId;
 
     const handleInactivity = () => {
-      setIsLoggedIn(false);
+      // localStorage,set(IsLogged, false);
+      localStorage.setItem('isLockedOut', true);
       window.location.href = '/Lock'; // Redirect to Lock component
     };
 
@@ -63,7 +67,7 @@ const Home = () => {
 
   return (
     <div>
-      <Navbar title="Home" isLoggedIn={localStorage.getItem('isLoggedIn')} fname={localStorage.getItem('fname')} />
+      <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       <div className='wrapper'>
         <h1>Welcome</h1>
       </div>

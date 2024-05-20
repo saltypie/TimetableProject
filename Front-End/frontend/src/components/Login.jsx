@@ -37,6 +37,8 @@ const Login = () => {
            localStorage.setItem('fname', data["fname"]);
            localStorage.setItem('email', data["email"]);
            localStorage.setItem('isLogged', true);
+           localStorage.setItem('isLockedOut', false);
+
            axios.defaults.headers.common['Authorization'] =`Bearer ${data['access']}`;
            window.location.href = '/Home/';
         }
