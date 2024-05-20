@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import axios from "axios";
-export const Logout = () => {
+
+const Logout = () => {
     useEffect(() => {
        (async () => {
          try {
@@ -21,3 +22,4 @@ export const Logout = () => {
        <div></div>
      )
 }
+export default Logout

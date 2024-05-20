@@ -1,15 +1,25 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import './Login.css';
 
 const Navbar = ({ title, isLoggedIn, userName }) => {
+  const [logoutConfirmed, setLogoutConfirmed] = useState(false);
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm('Are you sure you want to logout?');
+    if (confirmLogout) {
+
+      setLogoutConfirmed(true);
+    }
+  };
+
   const renderActions = () => {
     if (title === "Home") {
       return (
         <div className="navbar-actions">
           <span>{`Logged in as ${userName}`}</span>
           <Link to="/Lock">Lock</Link>
-          <Link to="/Logout">Logout</Link>
+          <button onClick={handleLogout}>Logout</button>
         </div>
       );
     } else if (title === "Landing Page") {
@@ -32,6 +42,10 @@ const Navbar = ({ title, isLoggedIn, userName }) => {
       );
     }
   };
+
+  if (logoutConfirmed) {
+    return <Link to="/Logout" />;
+  }
 
   return (
     <nav className="navbar">
