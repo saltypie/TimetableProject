@@ -8,6 +8,7 @@ const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
+  // const [errorMessage, setErrorMessage] = useState(true);
   const {id} = useParams();
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -39,7 +40,7 @@ const ResetPassword = () => {
 
       console.log('Response:', response.data);
 
-      
+      alert('Password reset successful!');
       console.log('Password reset successful!');
       window.location.href='/login'
     } catch (error) {
@@ -78,7 +79,6 @@ const ResetPassword = () => {
           />
           {passwordMatch ? null : <span style={{ color: 'red' }}>Passwords do not match</span>}
         </div>
-
         <button type="submit" disabled={!passwordMatch}>Submit</button>
 
       </form>    

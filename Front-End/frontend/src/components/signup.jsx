@@ -8,6 +8,10 @@ import axios from "axios";
 
 
 const Signup = () => {
+  if(localStorage.getItem('isLogged')){
+    window.location.href = '/Home';
+ }
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [lname, setLname] = useState('');
