@@ -1,4 +1,4 @@
-import Navigation from './components/navigation.jsx';
+
 import Signup from './components/signup.jsx';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from "./components/Login.jsx";
@@ -9,6 +9,12 @@ import Activate from "./components/Activate.jsx";
 import Home from "./components/home.jsx";
 import ResetPassword from "./components/resetPassword.jsx";
 import Email from "./components/email.jsx";
+import Admin from "./components/admin.jsx";
+import Class from "./components/class.jsx";
+import AddClass from "./components/addClass.jsx";
+import EditClass from "./components/editClass.jsx";
+import ViewClass from "./components/viewClass.jsx";
+/*import AdminSidebar from './adminSidebar.jsx'; */
 
 import{useEffect, useState} from 'react';
 
@@ -66,6 +72,11 @@ useEffect(()=>{
           <Route path="/Login" element={<Login/>}/>
           <Route path="/SignUp" element={<Signup/>}/>
           <Route path="/Lock" element={<Lock/>}/>
+          <Route path="/Admin" element={<Admin/>}/>
+          <Route path="/Class" element={<Class/>}/>
+          <Route path="/AddClass" element={<AddClass/>}/>
+          <Route path="/EditClass" element={<EditClass/>}/>
+          <Route path="/ViewClass" element={<ViewClass/>}/>
         </Routes>
       </BrowserRouter>;
     </div>

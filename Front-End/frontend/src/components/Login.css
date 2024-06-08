@@ -221,3 +221,20 @@
   .warning{
     color:red;
   }
+  .button {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .button:hover {
+    background-color: #fff;
+    color: #000;
+  }
+  

@@ -3,13 +3,24 @@ import { Link } from 'react-router-dom';
 import './Login.css';
 
 const Navbar = ({ title, isLoggedIn, fname }) => {
+  const handleLogout = async () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      try {
+        window.location.href = '/Logout';
+      } catch (e) {
+        console.log('Logout failed:', e);
+      }
+    }
+  };
+
   const renderActions = () => {
     if (title === "Home") {
       return (
         <div className="navbar-actions">
           <span>{`Logged in as ${fname}`}</span>
-          <Link to="/Lock">Lock</Link>
-          <Link to="/Logout">Logout</Link>
+          <Link to="/Lock" className="button">Lock</Link>
+          <span className="button" onClick={handleLogout}>Logout</span>
         </div>
       );
     } else if (title === "Landing Page") {
