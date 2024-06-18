@@ -29,7 +29,12 @@ const AddRoom = () => {
     // Create the POST requuest
     try {
        const {data} = await                                                                            
-                      axios.post('http://127.0.0.1:8000/timeapp/api//', body ,{headers: {'Content-Type': 'application/json'}}, {withCredentials: true});
+                      axios.post('http://127.0.0.1:8000/timeapp/api/viewsets/rooms', body ,
+                        {headers: 
+                          {'Content-Type': 'application/json',
+                           'Authorization':`Bearer ${localStorage.getItem('access_Token')}`
+                            }
+                          });
         if(data.Message){
           alert(data["Message"]);
           setErrorMessage(data.Message);
