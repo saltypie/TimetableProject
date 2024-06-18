@@ -14,12 +14,57 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: seagreen;
+  background: rgb(220, 226, 222);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* index.css */
+
+.card-container {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(33.33% - 20px); /* Three cards per row with gap of 20px */
+  max-width: calc(33.33% - 20px);
+  height: 300px; /* Set height equal to the max-width */
+  display: flex;
+  flex-direction: column; /* Ensure that button stays at the bottom */
+  justify-content: space-between; /* Ensure button stays at the bottom */
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.card p {
+  margin: 0;
+}
+
+.card button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.card button:hover {
+  background-color: #0056b3;
+}
+
 
 

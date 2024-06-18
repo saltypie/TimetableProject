@@ -13,14 +13,15 @@ const Navbar = ({ title, isLoggedIn, fname }) => {
       }
     }
   };
+
   const renderActions = () => {
     if (title === "Home") {
       return (
         <div className="navbar-actions">
           <span>{`Logged in as ${fname}`}</span>
-          {/* <Link to="/Lock">Lock</Link> */}
           <Link to="/Lock" className="button">Lock</Link>
-          <span className="button" onClick={handleLogout}>Logout</span>        </div>
+          <span className="button" onClick={handleLogout}>Logout</span>
+        </div>
       );
     } else if (title === "Landing Page") {
       return (
