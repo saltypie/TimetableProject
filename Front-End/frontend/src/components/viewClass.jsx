@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './navigation.jsx';
 import AdminSidebar from './adminSidebar.jsx';
-import EditClass from './editClass.jsx';
+import EditClass from './editRoom.jsx';
 
 const ViewClass = () => {
   const [classes, setClasses] = useState([]);

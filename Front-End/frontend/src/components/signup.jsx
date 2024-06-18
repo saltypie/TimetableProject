@@ -62,7 +62,7 @@ const Signup = () => {
           lname: lname,
           password: password
          };
-    // Create the POST requuest
+    // Create the POST request
     try {
        const {data} = await                                                                            
                       axios.post('http://127.0.0.1:8000/timeapp/api/register/', body ,{headers: {'Content-Type': 'application/json'}}, {withCredentials: true});

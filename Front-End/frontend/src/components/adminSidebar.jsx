@@ -7,7 +7,7 @@ const AdminSidebar = () => {
             <ul>
                 <li><Link to="/Admin">Dashboard</Link></li>
                 <li><a href="#">Lecturers</a></li>
-                <li><Link to="/Class">Classes</Link></li>
+                <li><Link to="/Room">Rooms</Link></li>
                 <li><a href="#">Timetables</a></li>
             </ul>
         </div>
