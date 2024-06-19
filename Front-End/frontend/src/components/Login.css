@@ -237,3 +237,36 @@
     background-color: #fff;
     color: #000;
   }
+  .profilePic{
+    height: 15vh;
+    width: 8vw;
+    border-radius: 50%;
+    right: 6vw;
+    border: 3px solid black;
+  }
+
+  .profileName{
+    width: 50%;
+  }
+  .youName{
+    width: 80%;
+  }
+
+  .white-div{
+    width: 100%;
+    background-color: white;
+    color: #000;
+  }
+  .not-a-wrapper{
+    /* width: 80%;
+    color: white; */
+    /* width:70%; */
+    background: transparent;
+    border: 2px solid rgba(255,255,255,.2);
+    backdrop-filter: blur(30px);
+    box-shadow: 0 0 10px rgba(0,0,0,.2);
+    color: #fff ;
+    border-radius:10px;
+    padding: 30px 40px;
+    top: 100px;
+  }

@@ -6,7 +6,7 @@ import Navbar from './navigation.jsx';
 import axios from "axios";
 
 const Home = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   if(!localStorage.getItem('isLogged')){
     window.location.href = '/login';
