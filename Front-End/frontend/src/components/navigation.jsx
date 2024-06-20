@@ -16,12 +16,16 @@ const Navbar = ({ title, isLoggedIn, fname }) => {
 
   const renderActions = () => {
     if (title === "Home") {
+      let fname = localStorage.getItem("fname")
+      console.log(fname)
       return (
         <div className="navbar-actions">
-          <span>{`Logged in as ${fname}`}</span>
+          {/* <span>{`Logged in as ${fname ? fname : "Admin"}`}</span> */}
+
+          <Link to="/You">{`Logged in as ${fname ? fname : "Admin"}`}</Link>
+          {/* <Link to="/Lock">Lock</Link> */}
           <Link to="/Lock" className="button">Lock</Link>
-          <span className="button" onClick={handleLogout}>Logout</span>
-        </div>
+          <span className="button" onClick={handleLogout}>Logout</span>        </div>
       );
     } else if (title === "Landing Page") {
       return (

@@ -14,6 +14,9 @@ import Class from "./components/class.jsx";
 import AddRoom from "./components/addRoom.jsx";
 import EditClass from "./components/editRoom.jsx";
 import ViewClass from "./components/viewClass.jsx";
+import ProfileUpdateForm from './components/ProfileForm.jsx';
+import ChangePassword from './components/ChangePassword.jsx';
+import You from './components/You.jsx';
 import Profile from "./components/profile.jsx";
 /*import AdminSidebar from './adminSidebar.jsx'; */
 
@@ -66,7 +69,7 @@ useEffect(()=>{
         <Routes>
           <Route path="/email" element={<Email/>}/>
           <Route path="/ResetPassword/:id" element={<ResetPassword/>}/>
-          <Route path="/Home" element={<Home/>}/>
+          <Route path="/" element={<Home/>}/>
           <Route path="/Activate" element={<Activate/>}/>
           <Route path="/LandingPage" element={<LandingPage/>}/>
           <Route path="/Logout" element={<Logout/>}/>
@@ -78,6 +81,9 @@ useEffect(()=>{
           <Route path="/AddRoom" element={<AddRoom/>}/>
           <Route path="/EditClass" element={<EditClass/>}/>
           <Route path="/ViewClass" element={<ViewClass/>}/>
+          <Route path="/ProfileUpdate" element={<ProfileUpdateForm/>}/>
+          <Route path="/ChangePassword" element={<ChangePassword/>}/>
+          <Route path="/You" element={<You/>}/>
           <Route path="/Profile" element={<Profile/>}/>
         </Routes>
       </BrowserRouter>

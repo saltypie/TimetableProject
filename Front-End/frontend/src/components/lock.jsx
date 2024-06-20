@@ -12,7 +12,7 @@ const Lock = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   localStorage.setItem('isLockedOut', true);
-
+  window.history.pushState(null, null, window.location.href);
   const submit = async e => {
     e.preventDefault();
     const user = {
@@ -34,7 +34,7 @@ const Lock = () => {
         localStorage.setItem('isLockedOut', false);
       
         axios.defaults.headers.common['Authorization'] =`Bearer ${data['access']}`;
-        window.location.href = '/Home/';
+        window.location.href = '//';
 
     } catch (error) {
        setErrorMessage("Incorrect Password ");

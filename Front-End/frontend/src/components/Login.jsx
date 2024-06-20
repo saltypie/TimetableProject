@@ -9,7 +9,7 @@ import Navbar from './navigation.jsx';
 
 const Login = () => {
    if(localStorage.getItem('isLogged')){
-      window.location.href = '/Home';
+      window.location.href = '/';
    }
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
@@ -40,7 +40,7 @@ const Login = () => {
            localStorage.setItem('isLockedOut', false);
 
            axios.defaults.headers.common['Authorization'] =`Bearer ${data['access']}`;
-           window.location.href = '/Home/';
+           window.location.href = '//';
         }
 
       } catch (error) {
