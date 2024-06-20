@@ -40,6 +40,7 @@ class UserLoginAPIView(GenericAPIView):
             serializer = UserSerializer(user)
             token = RefreshToken.for_user(user)
             data = serializer.data
+            data["institution"] = user.institution
             data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:

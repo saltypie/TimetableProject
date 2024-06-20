@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserData
-        fields = ["id", "email", "fname", "lname", "is_active","password","institution"]
+        fields = ["id", "email", "fname", "lname", "is_active","password"]
         # extra_kwargs = {"password": {"write_only": True}}
     def create(self, validated_data):
         user = UserData.objects.create_user(**validated_data)
@@ -102,7 +102,7 @@ class RoleSerializer(serializers.ModelSerializer):
 class InstitutionMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
-        fields = ['email', 'fname','lname','role','institution']
+        fields = ['email', 'fname','lname','role','institution','is_application_accepted']
 
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:

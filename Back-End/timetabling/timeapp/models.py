@@ -8,6 +8,7 @@ class Institution(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10)
     email = models.EmailField(max_length=100, unique=True)
+    is_institution_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
