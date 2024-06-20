@@ -4,9 +4,9 @@ import Navbar from './navigation.jsx';
 import axios from "axios";
 import AdminSidebar from './adminSidebar.jsx';
 
-const AddClass = () => {
+const AddRoom = () => {
   
-  const [aclass, setClass] = useState('');
+  const [room, setRoom] = useState('');
   const [capacity, setCapacity] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -14,8 +14,8 @@ const AddClass = () => {
   const handleCapacityChange = (e) => {
     setCapacity(e.target.value);
   }
-  const handleClassChange = (e) => {
-    setClass(e.target.value);
+  const handleRoomChange = (e) => {
+    setRoom(e.target.value);
   }
 
 
@@ -23,21 +23,26 @@ const AddClass = () => {
   const submit = async e => {
     e.preventDefault();
     const body = {
-          alass: aclass,
+          room: room,
           capacity: capacity
          };
     // Create the POST requuest
     try {
        const {data} = await                                                                            
-                      axios.post('http://127.0.0.1:8000/timeapp/api//', body ,{headers: {'Content-Type': 'application/json'}}, {withCredentials: true});
+                      axios.post('http://127.0.0.1:8000/timeapp/api/viewsets/rooms', body ,
+                        {headers: 
+                          {'Content-Type': 'application/json',
+                           'Authorization':`Bearer ${localStorage.getItem('access_Token')}`
+                            }
+                          });
         if(data.Message){
           alert(data["Message"]);
           setErrorMessage(data.Message);
         }else{
-          window.location.href = '/class/';
+          window.location.href = '/room/';
         }
     } catch (error) {
-       setErrorMessage("Incorrect Details");
+       setErrorMessage("Invalid Details");
     }
        
  }  
@@ -49,17 +54,17 @@ const AddClass = () => {
       <AdminSidebar />
       <div className='wrapper'>
         <form action="" onSubmit={submit}>
-          <h1>Add Class</h1>
+          <h1>Add Room</h1>
           <div className="input-box">
             <input 
-              name="aclass"
+              name="room"
               type="text" 
-              placeholder="Class Name" 
-              value={aclass} 
-              onChange={handleClassChange} 
+              placeholder="Room Name" 
+              value={room} 
+              onChange={handleRoomChange} 
               required 
             />
-            <span className="info" title="This is the name given to the class.">ℹ️</span>
+            <span className="info" title="This is the name given to the room.">ℹ️</span>
           </div>
 
           <div className="input-box">
@@ -77,4 +82,4 @@ const AddClass = () => {
   );
 }
 
-export default AddClass;
+export default AddRoom;
