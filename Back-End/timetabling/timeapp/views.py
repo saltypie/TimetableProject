@@ -42,6 +42,7 @@ class UserLoginAPIView(GenericAPIView):
             data = serializer.data
             data["institution"] = user.institution
             data["is_application_accepted"] = user.is_application_accepted
+            data["role"] = user.role
             data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
