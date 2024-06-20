@@ -4,7 +4,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 
 import AdminSidebar from './adminSidebar.jsx';
-const EditClass = ({ classData }) => {
+const EditRoom = ({ classData }) => {
   const [editedClass, setEditedClass] = useState(classData);
 
   const handleInputChange = (e) => {
@@ -37,4 +37,4 @@ const EditClass = ({ classData }) => {
   );
 };
 
-export default EditClass;
+export default EditRoom;

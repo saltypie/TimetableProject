@@ -11,12 +11,13 @@ import ResetPassword from "./components/resetPassword.jsx";
 import Email from "./components/email.jsx";
 import Admin from "./components/admin.jsx";
 import Class from "./components/class.jsx";
-import AddClass from "./components/addClass.jsx";
-import EditClass from "./components/editClass.jsx";
+import AddRoom from "./components/addRoom.jsx";
+import EditClass from "./components/editRoom.jsx";
 import ViewClass from "./components/viewClass.jsx";
 import ProfileUpdateForm from './components/ProfileForm.jsx';
 import ChangePassword from './components/ChangePassword.jsx';
 import You from './components/You.jsx';
+import Profile from "./components/profile.jsx";
 /*import AdminSidebar from './adminSidebar.jsx'; */
 
 import{useEffect, useState} from 'react';
@@ -77,12 +78,13 @@ useEffect(()=>{
           <Route path="/Lock" element={<Lock/>}/>
           <Route path="/Admin" element={<Admin/>}/>
           <Route path="/Class" element={<Class/>}/>
-          <Route path="/AddClass" element={<AddClass/>}/>
+          <Route path="/AddRoom" element={<AddRoom/>}/>
           <Route path="/EditClass" element={<EditClass/>}/>
           <Route path="/ViewClass" element={<ViewClass/>}/>
           <Route path="/ProfileUpdate" element={<ProfileUpdateForm/>}/>
           <Route path="/ChangePassword" element={<ChangePassword/>}/>
           <Route path="/You" element={<You/>}/>
+          <Route path="/Profile" element={<Profile/>}/>
         </Routes>
       </BrowserRouter>
     </div>
