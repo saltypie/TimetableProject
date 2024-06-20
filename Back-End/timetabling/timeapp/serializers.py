@@ -103,3 +103,8 @@ class InstitutionMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
         fields = ['email', 'fname','lname','role','institution']
+
+class InstitutionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserData
+        fields = ['name', 'phone', 'email']

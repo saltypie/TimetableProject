@@ -151,9 +151,19 @@ class InstitutionMemberView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         institution = self.request.user.institution
-        print("User making request:", user, "Institution:", institution)
+        print("User making request:", self.request.user, "Institution:", institution)
         return UserData.objects.filter(institution=institution)
 
+class InstitutionViewSet(viewsets.ModelViewSet):
+    queryset = Institution.objects.all()
+    serializer_class = InstitutionSerializer
+
+    def get_queryset(self):
+        queryset = Institution.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(name__istartswith=search_query)
+        return queryset
 #######
 
 

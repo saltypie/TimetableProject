@@ -56,7 +56,7 @@ class UserData(AbstractUser):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_profile_set = models.BooleanField(default=False)
-    is_institution_set = models.BooleanField(default=False)
+    is_application_accepted = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE,null=True, blank=True)
 
