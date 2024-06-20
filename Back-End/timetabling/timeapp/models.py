@@ -60,7 +60,7 @@ class UserData(AbstractUser):
     is_superuser = models.BooleanField(default=False)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE,null=True, blank=True)
 
-    role=models.OneToOneField(Role, on_delete=models.RESTRICT)
+    role=models.OneToOneField(Role, on_delete=models.RESTRICT)#admin scheduler instructor
 
     objects = UserManager()
     
@@ -104,13 +104,13 @@ class Room(models.Model):
         return self.r_number
 
 
-class Instructor(models.Model):
-    uid = models.CharField(max_length=6)
-    name = models.CharField(max_length=25)
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+# class Instructor(models.Model):
+#     uid = models.CharField(max_length=6)
+#     name = models.CharField(max_length=25)
+#     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'{self.uid} {self.name}'
+#     def __str__(self):
+#         return f'{self.uid} {self.name}'
 
 
 class MeetingTime(models.Model):
@@ -128,7 +128,7 @@ class Course(models.Model):
     course_number = models.CharField(max_length=5, primary_key=True)
     course_name = models.CharField(max_length=40)
     max_numb_students = models.CharField(max_length=65)
-    instructors = models.ManyToManyField(Instructor)
+    instructors = models.ManyToManyField(UserData)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -156,7 +156,8 @@ class Stream(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
     meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE, blank=True, null=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
-    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, blank=True, null=True)
+    instructor = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)
+    # instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return f'Stream {self.stream_id}'
     def set_room(self, room):
@@ -184,7 +185,8 @@ class Timetable(models.Model):
 class Lesson(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+    instructor = models.ForeignKey(UserData, on_delete=models.CASCADE)
+    # instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
     meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)

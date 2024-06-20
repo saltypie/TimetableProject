@@ -96,9 +96,9 @@ class ChangePasswordView(UpdateAPIView):
 
         
 #######
-class InstructorViewSet(viewsets.ModelViewSet):
-    queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
+# class InstructorViewSet(viewsets.ModelViewSet):
+#     queryset = Instructor.objects.all()
+#     serializer_class = InstructorSerializer
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()

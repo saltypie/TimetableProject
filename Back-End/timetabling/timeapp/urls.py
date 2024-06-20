@@ -12,7 +12,7 @@ from rest_framework_simplejwt.views import (
 )
 
 router = DefaultRouter()
-router.register(r'instructors', InstructorViewSet)
+# router.register(r'instructors', InstructorViewSet)
 router.register(r'meetingtimes', MeetingTimeViewSet)
 router.register(r'streams', StreamViewSet)
 router.register(r'rooms', RoomViewSet)
