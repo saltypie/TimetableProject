@@ -145,7 +145,14 @@ class ProfileDetailView(viewsets.ModelViewSet):
         print("User making request:", user)
         return Profile.objects.filter(user=user)
 
+class InstitutionMemberView(viewsets.ModelViewSet):
+    serializer_class = InstitutionMemberSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        institution = self.request.user.institution
+        print("User making request:", user, "Institution:", institution)
+        return UserData.objects.filter(institution=institution)
 
 #######
 

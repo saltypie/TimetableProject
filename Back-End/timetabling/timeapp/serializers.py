@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserData
-        fields = ["id", "email", "fname", "lname", "is_active","password"]
+        fields = ["id", "email", "fname", "lname", "is_active","password","institution"]
         # extra_kwargs = {"password": {"write_only": True}}
     def create(self, validated_data):
         user = UserData.objects.create_user(**validated_data)
@@ -78,10 +78,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['course_number', 'course_name', 'max_numb_students', 'instructors', 'institution']
 
-# class ProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Profile
-#         fields=['user','photo_url','bio','second_email']
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -97,3 +94,12 @@ class ProfileSerializer(serializers.ModelSerializer):
     #     profile.save()
 
     #     return profile
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ['id', 'name']
+
+class InstitutionMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserData
+        fields = ['email', 'fname','lname','role','institution']
