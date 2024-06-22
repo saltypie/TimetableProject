@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Role, UserData, Instructor, Department, MeetingTime, Stream, Room, Course,Profile
+from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile
 from django.contrib.auth import authenticate
 from .email_functionality import send_email
 from rest_framework.response import Response
@@ -48,10 +48,10 @@ class NewPassSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)  
     new_password = serializers.CharField(required=True)  
 ####
-class InstructorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Instructor
-        fields = ['id', 'uid', 'name', 'institution']
+# class InstructorSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Instructor
+#         fields = ['id', 'uid', 'name', 'institution']
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,10 +78,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['course_number', 'course_name', 'max_numb_students', 'instructors', 'institution']
 
-# class ProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Profile
-#         fields=['user','photo_url','bio','second_email']
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -97,3 +94,17 @@ class ProfileSerializer(serializers.ModelSerializer):
     #     profile.save()
 
     #     return profile
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = ['id', 'name']
+
+class InstitutionMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserData
+        fields = ['email', 'fname','lname','role','institution','is_application_accepted']
+
+class InstitutionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserData
+        fields = ['name', 'phone', 'email']

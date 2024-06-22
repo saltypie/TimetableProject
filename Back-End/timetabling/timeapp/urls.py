@@ -12,12 +12,14 @@ from rest_framework_simplejwt.views import (
 )
 
 router = DefaultRouter()
-router.register(r'instructors', InstructorViewSet)
+# router.register(r'instructors', InstructorViewSet)
 router.register(r'meetingtimes', MeetingTimeViewSet)
 router.register(r'streams', StreamViewSet)
 router.register(r'rooms', RoomViewSet)
 router.register(r'courses', CourseViewSet)
 router.register(r'profile', ProfileDetailView, basename="profile")
+router.register(r'institutionmembers', InstitutionMemberView, basename="institutionmembers")
+router.register(r'institution', InstitutionViewSet, basename="institution")
 # router.register(r'profileupdate', ProfileViewSet, basename="profile")
 
 urlpatterns = [

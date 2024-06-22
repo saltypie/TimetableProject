@@ -40,6 +40,9 @@ class UserLoginAPIView(GenericAPIView):
             serializer = UserSerializer(user)
             token = RefreshToken.for_user(user)
             data = serializer.data
+            data["institution"] = user.institution
+            data["is_application_accepted"] = user.is_application_accepted
+            data["role"] = user.role
             data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -96,9 +99,9 @@ class ChangePasswordView(UpdateAPIView):
 
         
 #######
-class InstructorViewSet(viewsets.ModelViewSet):
-    queryset = Instructor.objects.all()
-    serializer_class = InstructorSerializer
+# class InstructorViewSet(viewsets.ModelViewSet):
+#     queryset = Instructor.objects.all()
+#     serializer_class = InstructorSerializer
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
@@ -145,8 +148,25 @@ class ProfileDetailView(viewsets.ModelViewSet):
         print("User making request:", user)
         return Profile.objects.filter(user=user)
 
+class InstitutionMemberView(viewsets.ModelViewSet):
+    serializer_class = InstitutionMemberSerializer
+    permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        institution = self.request.user.institution
+        print("User making request:", self.request.user, "Institution:", institution)
+        return UserData.objects.filter(institution=institution)
 
+class InstitutionViewSet(viewsets.ModelViewSet):
+    queryset = Institution.objects.all()
+    serializer_class = InstitutionSerializer
+
+    def get_queryset(self):
+        queryset = Institution.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(name__istartswith=search_query)
+        return queryset
 #######
 
 
