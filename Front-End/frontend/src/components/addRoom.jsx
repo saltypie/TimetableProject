@@ -4,7 +4,7 @@ import Navbar from './navigation.jsx';
 import axios from "axios";
 import AdminSidebar from './adminSidebar.jsx';
 
-const AddRoom = () => {
+const AddSubject = () => {
   
   const [room, setRoom] = useState('');
   const [capacity, setCapacity] = useState('');
@@ -26,7 +26,7 @@ const AddRoom = () => {
           room: room,
           capacity: capacity
          };
-    // Create the POST requuest
+    // Create the POST request
     try {
        const {data} = await                                                                            
                       axios.post('http://127.0.0.1:8000/timeapp/api/viewsets/rooms', body ,
@@ -82,4 +82,4 @@ const AddRoom = () => {
   );
 }
 
-export default AddRoom;
+export default AddSubject;

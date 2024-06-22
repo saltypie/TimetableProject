@@ -18,6 +18,13 @@ import ProfileUpdateForm from './components/ProfileForm.jsx';
 import ChangePassword from './components/ChangePassword.jsx';
 import You from './components/You.jsx';
 import Profile from "./components/profile.jsx";
+import AddTiming from "./components/addTiming.jsx";
+import AddSubject from "./components/addSubject.jsx";
+import AddCourse from "./components/addCourse.jsx";
+import AddSection from "./components/addSection.jsx";
+
+
+
 /*import AdminSidebar from './adminSidebar.jsx'; */
 
 import{useEffect, useState} from 'react';
@@ -85,6 +92,14 @@ useEffect(()=>{
           <Route path="/ChangePassword" element={<ChangePassword/>}/>
           <Route path="/You" element={<You/>}/>
           <Route path="/Profile" element={<Profile/>}/>
+          <Route path="/AddTiming" element={<AddTiming/>}/>
+          <Route path="/AddSubject" element={<AddSubject/>}/>
+          <Route path="/AddCourse" element={<AddCourse/>}/>
+          <Route path="/AddSection" element={<AddSection/>}/>
+
+
+
+
         </Routes>
       </BrowserRouter>
     </div>
