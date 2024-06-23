@@ -61,7 +61,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class MeetingTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingTime
-        fields = ['pid', 'time', 'day', 'institution']
+        fields = ['id', 'time', 'day', 'institution']
 
 class StreamSerializer(serializers.ModelSerializer):
     class Meta:

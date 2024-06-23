@@ -115,7 +115,7 @@ class Room(models.Model):
 
 
 class MeetingTime(models.Model):
-    pid = models.CharField(max_length=4, primary_key=True)
+    # pid = models.CharField(max_length=4, primary_key=True)
     time = models.CharField(max_length=50, default='10:15 - 12:15')
     day = models.CharField(max_length=15)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
@@ -155,7 +155,8 @@ class Stream(models.Model):
     lessons_per_week = models.IntegerField(default=0)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
-    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE, blank=True, null=True)
+    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.SET_NULL, null=True)
+    # meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE, blank=True, null=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
     instructor = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)
     # instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, blank=True, null=True)
@@ -188,7 +189,7 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     instructor = models.ForeignKey(UserData, on_delete=models.CASCADE)
     # instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
-    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE)
+    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.SET_NULL, null=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE)

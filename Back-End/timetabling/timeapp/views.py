@@ -110,6 +110,16 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 class MeetingTimeViewSet(viewsets.ModelViewSet):
     queryset = MeetingTime.objects.all()
     serializer_class = MeetingTimeSerializer
+    def get_queryset(self):
+        queryset = MeetingTime.objects.all()
+        institution = self.request.user.institution
+        search_query = self.request.query_params.get('search', None)
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        if search_query:
+            queryset = queryset.filter(time__istartswith=search_query)
+        return queryset 
 
 class StreamViewSet(viewsets.ModelViewSet):
     queryset = Stream.objects.all()
@@ -127,8 +137,10 @@ class CourseViewSet(viewsets.ModelViewSet):
         search_query = self.request.query_params.get('search', None)
         institution = self.request.user.institution
         # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
         if search_query:
-            queryset = queryset.filter(name__istartswith=search_query, institution__name__istartswith=institution)
+            queryset = queryset.filter(name__istartswith=search_query)
         return queryset 
 
 

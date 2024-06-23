@@ -23,6 +23,7 @@ import AddSubject from "./components/addSubject.jsx";
 import AddCourse from "./components/addCourse.jsx";
 import AddSection from "./components/addSection.jsx";
 import CourseTable from './components/coursecomponents/viewcourses.jsx';
+import TimingTable from './components/coursecomponents/viewtimings.jsx';
 
 
 
@@ -98,6 +99,7 @@ useEffect(()=>{
           <Route path="/AddCourse" element={<AddCourse/>}/>
           <Route path="/AddSection" element={<AddSection/>}/>
           <Route path="/Course" element={<CourseTable/>}/>
+          <Route path="/Timing" element={<TimingTable/>}/>
 
 
 

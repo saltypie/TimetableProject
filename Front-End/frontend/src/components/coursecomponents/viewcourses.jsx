@@ -16,6 +16,7 @@ const CourseTable = () => {
                 },
                 params: {
                     'search': searchQuery,
+                    // 'institution_based':true
                     // 'instution': localStorage.getItem('institution')
                 }
             })
