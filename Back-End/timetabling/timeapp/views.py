@@ -40,9 +40,9 @@ class UserLoginAPIView(GenericAPIView):
             serializer = UserSerializer(user)
             token = RefreshToken.for_user(user)
             data = serializer.data
-            data["institution"] = user.institution
+            data["institution"] = user.institution.name
             data["is_application_accepted"] = user.is_application_accepted
-            data["role"] = user.role
+            data["role"] = user.role.name
             data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -122,6 +122,14 @@ class RoomViewSet(viewsets.ModelViewSet):
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if search_query:
+            queryset = queryset.filter(name__istartswith=search_query, institution__name__istartswith=institution)
+        return queryset 
 
 
 class ProfileUpdateAPIView(APIView):

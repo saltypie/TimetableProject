@@ -43,7 +43,7 @@ const Login = () => {
            localStorage.setItem('isLockedOut', false);
 
            axios.defaults.headers.common['Authorization'] =`Bearer ${data['access']}`;
-           window.location.href = '//';
+           window.location.href = '/';
         }
 
       } catch (error) {
