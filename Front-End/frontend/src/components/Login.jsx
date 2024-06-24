@@ -38,6 +38,7 @@ const Login = () => {
            localStorage.setItem('email', data["email"]);
            localStorage.setItem('institution', data["institution"]);
            localStorage.setItem('is_application_accepted', data["is_application_accepted"]);
+           localStorage.setItem('is_institution_approved', data["is_institution_approved"]);
            localStorage.setItem('role', data["role"]);
            localStorage.setItem('isLogged', true);
            localStorage.setItem('isLockedOut', false);

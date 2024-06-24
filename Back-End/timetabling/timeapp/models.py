@@ -150,7 +150,7 @@ class Department(models.Model):
 
 
 class Stream(models.Model):
-    stream_id = models.CharField(max_length=25, primary_key=True)
+    # stream_id = models.CharField(max_length=25, primary_key=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     lessons_per_week = models.IntegerField(default=0)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
@@ -161,19 +161,19 @@ class Stream(models.Model):
     instructor = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)
     # instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
-        return f'Stream {self.stream_id}'
+        return f'Stream {self.id}'
     def set_room(self, room):
-        stream = Stream.objects.get(pk = self.stream_id)
+        stream = Stream.objects.get(pk = self.id)
         stream.room = room
         stream.save()
 
     def set_meeting_time(self, meeting_time):
-        stream = Stream.objects.get(pk = self.stream_id)
+        stream = Stream.objects.get(pk = self.id)
         stream.meeting_time = meeting_time
         stream.save()
 
     def set_instructor(self, instructor):
-        stream = Stream.objects.get(pk=self.stream_id)
+        stream = Stream.objects.get(pk=self.id)
         stream.instructor = instructor
         stream.save()
 
