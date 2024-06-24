@@ -19,7 +19,8 @@ router.register(r'rooms', RoomViewSet)
 router.register(r'courses', CourseViewSet)
 router.register(r'profile', ProfileDetailView, basename="profile")
 router.register(r'institutionmembers', InstitutionMemberView, basename="institutionmembers")
-router.register(r'institution', InstitutionViewSet, basename="institution")
+router.register(r'institutions', InstitutionViewSet, basename="institution")
+router.register(r'departments', DepartmentViewSet, basename="department")
 # router.register(r'profileupdate', ProfileViewSet, basename="profile")
 
 urlpatterns = [

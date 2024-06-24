@@ -107,7 +107,16 @@ class ChangePasswordView(UpdateAPIView):
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-
+    def get_queryset(self):
+        queryset = Department.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        if search_query:
+            queryset = queryset.filter(dept_name__istartswith=search_query)
+        return queryset 
 class MeetingTimeViewSet(viewsets.ModelViewSet):
     queryset = MeetingTime.objects.all()
     serializer_class = MeetingTimeSerializer
@@ -125,11 +134,22 @@ class MeetingTimeViewSet(viewsets.ModelViewSet):
 class StreamViewSet(viewsets.ModelViewSet):
     queryset = Stream.objects.all()
     serializer_class = StreamSerializer
-
+    def get_queryset(self):
+        queryset = Stream.objects.all()
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        return queryset 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-
+    def get_queryset(self):
+        queryset = Room.objects.all()
+        institution = self.request.user.institution
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        return queryset 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
