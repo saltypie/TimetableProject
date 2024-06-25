@@ -36,11 +36,15 @@ const Login = () => {
            localStorage.setItem('refresh_token', data["tokens"]["refresh"]);
            localStorage.setItem('fname', data["fname"]);
            localStorage.setItem('email', data["email"]);
+           localStorage.setItem('institution', data["institution"]);
+           localStorage.setItem('is_application_accepted', data["is_application_accepted"]);
+           localStorage.setItem('is_institution_approved', data["is_institution_approved"]);
+           localStorage.setItem('role', data["role"]);
            localStorage.setItem('isLogged', true);
            localStorage.setItem('isLockedOut', false);
 
            axios.defaults.headers.common['Authorization'] =`Bearer ${data['access']}`;
-           window.location.href = '//';
+           window.location.href = '/';
         }
 
       } catch (error) {

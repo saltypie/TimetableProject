@@ -61,12 +61,12 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class MeetingTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingTime
-        fields = ['pid', 'time', 'day', 'institution']
+        fields = ['id', 'time', 'day', 'institution']
 
 class StreamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stream
-        fields = ['stream_id', 'department', 'lessons_per_week', 'institution', 'course', 'meeting_time', 'room', 'instructor']
+        fields = ['id', 'department', 'lessons_per_week', 'institution', 'course', 'meeting_time', 'room', 'instructor']
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,7 +76,7 @@ class RoomSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['course_number', 'course_name', 'max_numb_students', 'instructors', 'institution']
+        fields = ['id','course_number', 'course_name', 'max_numb_students', 'instructors', 'institution']
 
 
 class ProfileSerializer(serializers.ModelSerializer):

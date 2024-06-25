@@ -15,13 +15,18 @@ import AddRoom from "./components/addRoom.jsx";
 import EditClass from "./components/editRoom.jsx";
 import ViewClass from "./components/viewClass.jsx";
 import ProfileUpdateForm from './components/ProfileForm.jsx';
-import ChangePassword from './components/ChangePassword.jsx';
+import ChangePassword from './components/changePassword.jsx';
 import You from './components/You.jsx';
 import Profile from "./components/profile.jsx";
 import AddTiming from "./components/addTiming.jsx";
 import AddSubject from "./components/addSubject.jsx";
 import AddCourse from "./components/addCourse.jsx";
 import AddSection from "./components/addSection.jsx";
+import CourseTable from './components/coursecomponents/viewcourses.jsx';
+import RoomTable from './components/coursecomponents/viewrooms.jsx';
+import DepartmentTable from './components/coursecomponents/viewdepartments.jsx';
+import StreamTable from './components/coursecomponents/viewstreams.jsx';
+import TimingTable from "./components/coursecomponents/viewtimings.jsx";
 
 
 
@@ -96,10 +101,11 @@ useEffect(()=>{
           <Route path="/AddSubject" element={<AddSubject/>}/>
           <Route path="/AddCourse" element={<AddCourse/>}/>
           <Route path="/AddSection" element={<AddSection/>}/>
-
-
-
-
+          <Route path="/Course" element={<CourseTable/>}/>
+          <Route path="/Timing" element={<TimingTable/>}/>
+          <Route path="/Room" element={<RoomTable/>}/>
+          <Route path="/Department" element={<DepartmentTable/>}/>
+          <Route path="/Stream" element={<StreamTable/>}/>
         </Routes>
       </BrowserRouter>
     </div>

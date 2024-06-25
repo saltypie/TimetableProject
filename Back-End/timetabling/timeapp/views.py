@@ -40,9 +40,10 @@ class UserLoginAPIView(GenericAPIView):
             serializer = UserSerializer(user)
             token = RefreshToken.for_user(user)
             data = serializer.data
-            data["institution"] = user.institution
+            data["institution"] = user.institution.name if user.institution else None
             data["is_application_accepted"] = user.is_application_accepted
-            data["role"] = user.role
+            data["is_institution_approved"] = user.institution.is_institution_approved if user.institution else None
+            data["role"] = user.role.name
             data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -106,22 +107,62 @@ class ChangePasswordView(UpdateAPIView):
 class DepartmentViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-
+    def get_queryset(self):
+        queryset = Department.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        if search_query:
+            queryset = queryset.filter(dept_name__istartswith=search_query)
+        return queryset 
 class MeetingTimeViewSet(viewsets.ModelViewSet):
     queryset = MeetingTime.objects.all()
     serializer_class = MeetingTimeSerializer
+    def get_queryset(self):
+        queryset = MeetingTime.objects.all()
+        institution = self.request.user.institution
+        search_query = self.request.query_params.get('search', None)
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        if search_query:
+            queryset = queryset.filter(time__istartswith=search_query)
+        return queryset 
 
 class StreamViewSet(viewsets.ModelViewSet):
     queryset = Stream.objects.all()
     serializer_class = StreamSerializer
-
+    def get_queryset(self):
+        queryset = Stream.objects.all()
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        return queryset 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
-
+    def get_queryset(self):
+        queryset = Room.objects.all()
+        institution = self.request.user.institution
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        return queryset 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        search_query = self.request.query_params.get('search', None)
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution__name__istartswith=institution)
+        if search_query:
+            queryset = queryset.filter(name__istartswith=search_query)
+        return queryset 
 
 
 class ProfileUpdateAPIView(APIView):
