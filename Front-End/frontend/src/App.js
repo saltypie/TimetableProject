@@ -27,7 +27,8 @@ import RoomTable from './components/coursecomponents/viewrooms.jsx';
 import DepartmentTable from './components/coursecomponents/viewdepartments.jsx';
 import StreamTable from './components/coursecomponents/viewstreams.jsx';
 import TimingTable from "./components/coursecomponents/viewtimings.jsx";
-
+import './css/style.css';
+// import './css/satoshi.css';
 
 
 /*import AdminSidebar from './adminSidebar.jsx'; */

@@ -16,6 +16,7 @@ router = DefaultRouter()
 router.register(r'meetingtimes', MeetingTimeViewSet)
 router.register(r'streams', StreamViewSet)
 router.register(r'rooms', RoomViewSet)
+router.register(r'roles', RoleViewSet)
 router.register(r'courses', CourseViewSet)
 router.register(r'profile', ProfileDetailView, basename="profile")
 router.register(r'institutionmembers', InstitutionMemberView, basename="institutionmembers")
@@ -38,5 +39,5 @@ urlpatterns = [
     # path('api/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # path("logout/", UserLogoutAPIView.as_view(), name="logout-user"),
     # path('users/', UserListView.as_view(), name='user-list'),
-
 ]
+# urlpatterns += [path('api/viewsets/roles/searchorcreate/', RoleViewSet.as_view({'get': 'searchorcreate'}), name='role-search-or-create'),]
