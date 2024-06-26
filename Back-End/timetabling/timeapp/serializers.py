@@ -107,4 +107,4 @@ class InstitutionMemberSerializer(serializers.ModelSerializer):
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institution
-        fields = ['id','name', 'phone', 'email']
+        fields = ['id','name', 'phone', 'email','is_institution_approved']

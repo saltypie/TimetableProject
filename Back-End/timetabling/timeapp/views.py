@@ -229,6 +229,18 @@ class InstitutionViewSet(viewsets.ModelViewSet):
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
 
+
+    def patch(self, request, *args, **kwargs):
+        print("Here",   request.data)
+        try:
+            institute = Institution.objects.get(name=request.data["name"])
+            serializer = InstitutionSerializer(institute, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Institution.DoesNotExist:
+            return Response({"error": "Institution not found"}, status=status.HTTP_404_NOT_FOUND)
     def get_queryset(self):
         queryset = Institution.objects.all()
         search_query = self.request.query_params.get('search', None)

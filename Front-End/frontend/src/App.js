@@ -27,6 +27,7 @@ import RoomTable from './components/coursecomponents/viewrooms.jsx';
 import DepartmentTable from './components/coursecomponents/viewdepartments.jsx';
 import StreamTable from './components/coursecomponents/viewstreams.jsx';
 import TimingTable from "./components/coursecomponents/viewtimings.jsx";
+import InstitutionsTable from "./components/admincomponents/dashboard.jsx"
 import './css/style.css';
 // import './css/satoshi.css';
 
@@ -107,6 +108,7 @@ useEffect(()=>{
           <Route path="/Room" element={<RoomTable/>}/>
           <Route path="/Department" element={<DepartmentTable/>}/>
           <Route path="/Stream" element={<StreamTable/>}/>
+          <Route path='/institution-approval' element={<InstitutionsTable/>}/>
         </Routes>
       </BrowserRouter>
     </div>
