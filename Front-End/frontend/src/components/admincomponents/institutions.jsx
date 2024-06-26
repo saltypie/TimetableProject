@@ -9,8 +9,8 @@ const CrudTable = ({ titles, colNames, colTitles, endpoint }) => {
     const initialFormData = colNames.reduce((acc, col) => ({ ...acc, [col]: '' }), {});
     const [editFormData, setEditFormData] = useState(initialFormData);
 
-    // Define which columns are boolean
-    const booleanColumns = ['is_institution_approved', 'another_boolean_column']; // Add more boolean columns as needed
+  
+    const booleanColumns = ['is_institution_approved', 'another_boolean_column']; 
 
     const fetchData = async () => {
         try {

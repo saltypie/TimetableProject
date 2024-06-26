@@ -121,7 +121,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
         } else if (role === 'scheduler' && is_institution_approved==="false") {
             return (
                 <div>
-                    <br /><hr /><br />
+                    <br /><hr />
                     Your Institution is Awaiting Approval
                     <div className="centerholder">
                         <img className='centerholder' src="https://media.tenor.com/j6D0YKYLKsYAAAAM/paperwork-piles.gif" alt="" />
@@ -131,7 +131,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
         } else if (role === 'scheduler' && institution === "null") {
             return (
                 <div className=''>
-                    <br />
+                    <br /><hr />
                     <div onClick={() => setIsModalOpen(true)} className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">Register Institution</div>
                     <br />
                     <div className="search rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -149,6 +149,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
         } else if (role === 'instructor' && institution === "null") {
             return (
                 <div>
+                    <br /><hr /> 
                     <div className="search">
                         <input 
                             onChange={handleInstitutionSearchChange} 
@@ -175,15 +176,19 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
         } else if (role === 'scheduler' && is_institution_approved) {
             return (
                 <div>
+                    <br /><hr />
                     <br />
                     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/schedules">View Schedules</Link></div>
+                    <br />
                     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/constraints">View Constraints</Link></div>
+                    <br />
                     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/messages">View Messages</Link></div>
                 </div>
             );
         } else if (role === 'instructor') {
             return (
                 <div>
+                    <br /><hr /><br />
                     Welcome
                     <div><Link to="/messages">Most Recent Message (Click To See More Messages...)</Link></div>
                     <div><Link to="/schedules">View Schedules</Link></div>
