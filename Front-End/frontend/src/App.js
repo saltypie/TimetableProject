@@ -15,7 +15,7 @@ import AddRoom from "./components/addRoom.jsx";
 import EditClass from "./components/editRoom.jsx";
 import ViewClass from "./components/viewClass.jsx";
 import ProfileUpdateForm from './components/ProfileForm.jsx';
-import ChangePassword from './components/changePassword.jsx';
+//import ChangePassword from './components/changePassword.jsx';
 import You from './components/You.jsx';
 import Profile from "./components/profile.jsx";
 import AddTiming from "./components/addTiming.jsx";
@@ -29,6 +29,7 @@ import StreamTable from './components/coursecomponents/viewstreams.jsx';
 import TimingTable from "./components/coursecomponents/viewtimings.jsx";
 import InstitutionsTable from "./components/admincomponents/dashboard.jsx"
 import InstitutionProfile from './components/institution.jsx';
+import CommentSection from './components/CommentSection.jsx';
 import './css/style.css';
 // import './css/satoshi.css';
 
@@ -97,7 +98,7 @@ useEffect(()=>{
           <Route path="/EditClass" element={<EditClass/>}/>
           <Route path="/ViewClass" element={<ViewClass/>}/>
           <Route path="/ProfileUpdate" element={<ProfileUpdateForm/>}/>
-          <Route path="/ChangePassword" element={<ChangePassword/>}/>
+
           <Route path="/You" element={<You/>}/>
           <Route path="/Profile" element={<Profile/>}/>
           <Route path="/AddTiming" element={<AddTiming/>}/>
@@ -111,6 +112,7 @@ useEffect(()=>{
           <Route path="/Stream" element={<StreamTable/>}/>
           <Route path='/institution-approval' element={<InstitutionsTable/>}/>
           <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
+          <Route path='/CommentSection' element={<CommentSection/>}/>
         </Routes>
       </BrowserRouter>
     </div>

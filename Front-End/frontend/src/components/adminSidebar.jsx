@@ -12,6 +12,7 @@ const AdminSidebar = () => {
                 <li><Link to="/AddCourse">Courses</Link></li>
                 <li><Link to="/AddSection">Sections</Link></li>
                 <li><a href="#">Timetables</a></li>
+                <li><Link to="/CommentSection">Messages</Link></li>
             </ul>
         </div>
     );
