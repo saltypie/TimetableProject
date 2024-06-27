@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile
+from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile, Institution
 from django.contrib.auth import authenticate
 from .email_functionality import send_email
 from rest_framework.response import Response
@@ -106,5 +106,5 @@ class InstitutionMemberSerializer(serializers.ModelSerializer):
 
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserData
-        fields = ['name', 'phone', 'email']
+        model = Institution
+        fields = ['id','name', 'phone', 'email','is_institution_approved']

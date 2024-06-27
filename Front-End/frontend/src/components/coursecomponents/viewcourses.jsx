@@ -153,13 +153,13 @@ const CourseTable = () => {
                             ) : (
                                 <>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black dark:text-white">{course.course_number}</p>
+                                        <p className="text-black dark:text-white">{course['course_number']}</p>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black dark:text-white">{course.course_name}</p>
+                                        <p className="text-black dark:text-white">{course['course_name']}</p>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black dark:text-white">{course.max_numb_students}</p>
+                                        <p className="text-black dark:text-white">{course['max_numb_students']}</p>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
                                         <button onClick={() => handleEditClick(course)} className="btn btn-warning">Edit</button>

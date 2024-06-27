@@ -27,7 +27,10 @@ import RoomTable from './components/coursecomponents/viewrooms.jsx';
 import DepartmentTable from './components/coursecomponents/viewdepartments.jsx';
 import StreamTable from './components/coursecomponents/viewstreams.jsx';
 import TimingTable from "./components/coursecomponents/viewtimings.jsx";
-
+import InstitutionsTable from "./components/admincomponents/dashboard.jsx"
+import InstitutionProfile from './components/institution.jsx';
+import './css/style.css';
+// import './css/satoshi.css';
 
 
 /*import AdminSidebar from './adminSidebar.jsx'; */
@@ -106,6 +109,8 @@ useEffect(()=>{
           <Route path="/Room" element={<RoomTable/>}/>
           <Route path="/Department" element={<DepartmentTable/>}/>
           <Route path="/Stream" element={<StreamTable/>}/>
+          <Route path='/institution-approval' element={<InstitutionsTable/>}/>
+          <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
         </Routes>
       </BrowserRouter>
     </div>

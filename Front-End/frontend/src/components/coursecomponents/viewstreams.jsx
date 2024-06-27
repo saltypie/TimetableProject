@@ -74,7 +74,29 @@ const StreamTable = () => {
                 </h4>
 
                 <div className="flex flex-col">
-                    <div className="grid grid-cols-2 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-3">
+                    {/* <div className="grid grid-cols-2 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-3">
+                        <div className="p-2.5 xl:p-5">
+                            <h5 className="text-sm font-medium uppercase xsm:text-base">
+                                Stream ID
+                            </h5>
+                        </div>
+                        <div className="p-2.5 xl:p-5">
+                            <h5 className="text-sm font-medium uppercase xsm:text-base">
+                                Lessons per Week
+                            </h5>
+                        </div>
+                        <div className="p-2.5 xl:p-5">
+                            <h5 className="text-sm font-medium uppercase xsm:text-base">
+                                Update
+                            </h5>
+                        </div>
+                        <div className="p-2.5 xl:p-5">
+                            <h5 className="text-sm font-medium uppercase xsm:text-base">
+                                Delete
+                            </h5>
+                        </div>
+                    </div> */}
+                    <div className="grid grid-cols-2 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
                         <div className="p-2.5 xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
                                 Stream ID
@@ -99,7 +121,7 @@ const StreamTable = () => {
 
                     {streams.map((stream, key) => (
                         <div
-                            className={`grid grid-cols-2 sm:grid-cols-3 ${
+                            className={`grid grid-cols-2 sm:grid-cols-5 ${
                                 key === streams.length - 1 ? '' : 'border-b border-stroke dark:border-strokedark'
                             }`}
                             key={key}

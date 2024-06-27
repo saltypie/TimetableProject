@@ -4,6 +4,7 @@ import './Login.css';
 import { FaLock } from "react-icons/fa";
 import Navbar from './navigation.jsx';
 import axios from "axios";
+import HomeTiles from './reusable/homeoptions.jsx';
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -38,7 +39,8 @@ const Home = () => {
 
     const resetTimer = () => {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(handleInactivity, 20000); // 20 seconds
+      // timeoutId = setTimeout(handleInactivity, 20000); // 20 seconds
+      timeoutId = setTimeout(handleInactivity, 200000000); // 20 seconds
     };
 
     const events = ['click', 'keydown', 'mousemove', 'wheel'];
@@ -68,8 +70,12 @@ const Home = () => {
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <div className='wrapper'>
-        <h1>Welcome</h1>
+      <div className=''>
+        <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1'>
+          <h1 className='centerholder'>Welcome</h1>
+          <HomeTiles is_institution_approved={localStorage.getItem('is_institution_approved')} is_application_accepted={localStorage.getItem('is_application_accepted')} role={localStorage.getItem('role')} institution={localStorage.getItem('institution')}/>
+          <br />
+        </div>
       </div>
     </div>
   );

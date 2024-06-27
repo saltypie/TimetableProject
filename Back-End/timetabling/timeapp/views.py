@@ -25,6 +25,7 @@ class RegisterView(GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+    
 
 class UserLoginAPIView(GenericAPIView):
 
@@ -43,7 +44,10 @@ class UserLoginAPIView(GenericAPIView):
             data["institution"] = user.institution.name if user.institution else None
             data["is_application_accepted"] = user.is_application_accepted
             data["is_institution_approved"] = user.institution.is_institution_approved if user.institution else None
+            print(data["is_institution_approved"]) 
+            print(data["is_application_accepted"])
             data["role"] = user.role.name
+            data["user_id"] = user.id
             data["tokens"] = {"refresh": str(token), "access": str(token.access_token)}
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -197,16 +201,53 @@ class InstitutionMemberView(viewsets.ModelViewSet):
         institution = self.request.user.institution
         print("User making request:", self.request.user, "Institution:", institution)
         return UserData.objects.filter(institution=institution)
+    def patch(self, request, *args, **kwargs):
+        print("Here",   request.data)
+        try:
+            serializer = InstitutionMemberSerializer(request.user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except UserData.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class RoleViewSet(viewsets.ModelViewSet):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+
+    @action(detail=False, methods=['get'], url_path='searchorcreate')
+    def search_or_create(self, request):
+        search_query = request.query_params.get('search', None)
+        if search_query:
+            role, created = Role.objects.get_or_create(name=search_query)
+            serializer = self.get_serializer(role)
+            return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+        return Response({"error": "Search query not provided"}, status=status.HTTP_400_BAD_REQUEST)
 
 class InstitutionViewSet(viewsets.ModelViewSet):
     queryset = Institution.objects.all()
     serializer_class = InstitutionSerializer
 
+
+    def patch(self, request, *args, **kwargs):
+        print("Here",   request.data)
+        try:
+            institute = Institution.objects.get(name=request.data["name"])
+            serializer = InstitutionSerializer(institute, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Institution.DoesNotExist:
+            return Response({"error": "Institution not found"}, status=status.HTTP_404_NOT_FOUND)
     def get_queryset(self):
         queryset = Institution.objects.all()
         search_query = self.request.query_params.get('search', None)
         if search_query:
             queryset = queryset.filter(name__istartswith=search_query)
+        print("Hi")
+        print(queryset)
         return queryset
 #######
 
