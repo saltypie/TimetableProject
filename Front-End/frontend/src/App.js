@@ -30,12 +30,14 @@ import TimingTable from "./components/coursecomponents/viewtimings.jsx";
 import InstitutionsTable from "./components/admincomponents/dashboard.jsx"
 import InstitutionProfile from './components/institution.jsx';
 import './css/style.css';
+
 // import './css/satoshi.css';
 
 
-/*import AdminSidebar from './adminSidebar.jsx'; */
+/*import Sidebar from './navigation/sidebar.jsx'; */
 
 import{useEffect, useState} from 'react';
+import Sidebar from './components/navigation/sidebar.jsx';
 
 function App() {
   const[loggedIn,setLoggedIn]=useState(true);
@@ -78,9 +80,9 @@ useEffect(()=>{
 }, []);
   return (
     <div >
-      
+
      <BrowserRouter>
-     
+        <Sidebar/>
         <Routes>
           <Route path="/email" element={<Email/>}/>
           <Route path="/ResetPassword/:id" element={<ResetPassword/>}/>
@@ -113,6 +115,7 @@ useEffect(()=>{
           <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
         </Routes>
       </BrowserRouter>
+
     </div>
   );
 }

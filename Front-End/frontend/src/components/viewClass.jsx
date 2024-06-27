@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './navigation.jsx';
-import AdminSidebar from './adminSidebar.jsx';
+import Sidebar from './navigation/sidebar.jsx';
 import EditClass from './editRoom.jsx';
 
 const ViewClass = () => {

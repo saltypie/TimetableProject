@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
-import AdminSidebar from './adminSidebar.jsx';
+import Sidebar from './navigation/sidebar.jsx';
 
 const AddTiming = () => {
   
