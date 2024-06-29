@@ -37,7 +37,7 @@ Begin with cloning the project to your local repository.
 Press Enter to create your local clone.
 Move to the timetable project directory, then navigate to the Front-End folder.
 
-      cd TimetableProject/Ftont-End
+      cd TimetableProject/Front-End
 
 Install the required frontend packages used in javascript programming and Nodejs.
 
