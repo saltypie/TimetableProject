@@ -7,7 +7,7 @@ function Admin() {
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       
-        <AdminSidebar /> {}
+         {}
         <div className='wrapper'>
         <div className='content'>
           <h1>Welcome</h1>

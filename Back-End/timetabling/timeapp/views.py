@@ -11,6 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, action
 from .email_functionality import send_email
 from rest_framework.parsers import MultiPartParser, FormParser
+from .timetable_functionality import generate_timetables
 
 class RegisterView(GenericAPIView):
     serializer_class = UserSerializer
@@ -121,6 +122,18 @@ class DepartmentViewSet(viewsets.ModelViewSet):
         if search_query:
             queryset = queryset.filter(dept_name__istartswith=search_query)
         return queryset 
+    def post(self, request, *args, **kwargs):
+        try:
+            the_dept = Department.objects.get(dept_name=request.data["dept_name"])
+            print("That Exists")
+            return Response({"Message": "Department already exists"})
+        except:
+            self.request.data["institution"] = self.request.user.institution
+            serializer = DepartmentSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        
 class MeetingTimeViewSet(viewsets.ModelViewSet):
     queryset = MeetingTime.objects.all()
     serializer_class = MeetingTimeSerializer
@@ -134,6 +147,18 @@ class MeetingTimeViewSet(viewsets.ModelViewSet):
         if search_query:
             queryset = queryset.filter(time__istartswith=search_query)
         return queryset 
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            the_timing = MeetingTime.objects.get(time=request.data["time"], day=request.data["day"])
+            print("That Exists")
+            return Response({"Message": "Meeting Time already exists"})
+        except:
+            self.request.data["institution"] = self.request.user.institution
+            serializer = MeetingTimeSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
 
 class StreamViewSet(viewsets.ModelViewSet):
     queryset = Stream.objects.all()
@@ -145,6 +170,17 @@ class StreamViewSet(viewsets.ModelViewSet):
         if institution:
             queryset = queryset.filter(institution__name__istartswith=institution)
         return queryset 
+    def post(self, request, *args, **kwargs):
+        try:
+            self.request.data["institution"] = self.request.user.institution
+            serializer = StreamSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except:
+            return Response({"Message": "Failed"})
+
+
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
@@ -154,6 +190,16 @@ class RoomViewSet(viewsets.ModelViewSet):
         if institution:
             queryset = queryset.filter(institution__name__istartswith=institution)
         return queryset 
+    def post(self, request, *args, **kwargs):
+        try:
+            self.request.data["institution"] = self.request.user.institution
+            serializer = RoomSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except:
+            return Response({"Message": "Failed"})    
+        
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -165,9 +211,17 @@ class CourseViewSet(viewsets.ModelViewSet):
         if institution:
             queryset = queryset.filter(institution__name__istartswith=institution)
         if search_query:
-            queryset = queryset.filter(name__istartswith=search_query)
+            queryset = queryset.filter(name__istartswith=search_query, institution__name__istartswith=institution)
         return queryset 
-
+    def post(self, request, *args, **kwargs):
+        try:
+            self.request.data["institution"] = self.request.user.institution
+            serializer = CourseSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except:
+            return Response({"Message": "Failed"})
 
 class ProfileUpdateAPIView(APIView):
     parser_classes = [MultiPartParser, FormParser]  # To handle file uploads
@@ -200,7 +254,7 @@ class InstitutionMemberView(viewsets.ModelViewSet):
     def get_queryset(self):
         institution = self.request.user.institution
         print("User making request:", self.request.user, "Institution:", institution)
-        return UserData.objects.filter(institution=institution)
+        return UserData.objects.filter(institution=institution, role__name="instructor")
     def patch(self, request, *args, **kwargs):
         print("Here",   request.data)
         try:
@@ -251,9 +305,57 @@ class InstitutionViewSet(viewsets.ModelViewSet):
         return queryset
 #######
 
+@api_view(['GET'])
+def make_timetable(request):  
+    created_objects = generate_timetables(request.user.institution)
+    serializer1 = TimetableSerializer(created_objects['created_schedule'])
+    serializer2 = LessonDetailSerializer(created_objects['created_classes'], many=True)
+    return Response({'schedule':serializer1.data,'schedule_classes': serializer2.data})
 
+class TimetableViewSet(viewsets.ModelViewSet):
+    queryset = Timetable.objects.all()
+    serializer_class = TimetableSerializer
+    def get_queryset(self):
+        queryset = Timetable.objects.filter(institution = self.request.user.institution)
+        institution = self.request.user.institution
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution=institution)
+        return queryset    
 
+class LessonDetailViewSet(viewsets.ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonDetailSerializer
+    def get_queryset(self):
+        queryset = Lesson.objects.all()
+        institution = self.request.user.institution
+        search_query = self.request.query_params.get('search', None)
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            queryset = queryset.filter(institution=institution,timetable=search_query)
+        return queryset
+    @action(detail=False, methods=['get'], url_path='table')
+    def table(self, request):
+        institution = self.request.user.institution
+        timetable = self.request.query_params.get('search', None)
+        if not timetable or not institution:
+            return Response({"error": "Institution or timetable not provided"}, status=status.HTTP_400_BAD_REQUEST)
+        lessons = Lesson.objects.filter(institution=institution,timetable=timetable)
+        departments = Department.objects.filter(institution=institution)
+        streams = Stream.objects.filter(institution=institution)
+        meeting_times = MeetingTime.objects.filter(institution=institution)
+        schedules = {}
 
+        for department in departments:
+            for stream in streams:
+                for meeting_time in meeting_times:
+                    for lesson in lessons:
+                        if lesson.department == department and lesson.stream == stream and lesson.meeting_time == meeting_time:
+                            schedules[f"{department}--{stream}"][f"{meeting_time.day}"][f"{meeting_time.time}"] = lesson
+        
+        
+
+        return schedules
 
 
 

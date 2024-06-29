@@ -3,6 +3,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
+import { generalPost, searchFunction } from './reusable/functions.jsx';
 
 const AddCourse = () => {
   
@@ -17,12 +18,9 @@ const AddCourse = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/timeapp/api/viewsets/subjects', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-        }
-      });
-      setSubjects(response.data); // Assuming the response is an array of subject objects
+      const response = await searchFunction('viewsets/courses');
+      setSubjects(response);
+      console.log(`Hi ${response[0]["course_name"]}`);
     } catch (error) {
       console.error('Error fetching subjects:', error);
     }
@@ -41,21 +39,12 @@ const AddCourse = () => {
     e.preventDefault();
 
     const body = {
-      courseName: courseName,
-      subjects: selectedSubjects
+      dept_name: courseName,
+      courses: selectedSubjects
     };
 
     try {
-      const { data } = await axios.post(
-        'http://127.0.0.1:8000/timeapp/api/viewsets/courses',
-        body,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-          }
-        }
-      );
+      const { data } = await generalPost('viewsets/department', body);
 
       if (data.Message) {
         alert(data.Message);
@@ -71,7 +60,6 @@ const AddCourse = () => {
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
       <div className='wrapper'>
         <form onSubmit={submit}>
           <h1>Add Course</h1>
@@ -99,7 +87,7 @@ const AddCourse = () => {
               required
             >
               {subjects.map(subject => (
-                <option key={subject.id} value={subject.id}>{subject.name}</option>
+                <option key={subject.id} value={subject.id}>{subject.course_name}</option>
               ))}
             </select>
           </div>

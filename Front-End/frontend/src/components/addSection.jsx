@@ -3,6 +3,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
+import { generalPost } from './reusable/functions.jsx';
 
 const AddSection = () => {
   const [departments, setDepartments] = useState([]);
@@ -44,16 +45,7 @@ const AddSection = () => {
     };
 
     try {
-      const { data } = await axios.post(
-        'http://127.0.0.1:8000/timeapp/api/viewsets/sections',
-        body,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-          }
-        }
-      );
+      const { data } = await generalPost('viewsets/streams', body);
 
       if (data.Message) {
         alert(data.Message);
@@ -69,7 +61,6 @@ const AddSection = () => {
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
       <div className='wrapper'>
         <form onSubmit={submit}>
           <h1>Add Section</h1>

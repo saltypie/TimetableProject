@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile, Institution
+from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile, Institution, Timetable, Lesson
 from django.contrib.auth import authenticate
 from .email_functionality import send_email
 from rest_framework.response import Response
@@ -108,3 +108,33 @@ class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institution
         fields = ['id','name', 'phone', 'email','is_institution_approved']
+
+###
+class TimetableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Timetable
+        fields = ['id', 'time_made','author','institution']
+
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ['id', 'department', 'course', 'instructor', 'meeting_time', 'room', 'stream', 'timetable']
+        depth = 1  # Include foreign key data
+
+class LessonDetailSerializer(serializers.ModelSerializer):
+    department = serializers.StringRelatedField()
+    course = serializers.StringRelatedField()
+    instructor = serializers.StringRelatedField()
+    meeting_time = serializers.StringRelatedField()
+    room = serializers.StringRelatedField()
+    stream = serializers.StringRelatedField()
+    timetable = TimetableSerializer()
+
+    class Meta:
+        model = Lesson
+        fields = ['id', 'department', 'course', 'instructor', 'meeting_time', 'room', 'stream', 'timetable']
+
+
+
+
+####

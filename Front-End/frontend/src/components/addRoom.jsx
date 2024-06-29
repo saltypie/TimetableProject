@@ -3,6 +3,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
+import { generalPost } from './reusable/functions.jsx';
 
 const AddSubject = () => {
   
@@ -23,18 +24,12 @@ const AddSubject = () => {
   const submit = async e => {
     e.preventDefault();
     const body = {
-          room: room,
-          capacity: capacity
+          r_number: room,
+          seating_capacity: capacity
          };
     // Create the POST request
     try {
-       const {data} = await                                                                            
-                      axios.post('http://127.0.0.1:8000/timeapp/api/viewsets/rooms', body ,
-                        {headers: 
-                          {'Content-Type': 'application/json',
-                           'Authorization':`Bearer ${localStorage.getItem('access_Token')}`
-                            }
-                          });
+       const {data} = await  generalPost('viewsets/rooms', body);
         if(data.Message){
           alert(data["Message"]);
           setErrorMessage(data.Message);
@@ -51,7 +46,7 @@ const AddSubject = () => {
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       
-      <AdminSidebar />
+      <Sidebar />
       <div className='wrapper'>
         <form action="" onSubmit={submit}>
           <h1>Add Room</h1>
@@ -59,12 +54,12 @@ const AddSubject = () => {
             <input 
               name="room"
               type="text" 
-              placeholder="Room Name" 
+              placeholder="Room Number/Code/Name" 
               value={room} 
               onChange={handleRoomChange} 
               required 
             />
-            <span className="info" title="This is the name given to the room.">ℹ️</span>
+            <span className="info" title="This is the name/code given to the room.">ℹ️</span>
           </div>
 
           <div className="input-box">

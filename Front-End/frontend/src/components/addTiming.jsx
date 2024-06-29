@@ -3,6 +3,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
+import { generalPost } from './reusable/functions.jsx';
 
 const AddTiming = () => {
   
@@ -64,24 +65,14 @@ const AddTiming = () => {
     }
     
     const body = {
-      dayOfWeek: dayOfWeek,
-      startTime: startTime,
+      day: dayOfWeek,
+      time: `${startTime} - ${endTime}`,
       endTime: endTime
     };
 
     try {
-      const { data } = await axios.post(
-        'http://127.0.0.1:8000/timeapp/api/',
-        body,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-          }
-        }
-      );
-
-      if (data.Message) {
+      const { data } = await generalPost('viewsets/timings/', body);
+      if (!data) {
         alert(data.Message);
         setErrorMessage(data.Message);
       } else {
@@ -95,7 +86,7 @@ const AddTiming = () => {
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
+      
       <div className='wrapper'>
         <form onSubmit={submit}>
           <h1>Add Timing</h1>

@@ -24,7 +24,7 @@ function Class() {
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
+      
       <div className='content'>
         <div className="card-container">
          

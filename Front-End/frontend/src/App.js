@@ -100,12 +100,11 @@ useEffect(()=>{
           <Route path="/EditClass" element={<EditClass/>}/>
           <Route path="/ViewClass" element={<ViewClass/>}/>
           <Route path="/ProfileUpdate" element={<ProfileUpdateForm/>}/>
-
           <Route path="/You" element={<You/>}/>
           <Route path="/Profile" element={<Profile/>}/>
           <Route path="/AddTiming" element={<AddTiming/>}/>
-          <Route path="/AddSubject" element={<AddSubject/>}/>
-          <Route path="/AddCourse" element={<AddCourse/>}/>
+          <Route path="/AddCourse" element={<AddSubject/>}/>
+          <Route path="/AddDepartment" element={<AddCourse/>}/>
           <Route path="/AddSection" element={<AddSection/>}/>
           <Route path="/Course" element={<CourseTable/>}/>
           <Route path="/Timing" element={<TimingTable/>}/>
