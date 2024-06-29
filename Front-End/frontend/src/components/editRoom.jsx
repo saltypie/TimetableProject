@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Login.css';
 import Navbar from './navigation.jsx';
 
-import AdminSidebar from './adminSidebar.jsx';
+import Sidebar from './navigation/sidebar.jsx';
 const EditRoom = ({ classData }) => {
   const [editedClass, setEditedClass] = useState(classData);
 

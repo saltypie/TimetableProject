@@ -44,6 +44,7 @@ const Login = () => {
            localStorage.setItem('role', data["role"]);
            localStorage.setItem('isLogged', true);
            localStorage.setItem('isLockedOut', false);
+           localStorage.setItem('hamburger_open',false)
 
            axios.defaults.headers.common['Authorization'] =`Bearer ${data['access']}`;
            window.location.href = '/';

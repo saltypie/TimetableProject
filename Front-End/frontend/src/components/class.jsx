@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './index.css';
 import { Link } from 'react-router-dom'; 
 import Navbar from './navigation.jsx';
-import AdminSidebar from './adminSidebar.jsx';
+import Sidebar from './navigation/sidebar.jsx';
 import axios from 'axios';
 
 function Class() {
