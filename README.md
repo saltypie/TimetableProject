@@ -9,22 +9,22 @@ Timetabulous is a timetable creation application that is intended to ease the ch
 
 ## Getting Started
 The following are the base requirements before installation and setup of the project.
-Term 1
-:   This is a definition item
-    With a paragraph
-    > This is a block quote
-    
-    And a last line](https://github.com/Philip-O-M/TimetableProject.git)
-:   This ia another definition item
-First Term
-: Python >=3.11
-Second Term
-: Node js >=
-Third Term
-: pgAdmin
-Fourth Term 
-: postgresql
 
+- Python >=3.11
+
+This is the main language used in the backend programming.
+
+- Node js >=
+
+It provides a runtime environment that allows the running of JavaScript code outside of a web browser.
+
+- pgAdmin
+
+It helps in  PostgreSQL database administration
+
+- postgresql
+
+It is the database where the data will be stored.
 
 ### Environment and Repository Setup
 To begin the setup to your device. Move to the directory in which you would like to clone your project, e.g.,
@@ -58,11 +58,11 @@ Instal the backend requirements
 ### Database Setup
 Follow the following steps to set up the database
 
-  -Create a .env file in the Back-End folder
+  - Create a .env file in the Back-End folder
   
-  -Set the env file details according to env_guide.txt
+  - Set the env file details according to env_guide.txt
  
-  -Create a database with the same name in pgAdmin4
+  - Create a database with the same name in pgAdmin4
 
 Lastly, create a superuser by using the command below
 
