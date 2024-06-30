@@ -22,11 +22,12 @@ const AddTiming = () => {
     if (endTime < e.target.value) {
       setEndTime(e.target.value); // Adjust endTime if it is before startTime
     } else {
+      setErrorMessage("Start Time cannot be after End Time");
       // Check if endTime exceeds 3 hours from startTime
-      const maxEndTime = calculateMaxEndTime(e.target.value);
-      if (endTime > maxEndTime) {
-        setEndTime(maxEndTime); // Adjust endTime if it exceeds max duration
-      }
+      // const maxEndTime = calculateMaxEndTime(e.target.value);
+      // if (endTime > maxEndTime) {
+      //   setEndTime(maxEndTime); // Adjust endTime if it exceeds max duration
+      // }
     }
   }
 
@@ -40,13 +41,13 @@ const AddTiming = () => {
     }
   }
 
-  const calculateMaxEndTime = (startTime) => {
-    // Calculate max end time as 3 hours from startTime
-    const maxDuration = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
-    const startTimestamp = new Date(`2000-01-01T${startTime}`).getTime(); // Assuming a dummy date for comparison
-    const maxEndTime = new Date(startTimestamp + maxDuration).toISOString().substr(11, 5); // Format to HH:mm
-    return maxEndTime;
-  }
+  // const calculateMaxEndTime = (startTime) => {
+  //   // Calculate max end time as 3 hours from startTime
+  //   const maxDuration = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+  //   const startTimestamp = new Date(`2000-01-01T${startTime}`).getTime(); // Assuming a dummy date for comparison
+  //   const maxEndTime = new Date(startTimestamp + maxDuration).toISOString().substr(11, 5); // Format to HH:mm
+  //   return maxEndTime;
+  // }
 
   const submit = async (e) => {
     e.preventDefault();
@@ -58,29 +59,28 @@ const AddTiming = () => {
     }
 
     // Validation: Check if endTime exceeds 3 hours from startTime
-    const maxEndTime = calculateMaxEndTime(startTime);
-    if (endTime > maxEndTime) {
-      setErrorMessage(`End Time cannot exceed 3 hours from Start Time (${maxEndTime})`);
-      return;
-    }
+    // const maxEndTime = calculateMaxEndTime(startTime);
+    // if (endTime > maxEndTime) {
+    //   setErrorMessage(`End Time cannot exceed 3 hours from Start Time (${maxEndTime})`);
+    //   return;
+    // }
     
     const body = {
-      day: dayOfWeek,
       time: `${startTime} - ${endTime}`,
-      endTime: endTime
+      day: `${dayOfWeek}`,
     };
 
-    try {
-      const { data } = await generalPost('viewsets/timings/', body);
+    generalPost('viewsets/meetingtimes/', body).then((data) => {
       if (!data) {
         alert(data.Message);
         setErrorMessage(data.Message);
       } else {
-        window.location.href = '/room/';
+        // window.location.href = '/Timing';
+        alert('Timing added successfully!');
       }
-    } catch (error) {
-      setErrorMessage("Invalid Details");
-    }
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   return (

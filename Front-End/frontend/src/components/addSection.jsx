@@ -3,7 +3,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
-import { generalPost } from './reusable/functions.jsx';
+import { generalPost, searchFunction } from './reusable/functions.jsx';
 
 const AddSection = () => {
   const [departments, setDepartments] = useState([]);
@@ -17,12 +17,9 @@ const AddSection = () => {
 
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/timeapp/api/viewsets/departments', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-        }
-      });
-      setDepartments(response.data); // Assuming the response is an array of department objects
+      const response = await searchFunction('viewsets/departments');
+      console.log(response)
+      setDepartments(response); // Assuming the response is an array of department objects
     } catch (error) {
       console.error('Error fetching departments:', error);
     }
@@ -41,21 +38,21 @@ const AddSection = () => {
 
     const body = {
       department: selectedDepartment,
-      classesPerWeek: classesPerWeek
+      lessons_per_week: classesPerWeek
     };
 
-    try {
-      const { data } = await generalPost('viewsets/streams', body);
 
-      if (data.Message) {
-        alert(data.Message);
-        setErrorMessage(data.Message);
+    generalPost('viewsets/streams', body).then((response) =>{
+      if (response.Message) {
+        alert(response.Message);
+        setErrorMessage(response.Message);
       } else {
-        window.location.href = '/room/';
+        window.location.href = '/Stream';
       }
-    } catch (error) {
+    }).catch((error) => {
+      console.error('There was an error!', error);
       setErrorMessage("Invalid Details");
-    }
+    });
   };
 
   return (
@@ -75,7 +72,7 @@ const AddSection = () => {
             >
               <option value="">Select Department</option>
               {departments.map(department => (
-                <option key={department.id} value={department.id}>{department.name}</option>
+                <option key={department.id} value={department.id}>{department.dept_name}</option>
               ))}
             </select>
           </div>

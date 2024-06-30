@@ -43,18 +43,18 @@ const AddCourse = () => {
       courses: selectedSubjects
     };
 
-    try {
-      const { data } = await generalPost('viewsets/department', body);
-
-      if (data.Message) {
-        alert(data.Message);
-        setErrorMessage(data.Message);
+    generalPost('viewsets/departments', body).then((response) =>{
+      if (response.Message) {
+        alert(response.Message);
+        setErrorMessage(response.Message);
       } else {
-        window.location.href = '/room/';
+        alert('Course/Department added successfully');
+        // window.location.href = '/Department';
       }
-    } catch (error) {
+    }).catch((error) => {
+      console.error('There was an error!', error);
       setErrorMessage("Invalid Details");
-    }
+    });
   };
 
   return (

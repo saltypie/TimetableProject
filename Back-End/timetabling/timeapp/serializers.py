@@ -66,7 +66,8 @@ class MeetingTimeSerializer(serializers.ModelSerializer):
 class StreamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stream
-        fields = ['id', 'department', 'lessons_per_week', 'institution', 'course', 'meeting_time', 'room', 'instructor']
+        # fields = ['id', 'department', 'lessons_per_week', 'institution', 'course', 'meeting_time', 'room', 'instructor']
+        fields = ['id', 'department', 'lessons_per_week', 'institution']
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,10 +75,12 @@ class RoomSerializer(serializers.ModelSerializer):
         fields = ['id', 'r_number', 'seating_capacity', 'institution']
 
 class CourseSerializer(serializers.ModelSerializer):
+    instructors = serializers.PrimaryKeyRelatedField(many=True, queryset=UserData.objects.all())
     class Meta:
         model = Course
         fields = ['id','course_number', 'course_name', 'max_numb_students', 'instructors', 'institution']
-
+    # def validate_instructors(self, value):
+    #     return [int(instructor_id) for instructor_id in value]
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -102,7 +105,7 @@ class RoleSerializer(serializers.ModelSerializer):
 class InstitutionMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
-        fields = ['email', 'fname','lname','role','institution','is_application_accepted']
+        fields = ['id','email', 'fname','lname','role','institution','is_application_accepted']
 
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -111,6 +114,7 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
 ###
 class TimetableSerializer(serializers.ModelSerializer):
+    author = InstitutionMemberSerializer(read_only=True)
     class Meta:
         model = Timetable
         fields = ['id', 'time_made','author','institution']

@@ -51,7 +51,6 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
     const fetchData = async () => {
         try {
             const response = await searchFunction('/viewsets/institutions', { search: searchQuery });
-            console.log(`Hi my name is ${response[0].name}`)
             setSearchResults(response);
         } catch (error) {
             console.log(error);
@@ -64,7 +63,10 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
 
     const handleInstructorOptionClick = async () => {
         try {
-            await generalPatch('viewsets/institutionmembers/', localStorage.getItem('user_id'), { role: 'instructor' });
+            const role_data = await searchFunction('viewsets/roles/searchorcreate', { search: 'instructor' });
+            await generalPatch('viewsets/institutionmembers/', localStorage.getItem('user_id'), { role: role_data.id });
+            localStorage.setItem('role', 'instructor');
+            window.location.reload()
         } catch (error) {
             alert(error);
         }
@@ -75,6 +77,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             const role_data = await searchFunction('viewsets/roles/searchorcreate', { search: 'scheduler' });
             await generalPatch('viewsets/institutionmembers/', localStorage.getItem('user_id'), { role: role_data.id });
             localStorage.setItem('role', 'scheduler');
+            window.location.reload()
         } catch (error) {
             alert(error);
         }
@@ -87,6 +90,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             await generalPatch(`/viewsets/institutionmembers/`,localStorage.getItem('user_id') ,{institution: institute.id});
             localStorage.setItem('is_institution_approved', 'true')
             localStorage.setItem('institution', institute.name)
+            window.location.reload()
         } catch (error) {
             console.log(error);
         }
@@ -113,9 +117,12 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
         if (role === 'unassigned') {
             return (
                 <div>
-                    Do You Want To Use Timetabulous as an
-                    <div onClick={handleInstructorOptionClick}>Instructor</div>
-                    <div onClick={handleSchedulerOptionClick}>Scheduler</div>
+                    <hr /><br />
+                    How do You Want To Use Timetabulous?
+                    <br /><br />
+                    <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark cursor-pointer" onClick={handleInstructorOptionClick}>Instructor</div>
+                    <br />
+                    <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark cursor-pointer" onClick={handleSchedulerOptionClick}>Scheduler</div>
                 </div>
             );
         } else if (role === 'scheduler' && is_institution_approved==="false") {
@@ -159,7 +166,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
                         />
                         <div className="results">
                             {searchResults.map((result) => (
-                                <div key={result.id} onClick={() => handleInstitutionClick(result)}>{result.name}</div>
+                                <div className='cursor-pointer' key={result.id} onClick={() => handleInstitutionClick(result)}>{result.name}</div>
                             ))}
                         </div>
                     </div>
@@ -189,9 +196,9 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             return (
                 <div>
                     <br /><hr /><br />
-                    Welcome
-                    <div><Link to="/messages">Most Recent Message (Click To See More Messages...)</Link></div>
-                    <div><Link to="/schedules">View Schedules</Link></div>
+                    <div className="cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/messages">Notifications(Coming Soon)</Link></div>
+                    <br />
+                    <div className="cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark" ><Link to="/schedules">View Schedules</Link></div>
                 </div>
             );
         }

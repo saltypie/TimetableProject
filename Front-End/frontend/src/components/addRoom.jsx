@@ -28,26 +28,26 @@ const AddSubject = () => {
           seating_capacity: capacity
          };
     // Create the POST request
-    try {
-       const {data} = await  generalPost('viewsets/rooms', body);
-        if(data.Message){
-          alert(data["Message"]);
-          setErrorMessage(data.Message);
-        }else{
-          window.location.href = '/room/';
-        }
-    } catch (error) {
-       setErrorMessage("Invalid Details");
-    }
+
+    generalPost('viewsets/rooms', body).then((response) =>{
+      if (response.Message) {
+        alert(response.Message);
+        setErrorMessage(response.Message);
+      } else {
+        // window.location.href = '/Room';
+        alert("Room Added");
+      }
+    }).catch((error) => {
+      console.error('There was an error!', error);
+      setErrorMessage("Invalid Details");
+    });
        
  }  
 
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      
-      <Sidebar />
-      <div className='wrapper'>
+            <div className='wrapper'>
         <form action="" onSubmit={submit}>
           <h1>Add Room</h1>
           <div className="input-box">

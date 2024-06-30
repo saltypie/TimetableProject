@@ -118,21 +118,28 @@ class DepartmentViewSet(viewsets.ModelViewSet):
         institution = self.request.user.institution
         # institution = self.request.query_params.get('institution', None)
         if institution:
-            queryset = queryset.filter(institution__name__istartswith=institution)
+            queryset = queryset.filter(institution=institution)
         if search_query:
             queryset = queryset.filter(dept_name__istartswith=search_query)
         return queryset 
-    def post(self, request, *args, **kwargs):
-        try:
-            the_dept = Department.objects.get(dept_name=request.data["dept_name"])
-            print("That Exists")
-            return Response({"Message": "Department already exists"})
-        except:
-            self.request.data["institution"] = self.request.user.institution
-            serializer = DepartmentSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+        dept_name = request.data.get("dept_name")
+
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if Department.objects.filter(dept_name=dept_name, institution=institution).exists():
+            return Response({"detail": "Department already exists."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = DepartmentSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
         
 class MeetingTimeViewSet(viewsets.ModelViewSet):
     queryset = MeetingTime.objects.all()
@@ -143,22 +150,30 @@ class MeetingTimeViewSet(viewsets.ModelViewSet):
         search_query = self.request.query_params.get('search', None)
         # institution = self.request.query_params.get('institution', None)
         if institution:
-            queryset = queryset.filter(institution__name__istartswith=institution)
+            queryset = queryset.filter(institution=institution)
         if search_query:
             queryset = queryset.filter(time__istartswith=search_query)
         return queryset 
     
-    def post(self, request, *args, **kwargs):
-        try:
-            the_timing = MeetingTime.objects.get(time=request.data["time"], day=request.data["day"])
-            print("That Exists")
-            return Response({"Message": "Meeting Time already exists"})
-        except:
-            self.request.data["institution"] = self.request.user.institution
-            serializer = MeetingTimeSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+        time = request.data.get('time')
+        day = request.data.get('day')
+        
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if MeetingTime.objects.filter(time=time, day=day, institution=institution).exists():
+            return Response({"detail": "Meeting Time already exists."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        data = request.data.copy()
+        data['institution'] = institution.id
+        
+        serializer = MeetingTimeSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class StreamViewSet(viewsets.ModelViewSet):
     queryset = Stream.objects.all()
@@ -168,17 +183,22 @@ class StreamViewSet(viewsets.ModelViewSet):
         institution = self.request.user.institution
         # institution = self.request.query_params.get('institution', None)
         if institution:
-            queryset = queryset.filter(institution__name__istartswith=institution)
+            queryset = queryset.filter(institution=institution)
         return queryset 
-    def post(self, request, *args, **kwargs):
-        try:
-            self.request.data["institution"] = self.request.user.institution
-            serializer = StreamSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
-        except:
-            return Response({"Message": "Failed"})
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = StreamSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -188,17 +208,22 @@ class RoomViewSet(viewsets.ModelViewSet):
         queryset = Room.objects.all()
         institution = self.request.user.institution
         if institution:
-            queryset = queryset.filter(institution__name__istartswith=institution)
+            queryset = queryset.filter(institution=institution)
         return queryset 
-    def post(self, request, *args, **kwargs):
-        try:
-            self.request.data["institution"] = self.request.user.institution
-            serializer = RoomSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
-        except:
-            return Response({"Message": "Failed"})    
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = RoomSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)   
         
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -209,22 +234,29 @@ class CourseViewSet(viewsets.ModelViewSet):
         institution = self.request.user.institution
         # institution = self.request.query_params.get('institution', None)
         if institution:
-            queryset = queryset.filter(institution__name__istartswith=institution)
+            queryset = queryset.filter(institution=institution)
         if search_query:
-            queryset = queryset.filter(name__istartswith=search_query, institution__name__istartswith=institution)
+            queryset = queryset.filter(name__istartswith=search_query, institution=institution)
         return queryset 
-    def post(self, request, *args, **kwargs):
-        try:
-            self.request.data["institution"] = self.request.user.institution
-            serializer = CourseSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data)
-        except:
-            return Response({"Message": "Failed"})
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+        print(data["instructors"])
+        # data["instructors"] = [int(instructor_id) for instructor_id in data["instructors"]]
+
+        serializer = CourseSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ProfileUpdateAPIView(APIView):
-    parser_classes = [MultiPartParser, FormParser]  # To handle file uploads
+    parser_classes = [MultiPartParser, FormParser]  # handling file uploads
 
     def patch(self, request, *args, **kwargs):
         try:
@@ -251,20 +283,27 @@ class InstitutionMemberView(viewsets.ModelViewSet):
     serializer_class = InstitutionMemberSerializer
     permission_classes = [IsAuthenticated]
 
+class InstitutionMemberView(viewsets.ModelViewSet):
+    serializer_class = InstitutionMemberSerializer
+    permission_classes = [IsAuthenticated]
+
     def get_queryset(self):
         institution = self.request.user.institution
-        print("User making request:", self.request.user, "Institution:", institution)
-        return UserData.objects.filter(institution=institution, role__name="instructor")
+        return UserData.objects.filter(institution=institution)
+
     def patch(self, request, *args, **kwargs):
-        print("Here",   request.data)
+        print("Here", request.data)
         try:
-            serializer = InstitutionMemberSerializer(request.user, data=request.data, partial=True)
+            # Find the UserData object for the current user
+            user_data = UserData.objects.get(user=request.user)
+            serializer = InstitutionMemberSerializer(user_data, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except UserData.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "UserData not found for this user"}, status=status.HTTP_404_NOT_FOUND)
+            # return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
@@ -307,7 +346,7 @@ class InstitutionViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def make_timetable(request):  
-    created_objects = generate_timetables(request.user.institution)
+    created_objects = generate_timetables(request.user)
     serializer1 = TimetableSerializer(created_objects['created_schedule'])
     serializer2 = LessonDetailSerializer(created_objects['created_classes'], many=True)
     return Response({'schedule':serializer1.data,'schedule_classes': serializer2.data})
@@ -320,7 +359,9 @@ class TimetableViewSet(viewsets.ModelViewSet):
         institution = self.request.user.institution
         # institution = self.request.query_params.get('institution', None)
         if institution:
-            queryset = queryset.filter(institution=institution)
+            queryset = queryset.filter(institution=institution).select_related('author')
+            # queryset[0].
+            # print(queryset[0].author.fname)
         return queryset    
 
 class LessonDetailViewSet(viewsets.ModelViewSet):
@@ -332,35 +373,47 @@ class LessonDetailViewSet(viewsets.ModelViewSet):
         search_query = self.request.query_params.get('search', None)
         # institution = self.request.query_params.get('institution', None)
         if institution:
-            queryset = queryset.filter(institution=institution,timetable=search_query)
+            queryset = queryset.filter(timetable=search_query)
         return queryset
+
     @action(detail=False, methods=['get'], url_path='table')
     def table(self, request):
         institution = self.request.user.institution
-        timetable = self.request.query_params.get('search', None)
+        timetable = self.request.query_params.get('search', None).strip("/")
         if not timetable or not institution:
             return Response({"error": "Institution or timetable not provided"}, status=status.HTTP_400_BAD_REQUEST)
-        lessons = Lesson.objects.filter(institution=institution,timetable=timetable)
-        departments = Department.objects.filter(institution=institution)
+        
+        lessons = Lesson.objects.filter(timetable=timetable)
         streams = Stream.objects.filter(institution=institution)
         meeting_times = MeetingTime.objects.filter(institution=institution)
+        
         schedules = {}
 
-        for department in departments:
-            for stream in streams:
-                for meeting_time in meeting_times:
-                    for lesson in lessons:
-                        if lesson.department == department and lesson.stream == stream and lesson.meeting_time == meeting_time:
-                            schedules[f"{department}--{stream}"][f"{meeting_time.day}"][f"{meeting_time.time}"] = lesson
-        
-        
+        for stream in streams:
+            print(streams)
+            stream_key = f"{stream.department.dept_name}--{stream.id}"
+            schedules[stream_key] = {}
+            for meeting_time in meeting_times:
+                day_key = meeting_time.day
+                time_key = meeting_time.time
+                
+                if day_key not in schedules[stream_key]:
+                    schedules[stream_key][day_key] = {}
+                
+                schedules[stream_key][day_key][time_key] = "No Lesson"
 
-        return schedules
+        for lesson in lessons:
+            stream_key = f"{lesson.stream.department.dept_name}--{lesson.stream.id}"
+            day_key = lesson.meeting_time.day
+            time_key = lesson.meeting_time.time
+            
+            schedules[stream_key][day_key][time_key] = {
+                'course': lesson.course.course_name,
+                'instructor': lesson.instructor.email,
+                'room': lesson.room.r_number
+            }
 
-
-
-
-
+        return Response(schedules)
 
 
 

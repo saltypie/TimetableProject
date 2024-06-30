@@ -6,7 +6,6 @@ import Sidebar from './navigation/sidebar.jsx';
 import { generalPost, searchFunction } from './reusable/functions.jsx';
 
 const AddSubject = () => {
-  
   const [courseCode, setCourseCode] = useState('');
   const [course, setCourse] = useState('');
   const [courseCapacity, setCourseCapacity] = useState('');
@@ -21,14 +20,17 @@ const AddSubject = () => {
   const fetchLecturers = async () => {
     try {
       const response = await searchFunction('/viewsets/institutionmembers');
-      setLecturers(response); 
+      console.log('Fetched lecturers:', response); // Log the fetched lecturers
+      setLecturers(response);
     } catch (error) {
       console.error('Error fetching lecturers:', error);
     }
   };
+
   const handleCourseCodeChange = (e) => {
     setCourseCode(e.target.value);
-  }
+  };
+
   const handleCourseChange = (e) => {
     setCourse(e.target.value);
   };
@@ -39,6 +41,7 @@ const AddSubject = () => {
 
   const handleLecturersChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+    console.log('Selected options:', selectedOptions); // Log selected options
     setSelectedLecturers(selectedOptions);
   };
 
@@ -46,23 +49,25 @@ const AddSubject = () => {
     e.preventDefault();
 
     const body = {
+      course_number: courseCode,
       course_name: course,
       max_numb_students: courseCapacity,
       instructors: selectedLecturers
     };
 
-    try {
-      const { data } = await generalPost('viewsets/courses', body);
-
-      if (data.Message) {
-        alert(data.Message);
-        setErrorMessage(data.Message);
+    generalPost('viewsets/courses', body).then((response) => {
+      if (response.Message) {
+        alert(response.Message);
+        setErrorMessage(response.Message);
       } else {
-        window.location.href = '/room/';
+        console.log(response);
+        alert('Course Subject added successfully');
+        // window.location.href = '/Course';
       }
-    } catch (error) {
+    }).catch((error) => {
+      console.error('There was an error!', error);
       setErrorMessage("Invalid Details");
-    }
+    });
   };
 
   return (
@@ -74,13 +79,13 @@ const AddSubject = () => {
           <h1>Add Subject Unit</h1>
 
           <div className="input-box">
-            <label htmlFor="course">Course Name:</label>
+            <label htmlFor="course_number">Course Code:</label>
             <input 
               id="course_number"
               name="course_number"
               type="text" 
               placeholder="Enter Course Code/Number" 
-              value={course} 
+              value={courseCode} 
               onChange={handleCourseCodeChange} 
               required 
             />
@@ -124,7 +129,8 @@ const AddSubject = () => {
               required
             >
               {lecturers.map(lecturer => (
-                <option key={lecturer.id} value={lecturer.id}>{`${lecturer.fname } ${lecturer.lname}`}</option>
+                
+                <option key={lecturer.id} value={lecturer.id}>{`${lecturer.fname} ${lecturer.lname}`}</option>
               ))}
             </select>
           </div>
@@ -138,6 +144,6 @@ const AddSubject = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AddSubject;

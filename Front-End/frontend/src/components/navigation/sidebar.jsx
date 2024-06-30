@@ -44,21 +44,21 @@ const Sidebar = () => {
                         <li onClick={() => handleSideClick(open)}><FaTimes /></li>
                         <li><Link to="/"><FaHome className='inline' /> Home </Link></li>
                         <li><Link to="You"><FaUser className='inline' /> Profile</Link></li>
-                        <li>
-                            <FaPlus className='inline' onClick={() => setConstraintsDropdownOpen(!constraintsDropdownOpen)} /> Add Constraints
+                        <li onClick={() => setConstraintsDropdownOpen(!constraintsDropdownOpen)}>
+                            <FaPlus className='inline'/> Add Constraints
                             {constraintsDropdownOpen && (
                                 <ul className="dropdown">
                                     <li><Link to="/AddTiming">Timing</Link></li>
                                     <li><Link to="/AddRoom">Room</Link></li>
                                     <li><Link to="/AddDepartment">Department</Link></li>
                                     <li><Link to="/AddCourse">Course</Link></li>
-                                    <li><Link to="/AddStream">Stream</Link></li>
+                                    <li><Link to="/AddSection">Stream</Link></li>
                                 </ul>
                             )}
                         </li>
                         <li><Link to="/institutionprofile"><FaUniversity className='inline' /> Institution</Link></li>
-                        <li>
-                            <FaPencilRuler className='inline' onClick={() => setViewConstraintsDropdownOpen(!viewConstraintsDropdownOpen)} /> View/Edit Constraints
+                        <li onClick={() => setViewConstraintsDropdownOpen(!viewConstraintsDropdownOpen)} >
+                            <FaPencilRuler className='inline' /> View/Edit Constraints
                             {viewConstraintsDropdownOpen && (
                                 <ul className="dropdown">
                                     <li><Link to="/Timing">Timing</Link></li>

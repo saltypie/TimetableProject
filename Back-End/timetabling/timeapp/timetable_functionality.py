@@ -195,9 +195,10 @@ class GeneticAlgorithm:
         tournament_population.get_schedules().sort(key=lambda x: x.get_fitness(), reverse=True)
         return tournament_population
 
-def add_sched_to_db(schedule):
+def add_sched_to_db(schedule,requester):
     classes = schedule.get_classes()
-    created_table = Timetable.objects.create()
+    # user_data_instance = UserData.objects.get(id=requester.id)
+    created_table = Timetable.objects.create(author=requester, institution=requester.institution)
     for lesson in classes:
         Lesson.objects.create(
             department=lesson.get_department(),
@@ -210,7 +211,8 @@ def add_sched_to_db(schedule):
         )
     return created_table
 
-def generate_timetables(institution):
+def generate_timetables(requester):
+    institution = requester.institution
     data = Data(institution)
     population = Population(POPULATION_SIZE, data)
     generation_count = 0
@@ -226,7 +228,7 @@ def generate_timetables(institution):
         schedule = population.get_schedules()[0]
         print("Conflicts:", schedule.numberOfConflicts)
     created_objects = {}
-    created_objects["created_schedule"] = add_sched_to_db(schedule)
+    created_objects["created_schedule"] = add_sched_to_db(schedule,requester)
     created_objects["created_classes"] = Lesson.objects.filter(timetable=created_objects["created_schedule"])
     return created_objects
 

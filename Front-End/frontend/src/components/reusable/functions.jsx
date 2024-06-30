@@ -26,7 +26,6 @@ export const generalPatch = async (endpoint,id,data) => {
         await axios.patch(`http://localhost:8000/timeapp/api/${endpoint}/${id}/`, data, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
             }
         }); 
         return true;   

@@ -39,6 +39,8 @@ import './css/style.css';
 
 import{useEffect, useState} from 'react';
 import Sidebar from './components/navigation/sidebar.jsx';
+import Timetables from './components/timetable/timetables.jsx';
+import Timetable from './components/timetable/lessons.jsx';
 
 function App() {
   const[loggedIn,setLoggedIn]=useState(true);
@@ -113,6 +115,8 @@ useEffect(()=>{
           <Route path="/Stream" element={<StreamTable/>}/>
           <Route path='/institution-approval' element={<InstitutionsTable/>}/>
           <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
+          <Route path='/schedules' element={<Timetables/>}/>
+          <Route path='/lessons/:timetableId' element={<Timetable/>}/>
           <Route path='/CommentSection' element={<CommentSection/>}/>
         </Routes>
       </BrowserRouter>
