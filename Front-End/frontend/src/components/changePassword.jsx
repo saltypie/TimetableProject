@@ -1,95 +1,111 @@
 // ChangePassword.js
-
 import React, { useState } from 'react';
-import axios from 'axios';
+import './Login.css';
+import { useParams } from 'react-router-dom'; // Import useParams
+import { FaLock } from "react-icons/fa";
+import Navbar from './navigation.jsx';
+import axios from "axios";
 
 const ChangePassword = () => {
-  const [currentPassword, setCurrentPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { id } = useParams(); // Extract id from URL params
 
-  const handleCurrentPasswordChange = (e) => {
-    setCurrentPassword(e.target.value);
+  const handleOldPasswordChange = (e) => {
+    setOldPassword(e.target.value);
   };
 
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
   };
 
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
+  const handleConfirmNewPasswordChange = (e) => {
+    setConfirmNewPassword(e.target.value);
     setPasswordMatch(e.target.value === newPassword);
   };
 
-  const handleSubmit = async (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
-    if (!passwordMatch) {
-      setErrorMessage('Passwords do not match');
-      return;
-    }
+    if (!passwordMatch) return;
 
-    const body = {
-      currentPassword,
-      newPassword,
+    const data = {
+      new_password: newPassword,
+      old_password: oldPassword
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/timeapp/api/change-password/', body, {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
+      console.log('Submitting data:', data);
+
+      const response = await axios.put(`http://127.0.0.1:8000/timeapp/api/change_pass/${id}/`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
       });
-      alert(response.data.message); // Optionally show success message
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
+
+      console.log('Response:', response.data);
+
+      alert('Password reset successful!');
+      console.log('Password reset successful!');
+      window.location.href='/You';
     } catch (error) {
-      console.error('Error changing password:', error);
-      setErrorMessage('Failed to change password');
+      console.error('Error:', error);
+      alert(error.response.data.Message);
     }
   };
 
   return (
     <div>
-      <h1>Change Password</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Current Password:</label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={handleCurrentPasswordChange}
-            required
-          />
-        </div>
-        <div>
-          <label>New Password:</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={handleNewPasswordChange}
-            required
-            pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$"
-            title="Password must be at least 8 characters long and contain at least one symbol"
-          />
-        </div>
-        <div>
-          <label>Confirm New Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-            required
-          />
-          {!passwordMatch && <span style={{ color: 'red' }}>Passwords do not match</span>}
-        </div>
-        <button type="submit" disabled={!passwordMatch}>
-          Change Password
-        </button>
-        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-      </form>
+      <Navbar title="Home"/>
+      <div className='wrapper'>
+        <form onSubmit={submit}>
+          <h1>Reset Password</h1>
+
+          <div className="input-box">
+            <input 
+              name="oldPassword"
+              type="password" 
+              placeholder="Old Password" 
+              value={oldPassword} 
+              onChange={handleOldPasswordChange} 
+              required  
+            />
+            <FaLock className='icon'/>
+          </div>
+
+          <div className="input-box">
+            <input 
+              name="newPassword"
+              type="password" 
+              placeholder="New Password" 
+              value={newPassword} 
+              onChange={handleNewPasswordChange} 
+              required 
+              pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$" 
+              title="Password must be at least 8 characters long and contain at least one symbol" 
+            />
+            <FaLock className='icon'/>
+            <span className="info" title="Your password must be at least 8 characters long and contain at least one symbol.">ℹ️</span>
+          </div>
+
+          <div className="input-box">
+            <input 
+              type="password" 
+              placeholder="Confirm New Password" 
+              value={confirmNewPassword} 
+              onChange={handleConfirmNewPasswordChange} 
+              required 
+            />
+            {passwordMatch ? null : <span style={{ color: 'red' }}>Passwords do not match</span>}
+          </div>
+
+          <button type="submit" disabled={!passwordMatch}>Submit</button>
+          <span className="info" title="">ℹ️</span>
+        </form>    
+      </div>
     </div>
   );
 };
