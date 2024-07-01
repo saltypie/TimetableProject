@@ -15,7 +15,7 @@ import AddRoom from "./components/addRoom.jsx";
 import EditClass from "./components/editRoom.jsx";
 import ViewClass from "./components/viewClass.jsx";
 import ProfileUpdateForm from './components/ProfileForm.jsx';
-//import ChangePassword from './components/changePassword.jsx';
+import ChangePassword from './components/changePassword.jsx';
 import You from './components/You.jsx';
 import Profile from "./components/profile.jsx";
 import AddTiming from "./components/addTiming.jsx";
@@ -27,7 +27,7 @@ import RoomTable from './components/coursecomponents/viewrooms.jsx';
 import DepartmentTable from './components/coursecomponents/viewdepartments.jsx';
 import StreamTable from './components/coursecomponents/viewstreams.jsx';
 import TimingTable from "./components/coursecomponents/viewtimings.jsx";
-import InstitutionsTable from "./components/admincomponents/dashboard.jsx"
+import Dash from "./components/admincomponents/dashboard.jsx"
 import InstitutionProfile from './components/institution.jsx';
 import CommentSection from './components/CommentSection.jsx';
 import './css/style.css';
@@ -113,11 +113,12 @@ useEffect(()=>{
           <Route path="/Room" element={<RoomTable/>}/>
           <Route path="/Department" element={<DepartmentTable/>}/>
           <Route path="/Stream" element={<StreamTable/>}/>
-          <Route path='/institution-approval' element={<InstitutionsTable/>}/>
+          <Route path='/dashboard' element={<Dash/>}/>
           <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
           <Route path='/schedules' element={<Timetables/>}/>
           <Route path='/lessons/:timetableId' element={<Timetable/>}/>
           <Route path='/CommentSection' element={<CommentSection/>}/>
+          <Route path='/changepassword' element={<ChangePassword/>}/>
         </Routes>
       </BrowserRouter>
 

@@ -6,7 +6,6 @@ import { FaBars, FaHome, FaPencilRuler, FaPlus, FaUser, FaTable, FaTimes, FaUniv
 
 const Sidebar = () => {
     const [open, setOpen] = useState((JSON.parse(localStorage.getItem('hamburger_open'))));
-    const [tablesDropdownOpen, setTablesDropdownOpen] = useState(false);
     const [constraintsDropdownOpen, setConstraintsDropdownOpen] = useState(false);
     const [viewConstraintsDropdownOpen, setViewConstraintsDropdownOpen] = useState(false);
 
@@ -24,16 +23,6 @@ const Sidebar = () => {
                         <li><Link to="/"><FaHome className='inline' /> Home </Link></li>
                         <li><Link to="You"><FaUser className='inline' /> Profile</Link></li>
                         <li><Link to="dashboard"><FaTachometerAlt className='inline' /> Dashboard</Link></li>
-                        <li>
-                            <FaTable className='inline' onClick={() => setTablesDropdownOpen(!tablesDropdownOpen)} /> Tables
-                            {tablesDropdownOpen && (
-                                <ul className="dropdown">
-                                    <li><Link to="/tables/1">Table 1</Link></li>
-                                    <li><Link to="/tables/2">Table 2</Link></li>
-                                    <li><Link to="/tables/3">Table 3</Link></li>
-                                </ul>
-                            )}
-                        </li>
                     </ul>
                 </div>
             );

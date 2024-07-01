@@ -61,7 +61,7 @@ const You = () => {
                     </div>
                     <br />
                     <div className='white-div'>
-                        <Link to="/ChangePassword">                    
+                        <Link to="/changepassword">                    
                             Change Password
                             <FaKey className='icon' />
                         </Link>

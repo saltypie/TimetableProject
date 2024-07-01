@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, action
 from .email_functionality import send_email
 from rest_framework.parsers import MultiPartParser, FormParser
 from .timetable_functionality import generate_timetables
+from .visit_functionality import *
 
 class RegisterView(GenericAPIView):
     serializer_class = UserSerializer
@@ -279,9 +280,9 @@ class ProfileDetailView(viewsets.ModelViewSet):
         print("User making request:", user)
         return Profile.objects.filter(user=user)
 
-class InstitutionMemberView(viewsets.ModelViewSet):
-    serializer_class = InstitutionMemberSerializer
-    permission_classes = [IsAuthenticated]
+# class InstitutionMemberView(viewsets.ModelViewSet):
+#     serializer_class = InstitutionMemberSerializer
+#     permission_classes = [IsAuthenticated]
 
 class InstitutionMemberView(viewsets.ModelViewSet):
     serializer_class = InstitutionMemberSerializer
@@ -416,6 +417,41 @@ class LessonDetailViewSet(viewsets.ModelViewSet):
         return Response(schedules)
 
 
+class VisitViewSet(viewsets.ModelViewSet):
+    queryset = Visit.objects.all()
+    serializer_class = VisitSerializer()
+
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = VisitSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    @action(detail=False, methods=['get'], url_path='per_institution')
+    def per_institution(self, request):
+        return Response(visits_per_institution())
+    @action(detail=False, methods=['get'], url_path='per_table')
+    def per_table(self, request):
+        return Response(visits_per_table())
+    @action(detail=False, methods=['get'], url_path='per_action')
+    def per_action(self, request):
+        return Response(visits_per_action())
+    @action(detail=False, methods=['get'], url_path='per_daypart')
+    def per_day(self, request):
+        return Response(visits_per_daypart())
+
+class UserManagementViewSet(viewsets.ModelViewSet):
+    queryset = UserData.objects.all()
+    serializer_class = UserManagementSerializer
+    
 
 
 

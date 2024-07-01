@@ -71,29 +71,32 @@ const InstitutionProfile = () => {
         <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
           {editMode ? (
             <>
+              Name: 
               <input
                 type="text"
                 name="name"
                 value={editFormData.name}
                 onChange={handleInputChange}
-                className="text-xl font-semibold text-black dark:text-white"
+                className="justify-center text-sm text-gray-600 border-gray dark:text-gray-400 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
               <hr />
               <br />
+              Email:
               <input
                 type="email"
                 name="email"
                 value={editFormData.email}
                 onChange={handleInputChange}
-                className="text-sm text-gray-600 dark:text-gray-400"
+                className="justify-center text-sm text-gray-600 border-gray dark:text-gray-400 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
-              <br />
+              <br /><br />
+              Phone: 
               <input
                 type="text"
                 name="phone"
                 value={editFormData.phone}
                 onChange={handleInputChange}
-                className="text-sm text-gray-600 dark:text-gray-400"
+                className="justify-center text-sm text-gray-600 border-gray dark:text-gray-400 rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
               <div className="mt-6">
                 <button onClick={handleSaveClick} className="text-sm text-blue-500 hover:underline">Save</button>
@@ -102,6 +105,7 @@ const InstitutionProfile = () => {
             </>
           ) : (
             <>
+
               <h3 className="text-xl font-semibold text-black dark:text-white">
                 {institution.name}
               </h3>

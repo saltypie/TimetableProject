@@ -196,3 +196,12 @@ class Lesson(models.Model):
     def __str__(self):
         return f'Lesson: {self.id} by {self.instructor} on {self.meeting_time}'
 
+class Visit(models.Model):
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    action = models.CharField(max_length=10)
+    table_name = models.CharField(max_length=20)
+    time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Visit: {self.action} performed on {self.table_name} by {self.institution}"
+
