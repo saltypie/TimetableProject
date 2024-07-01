@@ -39,6 +39,8 @@ import './css/style.css';
 
 import{useEffect, useState} from 'react';
 import Sidebar from './components/navigation/sidebar.jsx';
+import Timetables from './components/timetable/timetables.jsx';
+import Timetable from './components/timetable/lessons.jsx';
 
 function App() {
   const[loggedIn,setLoggedIn]=useState(true);
@@ -100,12 +102,11 @@ useEffect(()=>{
           <Route path="/EditClass" element={<EditClass/>}/>
           <Route path="/ViewClass" element={<ViewClass/>}/>
           <Route path="/ProfileUpdate" element={<ProfileUpdateForm/>}/>
-
           <Route path="/You" element={<You/>}/>
           <Route path="/Profile" element={<Profile/>}/>
           <Route path="/AddTiming" element={<AddTiming/>}/>
-          <Route path="/AddSubject" element={<AddSubject/>}/>
-          <Route path="/AddCourse" element={<AddCourse/>}/>
+          <Route path="/AddCourse" element={<AddSubject/>}/>
+          <Route path="/AddDepartment" element={<AddCourse/>}/>
           <Route path="/AddSection" element={<AddSection/>}/>
           <Route path="/Course" element={<CourseTable/>}/>
           <Route path="/Timing" element={<TimingTable/>}/>
@@ -114,6 +115,8 @@ useEffect(()=>{
           <Route path="/Stream" element={<StreamTable/>}/>
           <Route path='/institution-approval' element={<InstitutionsTable/>}/>
           <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
+          <Route path='/schedules' element={<Timetables/>}/>
+          <Route path='/lessons/:timetableId' element={<Timetable/>}/>
           <Route path='/CommentSection' element={<CommentSection/>}/>
         </Routes>
       </BrowserRouter>

@@ -3,9 +3,10 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
+import { generalPost, searchFunction } from './reusable/functions.jsx';
 
 const AddSubject = () => {
-  
+  const [courseCode, setCourseCode] = useState('');
   const [course, setCourse] = useState('');
   const [courseCapacity, setCourseCapacity] = useState('');
   const [lecturers, setLecturers] = useState([]);
@@ -18,15 +19,16 @@ const AddSubject = () => {
 
   const fetchLecturers = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/timeapp/api/viewsets/lecturers', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-        }
-      });
-      setLecturers(response.data); // Assuming the response is an array of lecturer objects
+      const response = await searchFunction('/viewsets/institutionmembers');
+      console.log('Fetched lecturers:', response); // Log the fetched lecturers
+      setLecturers(response);
     } catch (error) {
       console.error('Error fetching lecturers:', error);
     }
+  };
+
+  const handleCourseCodeChange = (e) => {
+    setCourseCode(e.target.value);
   };
 
   const handleCourseChange = (e) => {
@@ -39,6 +41,7 @@ const AddSubject = () => {
 
   const handleLecturersChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+    console.log('Selected options:', selectedOptions); // Log selected options
     setSelectedLecturers(selectedOptions);
   };
 
@@ -46,41 +49,48 @@ const AddSubject = () => {
     e.preventDefault();
 
     const body = {
-      course: course,
-      capacity: courseCapacity,
-      lecturers: selectedLecturers
+      course_number: courseCode,
+      course_name: course,
+      max_numb_students: courseCapacity,
+      instructors: selectedLecturers
     };
 
-    try {
-      const { data } = await axios.post(
-        'http://127.0.0.1:8000/timeapp/api/viewsets/courses',
-        body,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-          }
-        }
-      );
-
-      if (data.Message) {
-        alert(data.Message);
-        setErrorMessage(data.Message);
+    generalPost('viewsets/courses', body).then((response) => {
+      if (response.Message) {
+        alert(response.Message);
+        setErrorMessage(response.Message);
       } else {
-        window.location.href = '/room/';
+        console.log(response);
+        alert('Course Subject added successfully');
+        // window.location.href = '/Course';
       }
-    } catch (error) {
+    }).catch((error) => {
+      console.error('There was an error!', error);
       setErrorMessage("Invalid Details");
-    }
+    });
   };
 
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
+      
       <div className='wrapper'>
         <form onSubmit={submit}>
           <h1>Add Subject Unit</h1>
+
+          <div className="input-box">
+            <label htmlFor="course_number">Course Code:</label>
+            <input 
+              id="course_number"
+              name="course_number"
+              type="text" 
+              placeholder="Enter Course Code/Number" 
+              value={courseCode} 
+              onChange={handleCourseCodeChange} 
+              required 
+            />
+            <span className="info" title="This is the code/number given to the course.">ℹ️</span>
+          </div>
 
           <div className="input-box">
             <label htmlFor="course">Course Name:</label>
@@ -119,7 +129,8 @@ const AddSubject = () => {
               required
             >
               {lecturers.map(lecturer => (
-                <option key={lecturer.id} value={lecturer.id}>{lecturer.name}</option>
+                
+                <option key={lecturer.id} value={lecturer.id}>{`${lecturer.fname} ${lecturer.lname}`}</option>
               ))}
             </select>
           </div>
@@ -133,6 +144,6 @@ const AddSubject = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AddSubject;

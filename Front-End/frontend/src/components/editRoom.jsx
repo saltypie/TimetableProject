@@ -27,7 +27,7 @@ const EditRoom = ({ classData }) => {
     <div>
     <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       
-      <AdminSidebar />
+      
     <form onSubmit={handleSubmit}>
       <input type="text" name="name" value={editedClass.name} onChange={handleInputChange} required />
       <input type="number" name="capacity" value={editedClass.capacity} onChange={handleInputChange} required />

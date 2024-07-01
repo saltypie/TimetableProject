@@ -23,7 +23,7 @@ const ViewClass = () => {
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
+      
       <div className='wrapper'>
         <table>
           <thead>

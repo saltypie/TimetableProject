@@ -154,11 +154,11 @@ class Stream(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     lessons_per_week = models.IntegerField(default=0)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
-    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.SET_NULL, null=True)
-    # meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE, blank=True, null=True)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
-    instructor = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)
+    # course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True)
+    # meeting_time = models.ForeignKey(MeetingTime, on_delete=models.SET_NULL, null=True)
+    # # meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE, blank=True, null=True)
+    # room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
+    # instructor = models.ForeignKey(UserData, on_delete=models.CASCADE, blank=True, null=True)
     # instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return f'Stream {self.id}'

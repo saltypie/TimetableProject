@@ -3,6 +3,7 @@ import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
+import { generalPost } from './reusable/functions.jsx';
 
 const AddTiming = () => {
   
@@ -21,11 +22,12 @@ const AddTiming = () => {
     if (endTime < e.target.value) {
       setEndTime(e.target.value); // Adjust endTime if it is before startTime
     } else {
+      setErrorMessage("Start Time cannot be after End Time");
       // Check if endTime exceeds 3 hours from startTime
-      const maxEndTime = calculateMaxEndTime(e.target.value);
-      if (endTime > maxEndTime) {
-        setEndTime(maxEndTime); // Adjust endTime if it exceeds max duration
-      }
+      // const maxEndTime = calculateMaxEndTime(e.target.value);
+      // if (endTime > maxEndTime) {
+      //   setEndTime(maxEndTime); // Adjust endTime if it exceeds max duration
+      // }
     }
   }
 
@@ -39,13 +41,13 @@ const AddTiming = () => {
     }
   }
 
-  const calculateMaxEndTime = (startTime) => {
-    // Calculate max end time as 3 hours from startTime
-    const maxDuration = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
-    const startTimestamp = new Date(`2000-01-01T${startTime}`).getTime(); // Assuming a dummy date for comparison
-    const maxEndTime = new Date(startTimestamp + maxDuration).toISOString().substr(11, 5); // Format to HH:mm
-    return maxEndTime;
-  }
+  // const calculateMaxEndTime = (startTime) => {
+  //   // Calculate max end time as 3 hours from startTime
+  //   const maxDuration = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+  //   const startTimestamp = new Date(`2000-01-01T${startTime}`).getTime(); // Assuming a dummy date for comparison
+  //   const maxEndTime = new Date(startTimestamp + maxDuration).toISOString().substr(11, 5); // Format to HH:mm
+  //   return maxEndTime;
+  // }
 
   const submit = async (e) => {
     e.preventDefault();
@@ -57,45 +59,34 @@ const AddTiming = () => {
     }
 
     // Validation: Check if endTime exceeds 3 hours from startTime
-    const maxEndTime = calculateMaxEndTime(startTime);
-    if (endTime > maxEndTime) {
-      setErrorMessage(`End Time cannot exceed 3 hours from Start Time (${maxEndTime})`);
-      return;
-    }
+    // const maxEndTime = calculateMaxEndTime(startTime);
+    // if (endTime > maxEndTime) {
+    //   setErrorMessage(`End Time cannot exceed 3 hours from Start Time (${maxEndTime})`);
+    //   return;
+    // }
     
     const body = {
-      dayOfWeek: dayOfWeek,
-      startTime: startTime,
-      endTime: endTime
+      time: `${startTime} - ${endTime}`,
+      day: `${dayOfWeek}`,
     };
 
-    try {
-      const { data } = await axios.post(
-        'http://127.0.0.1:8000/timeapp/api/',
-        body,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('access_Token')}`
-          }
-        }
-      );
-
-      if (data.Message) {
+    generalPost('viewsets/meetingtimes/', body).then((data) => {
+      if (!data) {
         alert(data.Message);
         setErrorMessage(data.Message);
       } else {
-        window.location.href = '/room/';
+        // window.location.href = '/Timing';
+        alert('Timing added successfully!');
       }
-    } catch (error) {
-      setErrorMessage("Invalid Details");
-    }
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <AdminSidebar />
+      
       <div className='wrapper'>
         <form onSubmit={submit}>
           <h1>Add Timing</h1>

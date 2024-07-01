@@ -22,6 +22,8 @@ router.register(r'profile', ProfileDetailView, basename="profile")
 router.register(r'institutionmembers', InstitutionMemberView, basename="institutionmembers")
 router.register(r'institutions', InstitutionViewSet, basename="institution")
 router.register(r'departments', DepartmentViewSet, basename="department")
+router.register(r'lessondetails', LessonDetailViewSet, basename="lessondetails")
+router.register(r'timetables', TimetableViewSet, basename="timetables")
 # router.register(r'profileupdate', ProfileViewSet, basename="profile")
 
 urlpatterns = [
@@ -33,6 +35,7 @@ urlpatterns = [
     path('api/new_pass/', pass_reset, name="pass_reset"),
     path('api/profileupdate/', ProfileUpdateAPIView.as_view(), name='profile-update'),
     path('api/change_pass/', ChangePasswordView.as_view(), name='change_password'),
+    path('api/make_table/', make_timetable, name='make_timetable'),
     path('api/viewsets/', include(router.urls)),
     # path('api/profile/update/', ProfileViewSet, basename='profile')
     # path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

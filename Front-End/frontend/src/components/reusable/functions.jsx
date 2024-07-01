@@ -26,13 +26,27 @@ export const generalPatch = async (endpoint,id,data) => {
         await axios.patch(`http://localhost:8000/timeapp/api/${endpoint}/${id}/`, data, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
             }
         }); 
         return true;   
     } catch (error) {
         console.log(error);
         return `Error-${error}`
+    }
+}
+export const generalPost = async (endpoint,data) => {
+    try {
+        endpoint = endpoint.replace(/(^\/+|\/+$)/g, '');
+        await axios.post(`http://localhost:8000/timeapp/api/${endpoint}/`, data, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                'Content-Type': 'application/json'
+            }
+        }); 
+        return true;   
+    } catch (error) {
+        console.log(error);
+        return false;
     }
 }
 
@@ -50,3 +64,4 @@ export const generalDelete = async (endpoint,id) => {
         return `Error-${error}`
     }
 }
+

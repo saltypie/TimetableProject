@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Login.css';
 import Navbar from './navigation.jsx';
 import axios from "axios";
-import AdminSidebar from './adminSidebar.jsx';
 
 const CommentSection = ({ id }) => {
     const [comments, setComments] = useState([]);
@@ -39,7 +38,6 @@ const CommentSection = ({ id }) => {
     return (
         <div>
             <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-            <AdminSidebar />
             <h2>Comments</h2>
             <ul>
                 {comments.map(comment => (

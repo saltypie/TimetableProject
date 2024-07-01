@@ -1,53 +1,3 @@
-// Profile.js
-
-/*import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Navbar from './navigation.jsx';
-import defaultProfileIcon from './photos/profileIcon.png'; // Replace with your default profile icon path
-
-const Profile = ({ userData }) => {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  // Function to handle profile picture change
-  const handleProfilePictureChange = (e) => {
-    const file = e.target.files[0];
-    setProfilePicture(file);
-
-    // Preview image before uploading
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewUrl(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  return (
-    <div>
-      <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      <h1>Profile</h1>
-      <div>
-        {/* Profile Picture Input }/*
-        <div>
-          <label>Profile Picture:</label>
-          <input type="file" accept="image/*" onChange={handleProfilePictureChange} />
-        </div>
-        {/* Display Profile Picture or Default Icon }
-        /*<div style={{ marginTop: '10px' }}>
-          {previewUrl ? (
-            <img src={previewUrl} alt="Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
-          ) : (
-            <img src={defaultProfileIcon} alt="Default Profile" style={{ maxWidth: '100px', maxHeight: '100px' }} />
-          )}
-        </div>
-      </div>
-      <Link to="/change-password">Change Password</Link>
-    </div>
-  );
-};
-
-export default Profile;*/
-// ProfileUpdateForm.js
 
 import React, { useEffect, useState } from 'react';
 import './Login.css';
@@ -88,7 +38,6 @@ const Profile = () => {
         const file = e.target.files[0];
         setPhoto(file);
 
-        // Preview image before uploading
         const reader = new FileReader();
         reader.onload = () => {
             setPreviewUrl(reader.result);
@@ -125,7 +74,7 @@ const Profile = () => {
             <br /><br />
             <div className="wrapper">
                 <form onSubmit={handleSubmit}>
-                    <div className="centerholder">
+                    <div className="centerholder text-black">
                         {previewUrl ? (
                             <img className="profilePic" src={previewUrl} alt="Profile" />
                         ) : (
