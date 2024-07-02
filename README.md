@@ -86,18 +86,18 @@ Then paste the following url in the browser and you are ready to begin.
 	project/
 	│
 	├── Back-End/
-	│   ├── server.js       
+	│   ├── server.py       
 	│   ├── routes/          
-	│   │   ├── api.js       
+	│   │   ├── api.py       
 	│   │   └── ...
 	│   ├── controllers/     
-	│   │   ├── userController.js
+	│   │   ├── userController.py
 	│   │   └── ...
 	│   ├── models/          
-	│   │   ├── User.js
+	│   │   ├── User.py
 	│   │   └── ...
 	│   ├── config/          
-	│   │   ├── db.js       
+	│   │   ├── db.py     
 	│   │   └── ...
 	│   └── ...
 	│
@@ -109,15 +109,15 @@ Then paste the following url in the browser and you are ready to begin.
 	|     │   │   └── ...
 	|     │   ├── src/             
 	|     │   │   ├── components/  
-	|     │   │   │   ├── Header.js
+	|     │   │   │   ├── Header.jsx
 	|     │   │   │   └── ...
 	|     │   │   ├── pages/       
-	|     │   │   │   ├── Home.js
+	|     │   │   │   ├── Home.jsx
 	|     │   │   │   └── ...
 	|     │   │   ├── services/    
-	|     │   │   │   ├── api.js   
+	|     │   │   │   ├── api.jsx  
 	|     │   │   │   └── ...
-	|     │   │   └── App.js       
+	|     │   │   └── App.jsx       
 	|  |   │   ├── package.json     
 	|    │   └── ...
  	├── README.md            
