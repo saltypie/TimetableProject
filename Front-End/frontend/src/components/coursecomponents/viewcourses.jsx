@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../navigation';
-import { generalPatch, generalDelete, searchFunction } from '../reusable/functions';
+import { generalPatch, generalDelete, searchFunction,makeNotification } from '../reusable/functions';
 
 const CourseTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -55,6 +55,7 @@ const CourseTable = () => {
     const handleSaveClick = async () => {
         try {
             await generalPatch('viewsets/courses/', editCourseId, editFormData);
+            await makeNotification(`Course ${editFormData.course_name} has been updated by Scheduler`);
             setEditCourseId(null);
             fetchData(); // Refresh the data
         } catch (error) {
@@ -65,6 +66,7 @@ const CourseTable = () => {
     const handleDeleteClick = async (courseId) => {
         try {
             await generalDelete('viewsets/courses/', courseId);
+            await makeNotification(`Course ${editFormData.course_name} has been deleted by Scheduler`);
             fetchData(); // Refresh the data
         } catch (error) {
             console.log(error);

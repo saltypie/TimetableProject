@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile, Institution, Timetable, Lesson, Visit
+from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile, Institution, Timetable, Lesson, Visit, Notification
 from django.contrib.auth import authenticate
 from .email_functionality import send_email
 from rest_framework.response import Response
@@ -151,3 +151,8 @@ class UserManagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
         fields = ['id', 'email', 'fname', 'lname', 'role', 'institution', 'is_active']
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'institution', 'description', 'read_by','time']

@@ -205,3 +205,11 @@ class Visit(models.Model):
     def __str__(self):
         return f"Visit: {self.action} performed on {self.table_name} by {self.institution}"
 
+class Notification(models.Model):
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    description = models.CharField(max_length=200)
+    time = models.DateTimeField(auto_now=True)
+    read_by = models.ManyToManyField(UserData, blank=True)
+
+    def __str__(self):
+        return f"Notification: {self.description} by {self.institution} at {self.time}"

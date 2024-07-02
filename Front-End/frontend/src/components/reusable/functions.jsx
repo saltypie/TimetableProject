@@ -153,3 +153,24 @@ export const fetchVisitData = async (endpoint) => {
     return null;
   }
 };
+
+export const makeNotification = async (description) => {
+  try {
+    const response = await axios.post('http://localhost:8000/timeapp/api/viewsets/notifications/', {
+      description: description
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true;
+  } catch (error) {
+    console.error('Error making notification:', error);
+    return false;
+  }
+}
+
+export const fomartDateTime = (date) => {
+    return date.slice(0, 10) + " " + date.slice(11, 16)
+}

@@ -41,6 +41,7 @@ import{useEffect, useState} from 'react';
 import Sidebar from './components/navigation/sidebar.jsx';
 import Timetables from './components/timetable/timetables.jsx';
 import Timetable from './components/timetable/lessons.jsx';
+import Notifications from './components/notifications.jsx';
 
 function App() {
   const[loggedIn,setLoggedIn]=useState(true);
@@ -119,6 +120,7 @@ useEffect(()=>{
           <Route path='/lessons/:timetableId' element={<Timetable/>}/>
           <Route path='/CommentSection' element={<CommentSection/>}/>
           <Route path='/changepassword' element={<ChangePassword/>}/>
+          <Route path='/notifications' element={<Notifications/>}/>
         </Routes>
       </BrowserRouter>
 

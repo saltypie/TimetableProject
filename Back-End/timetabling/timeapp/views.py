@@ -452,6 +452,52 @@ class UserManagementViewSet(viewsets.ModelViewSet):
     queryset = UserData.objects.all()
     serializer_class = UserManagementSerializer
     
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = NotificationSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        members = UserData.objects.filter(institution=institution)
+        for member in members:
+            if member != self.request.user:
+                send_email(member.email , "New Notification from Timetabulous", f"New Notification: {serializer.data['description']}")
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)        
+    def get_queryset(self):
+        current_user = self.request.user
+        queryset = Notification.objects.filter(institution = current_user.institution)
+            
+        return queryset
+    @action(detail=False, methods=['get'], url_path='caught_up')
+    def caught_up(self, request):
+        current_user = self.request.user
+        queryset = Notification.objects.filter(institution = current_user.institution)
+        # caught_up = True
+        num_unread = 0
+        for notification in queryset:
+            if current_user not in notification.read_by.all():
+                num_unread += 1
+        # caught_up = (num_unread == 0)
+        return Response({"num_unread": num_unread}, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['get'], url_path='mark_read')
+    def mark_read(self, request):
+        current_user = self.request.user
+        queryset = Notification.objects.filter(institution = current_user.institution)
+        for notification in queryset:
+            if current_user not in notification.read_by.all():
+                notification.read_by.add(current_user)
+        return Response({"success": True}, status=status.HTTP_200_OK)
+    
 
 
 

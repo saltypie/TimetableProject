@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../navigation';
-import { generalPatch, generalDelete, searchFunction } from '../reusable/functions';
+import { generalPatch, generalDelete, searchFunction,makeNotification } from '../reusable/functions';
 
 const StreamTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -59,6 +59,7 @@ const StreamTable = () => {
     const handleDeleteClick = async (streamId) => {
         try {
             await generalDelete('viewsets/streams/', streamId);
+            await makeNotification(`Stream ${streamId} has been removed by Scheduler`);
             fetchData(); // Refresh the data
         } catch (error) {
             console.log(error);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Login.css';
 import axios from 'axios';
-import { generalPatch, searchFunction } from './functions';
+import { generalPatch, searchFunction,makeNotification } from './functions';
 // import { Input } from "@material-tailwind/react";
 
 // Modal Component for Registering an Institution
@@ -88,6 +88,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             // await axios.patch(`/api/viewsets/institutionmembers/${localStorage.getItem('user_id')}`, { institution: institutionId });
             console.log(institute)
             await generalPatch(`/viewsets/institutionmembers/`,localStorage.getItem('user_id') ,{institution: institute.id});
+            await makeNotification(`User by the name of ${localStorage.getItem('fname')} has joined ${institute.name}`);
             localStorage.setItem('is_institution_approved', 'true')
             localStorage.setItem('institution', institute.name)
             window.location.reload()
