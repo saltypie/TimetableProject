@@ -10,23 +10,24 @@ Timetabulous is a timetable creation application that is intended to ease the ch
 ## Getting Started
 The following are the base requirements before installation and setup of the project.
 
-- Python >=3.11
+- Python >=3.11 (https://www.python.org/downloads/)
 
 This is the main language used in the backend programming.
 
-- Node js >=
+- Node js >= (https://nodejs.org/en/download/package-manager)
 
 It provides a runtime environment that allows the running of JavaScript code outside of a web browser.
 
-- pgAdmin
+- pgAdmin (https://www.pgadmin.org/download/)
 
 It helps in  PostgreSQL database administration
 
-- postgresql
+- postgresql (https://www.postgresql.org/download/)
 
 It is the database where the data will be stored.
 
 ### Environment and Repository Setup
+Ensure all the commands below are executed.
 To begin the setup to your device. Move to the directory in which you would like to clone your project, e.g.,
 
      C:\Projects
@@ -77,7 +78,52 @@ Navigate to the frontend
 
 	 cd Front-End
 	 npm run
-Then paste the following url in the browser 
+Then paste the following url in the browser and you are ready to begin.
 
 	http://localhost:3000/LandingPage
+### Structure
+
+	project/
+	│
+	├── Back-End/
+	│   ├── server.js       
+	│   ├── routes/          
+	│   │   ├── api.js       
+	│   │   └── ...
+	│   ├── controllers/     
+	│   │   ├── userController.js
+	│   │   └── ...
+	│   ├── models/          
+	│   │   ├── User.js
+	│   │   └── ...
+	│   ├── config/          
+	│   │   ├── db.js       
+	│   │   └── ...
+	│   └── ...
+	│
+	└── Front-End/
+	|     ├── frontend/        
+	|     │   ├── public/      
+	|     │   │   ├── index.html   
+	|     │   │   ├── styles/      
+	|     │   │   └── ...
+	|     │   ├── src/             
+	|     │   │   ├── components/  
+	|     │   │   │   ├── Header.js
+	|     │   │   │   └── ...
+	|     │   │   ├── pages/       
+	|     │   │   │   ├── Home.js
+	|     │   │   │   └── ...
+	|     │   │   ├── services/    
+	|     │   │   │   ├── api.js   
+	|     │   │   │   └── ...
+	|     │   │   └── App.js       
+	|  |   │   ├── package.json     
+	|    │   └── ...
+ 	├── README.md            
+	 └── ...
+
+	
+## Contact Us
+Contact us at @
 
