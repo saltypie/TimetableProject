@@ -118,13 +118,13 @@ const InstitutionProfile = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Phone: {institution.phone}
               </p>
-              <div className="mt-6">
+              <div className="mt-6 justify-center">
                 {localStorage.getItem("role")==="scheduler" ? <button onClick={handleEditClick} className="text-sm text-blue-500 hover:underline">Edit Profile</button> : <></>}
                 
                 <br />
-                <Link to='/notifications' className="text-sm text-blue-500 hover:underline ml-4">Notifcations(10)</Link>
+                <Link to='/schedulerdash' className="text-sm text-blue-500 hover:underline ml-4">Dashboard</Link>
                 <br />
-                <Link to='/notifications' className="text-sm text-blue-500 hover:underline">Schedules</Link>
+                <Link to='/schedules' className="text-sm text-blue-500 hover:underline">Schedules</Link>
               </div>
             </>
           )}

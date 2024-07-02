@@ -27,6 +27,8 @@ router.register(r'timetables', TimetableViewSet, basename="timetables")
 router.register(r'visits', VisitViewSet, basename="visits")
 router.register(r'usermanagement', UserManagementViewSet, basename="usermanagement")
 router.register(r'notifications', NotificationViewSet, basename="notifications")
+router.register(r'votes', VoteViewSet, basename="votes")
+router.register(r'comments', CommentViewSet, basename="comments")
 # router.register(r'profileupdate', ProfileViewSet, basename="profile")
 
 urlpatterns = [

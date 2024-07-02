@@ -35,35 +35,36 @@ const You = () => {
     return (
         <div>
             <Navbar title="Home" />
-            <div className="not-a-wrapper">
+            <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="wide-div">
-                    <h1 className='centerholder'>You</h1>
-                    <br />
-                    <div className="centerholder">
+                    <div className="centerholder mb-6">
                         {profile && profile.photo_url && (
                             <img className="profilePic" src={profile.photo_url} alt="Profile" />
                         )}
-                        <div>
-                            <h2 className=''>
-                                First Name: {localStorage.getItem('fname') ? localStorage.getItem('fname') : 'Admin'}
-                            </h2>
-                            <h3 className=''>
-                                Email: {localStorage.getItem('email')}
-                            </h3>
-                        </div>
+                    </div>
+                    <h1 className='text-title-md2 font-semibold text-primary dark:text-white centerholder'>You</h1>
+                    <hr className='mt-4 mb-4'/>
+                    <div className='border-primary'>
+                        <h2 className=''>
+                            First Name: {localStorage.getItem('fname') ? localStorage.getItem('fname') : 'Admin'}
+                        </h2>
+                        <br />
+                        <h3 className=''>
+                            Email: {localStorage.getItem('email')}
+                        </h3>
                     </div>
                     <br />
-                    <div className='white-div'>
+                    <div className='bg-primary text-white'>
                         <Link to="/ProfileUpdate">                    
                             Edit Profile
-                            <FaPen className='icon' />
+                            <FaPen className='icon inline' />
                         </Link>
                     </div>
                     <br />
-                    <div className='white-div'>
+                    <div className='bg-primary text-white'>
                         <Link to="/changepassword">                    
                             Change Password
-                            <FaKey className='icon' />
+                            <FaKey className='icon inline' />
                         </Link>
                     </div>
                 </div>

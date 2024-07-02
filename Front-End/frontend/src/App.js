@@ -42,6 +42,7 @@ import Sidebar from './components/navigation/sidebar.jsx';
 import Timetables from './components/timetable/timetables.jsx';
 import Timetable from './components/timetable/lessons.jsx';
 import Notifications from './components/notifications.jsx';
+import TimetableVotesChart from './components/timetable/schedulerdash.jsx';
 
 function App() {
   const[loggedIn,setLoggedIn]=useState(true);
@@ -121,6 +122,8 @@ useEffect(()=>{
           <Route path='/CommentSection' element={<CommentSection/>}/>
           <Route path='/changepassword' element={<ChangePassword/>}/>
           <Route path='/notifications' element={<Notifications/>}/>
+          <Route path='/schedulerdash' element={<TimetableVotesChart/>}/>
+          
         </Routes>
       </BrowserRouter>
 

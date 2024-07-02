@@ -4,6 +4,8 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from django.db.models import Sum
+
 class Institution(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10)
@@ -213,3 +215,28 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification: {self.description} by {self.institution} at {self.time}"
+    
+class Comment(models.Model):
+    commenter = models.ForeignKey(UserData, null=True, blank=True,on_delete=models.SET_NULL)
+    schedule = models.ForeignKey(Timetable, on_delete=models.CASCADE)
+    content = models.CharField(max_length=200)
+    time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Comment: {self.content} by {self.commenter} at {self.time}"
+    @classmethod
+    def get_comments_for_schedule(cls, schedule):
+        return cls.objects.filter(schedule=schedule)
+
+class Vote(models.Model):
+    voter = models.ForeignKey(UserData, null=True, blank=True,on_delete=models.SET_NULL)
+    schedule = models.ForeignKey(Timetable, on_delete=models.CASCADE)
+    value = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Vote: {self.value} by {self.voter} on {self.schedule}"
+    
+    @classmethod
+    def total_vote_for_schedule(cls, schedule):
+        return cls.objects.filter(schedule=schedule).aggregate(Sum('value'))['value__sum'] or 0
+

@@ -61,15 +61,17 @@ const ProfileUpdateForm = () => {
     return (
         <div><Navbar title="Home" />
         <br /><br />
-            <div className="wrapper">
+            <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
                 <form onSubmit={handleSubmit}>
                     <div className="centerholder">
                         {photoView && (<img className="profilePic" src={photoView} alt="Profile" />)}
-                        <h1 className='profileName'>{localStorage.getItem('fname') ? localStorage.getItem('fname') : 'Super Admin'}'s Profile</h1>
                     </div>
+                    <hr className='mb-4 mt-4'/>
+                    <h1 className='text-title-md2 font-semibold text-primary dark:text-white centerholder'>{localStorage.getItem('fname') ? localStorage.getItem('fname') : 'Super Admin'}'s Profile</h1>
                     <div className='input-box'>
                         <label htmlFor="bio">Bio:</label>
                         <input
+                            className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                             type="text"
                             id="bio"
                             placeholder='Add a bio about yourself'
@@ -80,6 +82,7 @@ const ProfileUpdateForm = () => {
                     <div className='input-box'>
                         <label htmlFor="secondEmail">Second Email:</label>
                         <input
+                            className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                             type="email"
                             id="secondEmail"
                             placeholder='Enter your second email'
@@ -90,14 +93,22 @@ const ProfileUpdateForm = () => {
                     <br/>
                     <div >
                         <label htmlFor="photo">Change Profile Picture:</label>
-                        <input className='form-control custom-file'
+                        <input 
+                            className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
                             type="file"
                             id="photo"
                             onChange={(e) => setPhoto(e.target.files[0])}
                         />
                     </div>
                     <br/>
-                    <button type="submit">Update Profile</button>
+                    <div className="centerholder">
+                        <button 
+                            className='justify-center inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10'
+                            type="submit"
+                        >
+                            Update Profile
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -363,7 +363,22 @@ class TimetableViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(institution=institution).select_related('author')
             # queryset[0].
             # print(queryset[0].author.fname)
-        return queryset    
+        return queryset
+
+    @action(detail=False, methods=['get'], url_path='by_vote')
+    def tables_by_vote(self, request):
+        institution = self.request.user.institution
+        schedule_sets = Timetable.objects.filter(institution=institution) 
+        votes = Vote.objects.all()   
+        schedules_by_vote = {}
+        for schedule_set in schedule_sets:
+            for vote in votes:
+                if vote.schedule == schedule_set:
+                    if schedule_set.id not in schedules_by_vote:
+                        schedules_by_vote[schedule_set.id] = 1
+                    else:
+                        schedules_by_vote[schedule_set.id] += 1
+        return Response(schedules_by_vote)
 
 class LessonDetailViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
@@ -498,10 +513,55 @@ class NotificationViewSet(viewsets.ModelViewSet):
                 notification.read_by.add(current_user)
         return Response({"success": True}, status=status.HTTP_200_OK)
     
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['commenter'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_queryset(self):
+        queryset = Comment.objects.all().select_related('commenter')
+        schedule_id = self.request.query_params.get('schedule', None)
+        if schedule_id:
+            schedule = Timetable.objects.get(id=schedule_id)
+            queryset = Comment.get_comments_for_schedule(schedule).select_related('commenter')
+        return queryset
 
 
+class VoteViewSet(viewsets.ModelViewSet):
+    queryset = Vote.objects.all()
+    serializer_class = VoteSerializer
 
+    @action(detail=False, methods=['get'], url_path='tally')
+    def tally_votes(self,request):
+        schedule_id = self.request.query_params.get('search', None)
+        schedule = Timetable.objects.get(id=schedule_id)
+        tally = Vote.total_vote_for_schedule(schedule)
+        voters_value = Vote.objects.get(voter=self.request.user, schedule=schedule).value if Vote.objects.filter(voter=self.request.user, schedule=schedule).exists() else 0
+        return Response({"tally": tally, "voters_value": voters_value}, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['post'], url_path='takevote')
+    def take_vote(self, request):
+        data = request.data.copy()
+        schedule_id = data["schedule"]
+        schedule = Timetable.objects.get(id=schedule_id)
+        users_vote = Vote.objects.filter(schedule=schedule, voter=self.request.user)
 
+        if users_vote.exists():
+            users_vote.delete()
+
+        serializer = VoteSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
 
 
 

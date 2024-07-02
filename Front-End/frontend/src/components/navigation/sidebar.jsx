@@ -65,6 +65,7 @@ const Sidebar = () => {
                             )}
                         </li>
                         <li><Link to="/institutionprofile"><FaUniversity className='inline' /> Institution</Link></li>
+                        <li><Link to="schedulerdash"><FaTachometerAlt className='inline' /> Dashboard</Link></li>
                         <li onClick={() => setViewConstraintsDropdownOpen(!viewConstraintsDropdownOpen)} >
                             <FaPencilRuler className='inline' /> View/Edit Constraints
                             {viewConstraintsDropdownOpen && (
@@ -92,7 +93,15 @@ const Sidebar = () => {
                         <li><Link to="You"><FaUser className='inline' /> Profile</Link></li>
                         <li><Link to="/institutionprofile"><FaUniversity className='inline' /> Institution</Link></li>
                         <li><Link to="/schedules"><FaTable className='inline' /> Schedules</Link></li>
-                        <li><Link to="/notifications"><FaBell className='inline' /> Notifications <span className='inline flex h-6 w-6 items-center justify-center rounded-full bg-primary'>{numNotifications}</span></Link></li>
+                        <li>
+                            <Link to="/notifications" className="inline-flex items-center space-x-2 whitespace-nowrap">
+                                <FaBell />
+                                <span>Notifications</span>
+                                <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-primary text-white text-xs">
+                                {numNotifications}
+                                </span>
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             );
