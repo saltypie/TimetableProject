@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Login.css';
 import axios from 'axios';
-import { generalPatch, searchFunction } from './functions';
+import { generalPatch, searchFunction,makeNotification } from './functions';
 // import { Input } from "@material-tailwind/react";
 
 // Modal Component for Registering an Institution
@@ -88,6 +88,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             // await axios.patch(`/api/viewsets/institutionmembers/${localStorage.getItem('user_id')}`, { institution: institutionId });
             console.log(institute)
             await generalPatch(`/viewsets/institutionmembers/`,localStorage.getItem('user_id') ,{institution: institute.id});
+            await makeNotification(`User by the name of ${localStorage.getItem('fname')} has joined ${institute.name}`);
             localStorage.setItem('is_institution_approved', 'true')
             localStorage.setItem('institution', institute.name)
             window.location.reload()
@@ -175,9 +176,10 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
         } else if (role === 'admin') {
             return (
                 <div>
-                    Welcome
-                    <div><Link to="/dashboard">View Dashboard</Link></div>
-                    <div><Link to="/profile">View Profile</Link></div>
+                    <br /><hr /><br />
+                    <div className='cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark'><Link to="/dashboard">View Dashboard</Link></div>
+                    <br />
+                    <div className='cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark'><Link to="/you">View Profile</Link></div>
                 </div>
             );
         } else if (role === 'scheduler' && is_institution_approved) {
@@ -187,9 +189,8 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
                     <br />
                     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/schedules">View Schedules</Link></div>
                     <br />
-                    <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/constraints">View Constraints</Link></div>
-                    <br />
-                    <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/messages">View Messages</Link></div>
+                    <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/institutionprofile">View Institution</Link></div>
+
                 </div>
             );
         } else if (role === 'instructor') {

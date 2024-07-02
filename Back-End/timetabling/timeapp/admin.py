@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import UserData, Role, Profile, MeetingTime, Course, Department, Stream, Room, Institution, Lesson, Timetable
-# Register your models here.
+from .models import *
 
 admin.site.register(UserData)
 admin.site.register(Role)
@@ -13,3 +12,7 @@ admin.site.register(Room)
 admin.site.register(Institution)
 admin.site.register(Lesson)
 admin.site.register(Timetable)
+admin.site.register(Visit)
+admin.site.register(Notification)
+admin.site.register(Comment)
+admin.site.register(Vote)

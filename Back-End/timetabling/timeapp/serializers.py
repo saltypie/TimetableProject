@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Role, UserData, Department, MeetingTime, Stream, Room, Course,Profile, Institution, Timetable, Lesson
+from .models import *
 from django.contrib.auth import authenticate
 from .email_functionality import send_email
 from rest_framework.response import Response
@@ -139,6 +139,50 @@ class LessonDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'department', 'course', 'instructor', 'meeting_time', 'room', 'stream', 'timetable']
 
 
+class VisitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visit
+        fields = ['id', 'table_name','action', 'institution', 'time']
 
 
-####
+class VisitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visit
+        fields = ['id', 'table_name','action', 'institution', 'time']
+
+class UserManagementSerializer(serializers.ModelSerializer):
+    institution = serializers.PrimaryKeyRelatedField(queryset=Institution.objects.all())
+    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+
+    class Meta:
+        model = UserData
+        fields = ['id', 'email', 'fname', 'lname', 'role', 'institution', 'is_active']
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'institution', 'description', 'read_by','time']
+    
+class CommentSerializer(serializers.ModelSerializer):
+    schedule = serializers.PrimaryKeyRelatedField(queryset=Timetable.objects.all())
+    commenter = serializers.PrimaryKeyRelatedField(queryset=UserData.objects.all(), required=False, write_only=True)
+    commenter_details = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'commenter', 'commenter_details', 'schedule', 'time']
+
+    def get_commenter_details(self, obj):
+        if obj.commenter:
+            return {
+                'id': obj.commenter.id,
+                'fname': obj.commenter.fname,
+                'lname': obj.commenter.lname,
+                'email': obj.commenter.email
+            }
+        return None
+
+class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        fields = ['id', 'voter', 'schedule', 'value']

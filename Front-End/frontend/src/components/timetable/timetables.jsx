@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaPlus } from 'react-icons/fa';
-import { searchFunction } from '../reusable/functions';
+import { searchFunction,makeNotification } from '../reusable/functions';
 import Navbar from '../navigation';
 import { Link } from 'react-router-dom';
 
@@ -28,6 +28,11 @@ const Timetables = () => {
         if(response==="Error-AxiosError: Request failed with status code 500"){
           setStatus('Impossible constraints provided.');
         }else{
+          makeNotification(`New schedule has been made by the scheduler on ${new Date().toLocaleString()}`).then(() => {
+            
+          }).catch(error => {
+            console.error('There was an error while notifying', error);
+          });
           setStatus('success');
         }
 
@@ -36,6 +41,7 @@ const Timetables = () => {
         console.error('There was an error generating the timetable!', error);
         setStatus('error generating timetable');
     });
+    
   };
   return (
     

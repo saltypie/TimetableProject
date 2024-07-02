@@ -10,7 +10,7 @@ const CrudTable = ({ titles, colNames, colTitles, endpoint }) => {
     const [editFormData, setEditFormData] = useState(initialFormData);
 
   
-    const booleanColumns = ['is_institution_approved', 'another_boolean_column']; 
+    const booleanColumns = ['is_institution_approved', 'is_active']; 
 
     const fetchData = async () => {
         try {

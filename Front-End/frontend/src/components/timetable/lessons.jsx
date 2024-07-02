@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { searchFunction } from '../reusable/functions';
 import Navbar from '../navigation';
+import VoteComponent from './votes';
+import CommentComponent from './comments';
 
 const Timetable = () => {
   const [schedules, setSchedules] = useState({});
@@ -71,6 +73,9 @@ const Timetable = () => {
         {Object.entries(schedules).map(([streamName, streamData]) => 
           renderTimetable(streamName, streamData)
         )}
+        <VoteComponent scheduleId={timetableId}></VoteComponent>
+        <CommentComponent scheduleId={timetableId}></CommentComponent>
+
       </div>
     </>
   );

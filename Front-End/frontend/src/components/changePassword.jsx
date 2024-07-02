@@ -11,7 +11,6 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
-  const { id } = useParams(); // Extract id from URL params
 
   const handleOldPasswordChange = (e) => {
     setOldPassword(e.target.value);
@@ -39,7 +38,7 @@ const ChangePassword = () => {
     try {
       console.log('Submitting data:', data);
 
-      const response = await axios.put(`http://127.0.0.1:8000/timeapp/api/change_pass/${id}/`, data, {
+      const response = await axios.put(`http://127.0.0.1:8000/timeapp/api/change_pass/`, data, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`

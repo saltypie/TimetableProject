@@ -1,14 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './AdminSidebar.css';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { FaBars, FaHome, FaPencilRuler, FaPlus, FaUser, FaTable, FaTimes, FaUniversity, FaBell, FaTachometerAlt } from 'react-icons/fa';
+import { searchFunction } from '../reusable/functions';
 
 const Sidebar = () => {
+
     const [open, setOpen] = useState((JSON.parse(localStorage.getItem('hamburger_open'))));
-    const [tablesDropdownOpen, setTablesDropdownOpen] = useState(false);
     const [constraintsDropdownOpen, setConstraintsDropdownOpen] = useState(false);
     const [viewConstraintsDropdownOpen, setViewConstraintsDropdownOpen] = useState(false);
+    const [numNotifications, setNumNotifications] = useState(0);
+    
+    useEffect(() => {
+        if(localStorage.getItem('isLogged') === 'false') {
+            return;
+        }
+        const findNumNotifications = async () => {
+            try {
+                const response = await searchFunction('viewsets/notifications/caught_up');
+                console.log(response);
+                setNumNotifications(response.num_unread);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        findNumNotifications();
+    }, []);
 
     const handleSideClick = (open) => {
         setOpen(!open);
@@ -24,16 +42,6 @@ const Sidebar = () => {
                         <li><Link to="/"><FaHome className='inline' /> Home </Link></li>
                         <li><Link to="You"><FaUser className='inline' /> Profile</Link></li>
                         <li><Link to="dashboard"><FaTachometerAlt className='inline' /> Dashboard</Link></li>
-                        <li>
-                            <FaTable className='inline' onClick={() => setTablesDropdownOpen(!tablesDropdownOpen)} /> Tables
-                            {tablesDropdownOpen && (
-                                <ul className="dropdown">
-                                    <li><Link to="/tables/1">Table 1</Link></li>
-                                    <li><Link to="/tables/2">Table 2</Link></li>
-                                    <li><Link to="/tables/3">Table 3</Link></li>
-                                </ul>
-                            )}
-                        </li>
                     </ul>
                 </div>
             );
@@ -57,6 +65,7 @@ const Sidebar = () => {
                             )}
                         </li>
                         <li><Link to="/institutionprofile"><FaUniversity className='inline' /> Institution</Link></li>
+                        <li><Link to="schedulerdash"><FaTachometerAlt className='inline' /> Dashboard</Link></li>
                         <li onClick={() => setViewConstraintsDropdownOpen(!viewConstraintsDropdownOpen)} >
                             <FaPencilRuler className='inline' /> View/Edit Constraints
                             {viewConstraintsDropdownOpen && (
@@ -70,7 +79,7 @@ const Sidebar = () => {
                             )}
                         </li>
                         <li><Link to="/schedules"><FaTable className='inline' /> Schedules</Link></li>
-                        <li><Link to="/notifications"><FaBell className='inline' /> Notifications (Coming Soon)</Link></li>
+                        <li><Link to="/notifications"><FaBell className='inline' /> Notifications <span className='inline flex h-6 w-6 items-center justify-center rounded-full bg-primary'>{numNotifications}</span></Link></li>
                     </ul>
                 </div>
             );
@@ -84,7 +93,15 @@ const Sidebar = () => {
                         <li><Link to="You"><FaUser className='inline' /> Profile</Link></li>
                         <li><Link to="/institutionprofile"><FaUniversity className='inline' /> Institution</Link></li>
                         <li><Link to="/schedules"><FaTable className='inline' /> Schedules</Link></li>
-                        <li><Link to="/notifications"><FaBell className='inline' /> Notifications (Coming Soon)</Link></li>
+                        <li>
+                            <Link to="/notifications" className="inline-flex items-center space-x-2 whitespace-nowrap">
+                                <FaBell />
+                                <span>Notifications</span>
+                                <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-primary text-white text-xs">
+                                {numNotifications}
+                                </span>
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             );

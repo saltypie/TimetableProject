@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view, action
 from .email_functionality import send_email
 from rest_framework.parsers import MultiPartParser, FormParser
 from .timetable_functionality import generate_timetables
+from .visit_functionality import *
 
 class RegisterView(GenericAPIView):
     serializer_class = UserSerializer
@@ -279,9 +280,9 @@ class ProfileDetailView(viewsets.ModelViewSet):
         print("User making request:", user)
         return Profile.objects.filter(user=user)
 
-class InstitutionMemberView(viewsets.ModelViewSet):
-    serializer_class = InstitutionMemberSerializer
-    permission_classes = [IsAuthenticated]
+# class InstitutionMemberView(viewsets.ModelViewSet):
+#     serializer_class = InstitutionMemberSerializer
+#     permission_classes = [IsAuthenticated]
 
 class InstitutionMemberView(viewsets.ModelViewSet):
     serializer_class = InstitutionMemberSerializer
@@ -362,7 +363,22 @@ class TimetableViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(institution=institution).select_related('author')
             # queryset[0].
             # print(queryset[0].author.fname)
-        return queryset    
+        return queryset
+
+    @action(detail=False, methods=['get'], url_path='by_vote')
+    def tables_by_vote(self, request):
+        institution = self.request.user.institution
+        schedule_sets = Timetable.objects.filter(institution=institution) 
+        votes = Vote.objects.all()   
+        schedules_by_vote = {}
+        for schedule_set in schedule_sets:
+            for vote in votes:
+                if vote.schedule == schedule_set:
+                    if schedule_set.id not in schedules_by_vote:
+                        schedules_by_vote[schedule_set.id] = 1
+                    else:
+                        schedules_by_vote[schedule_set.id] += 1
+        return Response(schedules_by_vote)
 
 class LessonDetailViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
@@ -416,10 +432,136 @@ class LessonDetailViewSet(viewsets.ModelViewSet):
         return Response(schedules)
 
 
+class VisitViewSet(viewsets.ModelViewSet):
+    queryset = Visit.objects.all()
+    serializer_class = VisitSerializer()
+
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = VisitSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    @action(detail=False, methods=['get'], url_path='per_institution')
+    def per_institution(self, request):
+        return Response(visits_per_institution())
+    @action(detail=False, methods=['get'], url_path='per_table')
+    def per_table(self, request):
+        return Response(visits_per_table())
+    @action(detail=False, methods=['get'], url_path='per_action')
+    def per_action(self, request):
+        return Response(visits_per_action())
+    @action(detail=False, methods=['get'], url_path='per_daypart')
+    def per_day(self, request):
+        return Response(visits_per_daypart())
+
+class UserManagementViewSet(viewsets.ModelViewSet):
+    queryset = UserData.objects.all()
+    serializer_class = UserManagementSerializer
+    
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    def create(self, request, *args, **kwargs):
+        institution = self.request.user.institution
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = NotificationSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        members = UserData.objects.filter(institution=institution)
+        for member in members:
+            if member != self.request.user:
+                send_email(member.email , "New Notification from Timetabulous", f"New Notification: {serializer.data['description']}")
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)        
+    def get_queryset(self):
+        current_user = self.request.user
+        queryset = Notification.objects.filter(institution = current_user.institution)
+            
+        return queryset
+    @action(detail=False, methods=['get'], url_path='caught_up')
+    def caught_up(self, request):
+        current_user = self.request.user
+        queryset = Notification.objects.filter(institution = current_user.institution)
+        # caught_up = True
+        num_unread = 0
+        for notification in queryset:
+            if current_user not in notification.read_by.all():
+                num_unread += 1
+        # caught_up = (num_unread == 0)
+        return Response({"num_unread": num_unread}, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['get'], url_path='mark_read')
+    def mark_read(self, request):
+        current_user = self.request.user
+        queryset = Notification.objects.filter(institution = current_user.institution)
+        for notification in queryset:
+            if current_user not in notification.read_by.all():
+                notification.read_by.add(current_user)
+        return Response({"success": True}, status=status.HTTP_200_OK)
+    
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['commenter'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_queryset(self):
+        queryset = Comment.objects.all().select_related('commenter')
+        schedule_id = self.request.query_params.get('schedule', None)
+        if schedule_id:
+            schedule = Timetable.objects.get(id=schedule_id)
+            queryset = Comment.get_comments_for_schedule(schedule).select_related('commenter')
+        return queryset
 
 
+class VoteViewSet(viewsets.ModelViewSet):
+    queryset = Vote.objects.all()
+    serializer_class = VoteSerializer
 
+    @action(detail=False, methods=['get'], url_path='tally')
+    def tally_votes(self,request):
+        schedule_id = self.request.query_params.get('search', None)
+        schedule = Timetable.objects.get(id=schedule_id)
+        tally = Vote.total_vote_for_schedule(schedule)
+        voters_value = Vote.objects.get(voter=self.request.user, schedule=schedule).value if Vote.objects.filter(voter=self.request.user, schedule=schedule).exists() else 0
+        return Response({"tally": tally, "voters_value": voters_value}, status=status.HTTP_200_OK)
+    @action(detail=False, methods=['post'], url_path='takevote')
+    def take_vote(self, request):
+        data = request.data.copy()
+        schedule_id = data["schedule"]
+        schedule = Timetable.objects.get(id=schedule_id)
+        users_vote = Vote.objects.filter(schedule=schedule, voter=self.request.user)
 
+        if users_vote.exists():
+            users_vote.delete()
+
+        serializer = VoteSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
 
 
 
