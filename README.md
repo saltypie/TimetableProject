@@ -8,7 +8,7 @@ This project is licensed under the MIT license
 Timetabulous is a timetable creation application that is intended to ease the challenges of timetable creation faced in educational institutions. The application will use the genetic algorithm to allow university administrators to design clash-free timetables by providing the system with constraints, namely Lecturer times, rooms, total hours for lessons and Subjects available. The application also aims to reduce the chance of errors made by keeping members of the system current and up to date with each other via communication channels focussed on the scheduling tasks of the institutions.
 
 ## Getting Started
-The following are the base requirements before installation and setup of the project.
+The following are the base requirements before installation and setup of the project. Different Operating Systems downloads have been provided in the links.
 
 - Python >=3.11 (https://www.python.org/downloads/)
 
@@ -25,6 +25,8 @@ It helps in  PostgreSQL database administration
 - postgresql (https://www.postgresql.org/download/)
 
 It is the database where the data will be stored.
+
+- Git (https://git-scm.com/downloads)
 
 ## Environment and Repository Setup
 Ensure all the commands below are executed.
