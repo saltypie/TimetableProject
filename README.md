@@ -26,12 +26,12 @@ It helps in  PostgreSQL database administration
 
 It is the database where the data will be stored.
 
-### Environment and Repository Setup
+## Environment and Repository Setup
 Ensure all the commands below are executed.
-To begin the setup to your device. Move to the directory in which you would like to clone your project, e.g.,
+To begin the setup to your device, move to the directory in which you would like to clone your project, e.g.,
 
      C:\Projects
-Begin with cloning the project to your local repository.
+Start with cloning the project to your local repository.
 
      git clone https://github.com/Philip-O-M/TimetableProject.git
 
@@ -56,7 +56,7 @@ Instal the backend requirements
 
       pip install -r requirements.txt
 
-### Database Setup
+## Database Setup
 Follow the following steps to set up the database
 
   - Create a .env file in the Back-End folder
@@ -74,56 +74,54 @@ To run the application type the command below
 
 	Python3 manage.py runserver
 
-Navigate to the frontend 
+Navigate to the frontend and run it.
 
 	 cd Front-End
 	 npm run
 Then paste the following url in the browser and you are ready to begin.
 
 	http://localhost:3000/LandingPage
-### Structure
+## Structure
 
-	project/
-	│
-	├── Back-End/
-	│   ├── server.py       
-	│   ├── routes/          
-	│   │   ├── api.py       
-	│   │   └── ...
-	│   ├── controllers/     
-	│   │   ├── userController.py
-	│   │   └── ...
-	│   ├── models/          
-	│   │   ├── User.py
-	│   │   └── ...
-	│   ├── config/          
-	│   │   ├── db.py     
-	│   │   └── ...
-	│   └── ...
-	│
-	└── Front-End/
-	|     ├── frontend/        
-	|     │   ├── public/      
-	|     │   │   ├── index.html   
-	|     │   │   ├── styles/      
-	|     │   │   └── ...
-	|     │   ├── src/             
-	|     │   │   ├── components/  
-	|     │   │   │   ├── Header.jsx
-	|     │   │   │   └── ...
-	|     │   │   ├── pages/       
-	|     │   │   │   ├── Home.jsx
-	|     │   │   │   └── ...
-	|     │   │   ├── services/    
-	|     │   │   │   ├── api.jsx  
-	|     │   │   │   └── ...
-	|     │   │   └── App.jsx       
-	|  |   │   ├── package.json     
-	|    │   └── ...
+	Project/
+	.
+	├── Back-End
+	│   └── timetabling
+	│       ├── media
+	│       │   └── images
+	│       ├── timeapp
+	│       │   ├── _pycache_
+	│       │   └── migrations
+	│       │       └── _pycache_
+	│       └── timetabling
+	│           └── _pycache_
+	└── Front-End
+	|    └── frontend
+	|         ├── node_modules
+	|         ├── public
+	|         └── src
+	|             ├── components
+	|             │   ├── admincomponents
+	|             │   ├── coursecomponents
+	|             │   ├── navigation
+	|             │   ├── photos
+	|             │   ├── reusable
+	|             │   └── timetable
+	|             ├── css
+	|             └── images
+	|                 ├── brand
+	|                 ├── cards
+	|                 ├── country
+	|                 ├── cover
+	|                 ├── icon
+	|                 ├── logo
+	|                 ├── product
+	|                 ├── task
+	|                 └── user
  	├── README.md            
 	 └── ...
 
 	
 ## Contact Us
-Contact us at @
+Contact us at @ loius.gacho@strathmore.edu/philip.miroga@strathmore.edu
 
