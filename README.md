@@ -12,21 +12,23 @@ The following are the base requirements before installation and setup of the pro
 
 - Python >=3.11 (https://www.python.org/downloads/)
 
-This is the main language used in the backend programming.
+	This is the main language used in the backend programming.
 
 - Node js >= (https://nodejs.org/en/download/package-manager)
 
-It provides a runtime environment that allows the running of JavaScript code outside of a web browser.
+	It provides a runtime environment that allows the running of JavaScript code outside of a web browser.
 
 - pgAdmin (https://www.pgadmin.org/download/)
 
-It helps in  PostgreSQL database administration
+	It helps in  PostgreSQL database administration
 
 - postgresql (https://www.postgresql.org/download/)
 
-It is the database where the data will be stored.
+	It is the database where the data will be stored.
 
 - Git (https://git-scm.com/downloads)
+
+	It is for version control
 
 ## Environment and Repository Setup
 Ensure all the commands below are executed.
