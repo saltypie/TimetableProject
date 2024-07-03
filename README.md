@@ -81,6 +81,9 @@ Navigate to the frontend and run it.
 Then paste the following url in the browser and you are ready to begin.
 
 	http://localhost:3000/LandingPage
+### Input and Output
+The application's main aim is to generate a timetable which does not have clashes. The input includes rooms, lecturers, sections and subjects while the output expected is a timetable.
+ 
 ## Structure
 
 	Project/
