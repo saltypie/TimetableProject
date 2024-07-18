@@ -60,7 +60,6 @@ export const EditLessonModal = ({show,lesson,onClose}) => {
 
     const fetchAvailableTimings = async()=>{
         try {
-            console.log("yo");
             console.log(lesson);
             setStatus("Fetching available timings...");
             const response = await searchFunction('viewsets/meetingtimes/availabletimings',{lessonId:lesson.id});

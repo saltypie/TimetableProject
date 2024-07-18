@@ -110,7 +110,7 @@ const Timetables = () => {
                   <p><strong>Time Made:</strong> {new Date(timetable.time_made).toLocaleString()}</p>
                   <p><strong>Author:</strong> {timetable.author.fname} {timetable.author.lname}</p>
                 </Link>
-                <FaTrash onClick={() =>{handleTimetableDelete(timetable.id)}}></FaTrash>
+                {localStorage.getItem("role")==="scheduler"&&(<FaTrash className='cursor-pointer' onClick={() =>{handleTimetableDelete(timetable.id)}}></FaTrash>)}
             </div>
         ))}
       </div>

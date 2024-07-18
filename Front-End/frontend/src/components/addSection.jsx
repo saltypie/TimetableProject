@@ -60,7 +60,6 @@ const AddSection = () => {
         setErrorMessage(response.detail);
       } else {
         // window.location.href = '/Stream';
-        console.log("yo")
         alert("Stream Added Successfuly")
       }
     }).catch((error) => {
