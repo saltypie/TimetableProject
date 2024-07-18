@@ -9,7 +9,7 @@ const LandingPage = () => {
   return (
     <div><Navbar title="Landing Page" />
     <div className='wrapper'>
-      <h1>Welcome</h1>
+      <h1>Welcome to Timetabulous</h1>
           
     </div></div>
   )

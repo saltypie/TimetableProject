@@ -1,146 +1,173 @@
 import React, { useState } from 'react';
 import './Login.css';
 import Navbar from './navigation.jsx';
-import axios from "axios";
 import Sidebar from './navigation/sidebar.jsx';
 import { generalPost } from './reusable/functions.jsx';
 
 const AddTiming = () => {
-  
-  const [dayOfWeek, setDayOfWeek] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [duration, setDuration] = useState();
   const [errorMessage, setErrorMessage] = useState('');
+  const [name, setName] = useState('')
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
+  const [startDayNum, setStartDayNum] = useState(null);
+  const [endDayNum, setEndDayNum] = useState(null);
 
-  const handleDayOfWeekChange = (e) => {
-    setDayOfWeek(e.target.value);
-  }
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  const handleStartTimeChange = (e) => {
-    setStartTime(e.target.value);
-    // Ensure endTime does not precede startTime
-    if (endTime < e.target.value) {
-      setEndTime(e.target.value); // Adjust endTime if it is before startTime
-    } else {
-      setErrorMessage("Start Time cannot be after End Time");
-      // Check if endTime exceeds 3 hours from startTime
-      // const maxEndTime = calculateMaxEndTime(e.target.value);
-      // if (endTime > maxEndTime) {
-      //   setEndTime(maxEndTime); // Adjust endTime if it exceeds max duration
-      // }
-    }
-  }
 
-  const handleEndTimeChange = (e) => {
-    setEndTime(e.target.value);
-    // Ensure endTime is not before startTime
-    if (e.target.value < startTime) {
-      setErrorMessage("End Time cannot be before Start Time");
-    } else {
-      setErrorMessage('');
-    }
-  }
 
-  // const calculateMaxEndTime = (startTime) => {
-  //   // Calculate max end time as 3 hours from startTime
-  //   const maxDuration = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
-  //   const startTimestamp = new Date(`2000-01-01T${startTime}`).getTime(); // Assuming a dummy date for comparison
-  //   const maxEndTime = new Date(startTimestamp + maxDuration).toISOString().substr(11, 5); // Format to HH:mm
-  //   return maxEndTime;
-  // }
+
+
+  const handleNameChange = (e)=>{
+    setName(e.target.value);
+  } 
+  const handleDurationChange = (e)=>{
+    setDuration(e.target.value);
+  } 
 
   const submit = async (e) => {
     e.preventDefault();
 
-    // Validation: Check if endTime is before startTime
-    if (endTime < startTime) {
-      setErrorMessage("End Time cannot be before Start Time");
+    console.log("abc")
+    console.log(typeof startDayNum)
+    console.log(typeof endDayNum)
+    if (endTime <= startTime) {
+      setErrorMessage(`End Time cannot be before or at Start Time`);
       return;
     }
-
-    // Validation: Check if endTime exceeds 3 hours from startTime
-    // const maxEndTime = calculateMaxEndTime(startTime);
-    // if (endTime > maxEndTime) {
-    //   setErrorMessage(`End Time cannot exceed 3 hours from Start Time (${maxEndTime})`);
-    //   return;
-    // }
-    
+    if (endDayNum < startDayNum) {
+      setErrorMessage(`End Day cannot be before Start Day`);
+      return;
+    }
+    if (startDayNum == null){
+      setErrorMessage("Pick a start day")
+      return;
+    }
+    if (endDayNum == null){
+      setErrorMessage("Pick an end day")
+      return;
+    }
+   
     const body = {
-      time: `${startTime} - ${endTime}`,
-      day: `${dayOfWeek}`,
+      name:name,
+      duration :duration,
+      start_day_num: startDayNum,
+      end_day_num: endDayNum,
+      start_time: startTime,
+      end_time: endTime
+
     };
 
-    generalPost('viewsets/meetingtimes/', body).then((data) => {
+    try {
+      const data = await generalPost('viewsets/timesets', body);
       if (!data) {
-        alert(data.Message);
-        setErrorMessage(data.Message);
+        setErrorMessage(`Timeset already exists`);
       } else {
-        // window.location.href = '/Timing';
-        alert('Timing added successfully!');
+        alert(`Timeset added successfully!`);
       }
-    }).catch((error) => {
+    } catch (error) {
       console.log(error);
-    });
+    }
+
   }
 
   return (
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
-      
-      <div className='wrapper'>
-        <form onSubmit={submit}>
-          <h1>Add Timing</h1>
 
-          <div className="input-box">
-            <label htmlFor="dayOfWeek">Day of the Week:</label>
-            <select
-              id="dayOfWeek"
-              value={dayOfWeek}
-              onChange={handleDayOfWeekChange}
+      <div className='mt-9 rounded-sm border border-stroke bg-white py-6 px-10 shadow-default dark:border-strokedark dark:bg-boxdark'>
+        <form onSubmit={submit}>
+          <h1 className='text-title-md2 font-semibold text-primary dark:text-white centerholder'>Add Timeset</h1>
+          <br />
+
+          <div className="centerholder input-box mb-2">
+            <input 
+              id="name"
+              type="text" 
+              name="name"
+              placeholder="Timeset Name" 
+              value={name} 
+              onChange={handleNameChange} 
+              required             />
+          </div>
+          <div className="centerholder input-box mb-2">
+            <input 
+              id="duration"
+              type="number" 
+              name="duration"
+              placeholder="Lesson Duration (minutes)" 
+              value={duration} 
+              onChange={handleDurationChange} 
+              required             />
+          </div>
+
+          <label htmlFor={`startTime`}>Start Time:</label>
+          <div className="input-box centerholder mb-2">          
+            <input
+              type="time"
+              id={`startTime`}
+              placeholder="Starting Time of a work day"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+            />
+          </div>
+
+          <label htmlFor={`endTime`}>End Time:</label>
+
+          <div className="input-box centerholder mb-2">          
+            <input
+              type="time"
+              id={`endTime`}
+              placeholder="Ending Time of a work day"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="input-box centerholder mb-2">          
+            <select 
+              id='startDayNum'
+              onChange={(e) => setStartDayNum(Number(e.target.value))}
               required
             >
-              <option value="">Select a Day</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
+              <option value={null}>Choose a Day</option>
+              {
+                daysOfWeek.map((day,i) => (
+                  <option key={i} value={i}>{day}</option>
+                ))
+              }
+              <option></option>
             </select>
           </div>
 
-          <div className="input-box">
-            <label htmlFor="startTime">Start Time:</label>
-            <input 
-              type="time" 
-              id="startTime"
-              placeholder="Start Time" 
-              value={startTime} 
-              onChange={handleStartTimeChange} 
-              required 
-            />
-            <span className="info" title="Time the class should start">⏰</span>
-          </div><br></br>
+          <div className="input-box centerholder mb-2">
+            <select 
+              id='endDayNum'
+              onChange={(e) => setEndDayNum(Number(e.target.value))}
+              required
+              >
+                <option value={null}>Choose a Day</option>
+              {
+                daysOfWeek.map((day,i) => (
+                  <option key={i} value={i}>{day}</option>
+                ))
+              }
+              <option></option>
+            </select>
+          </div>
 
-          <div className="input-box">
-            <label htmlFor="endTime">End Time:</label>
-            <input 
-              type="time" 
-              id="endTime"
-              placeholder="End Time" 
-              value={endTime} 
-              onChange={handleEndTimeChange} 
-              required 
-            />
-            <span className="info" title="Time the class should end">⏰</span>
-          </div><br></br>
 
-          <button type="submit">Add</button>
+          <div className="centerholder">
+            <button type="submit" className='justify-center inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" type="submit">Add</button>'>Add</button>
+          </div>
 
           <div className="warning centerholder">
             {errorMessage && <p>{errorMessage}</p>}
           </div>
-        </form>    
+        </form>
       </div>
     </div>
   );

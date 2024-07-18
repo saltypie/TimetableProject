@@ -50,7 +50,7 @@ const Navbar = ({ title, isLoggedIn, fname }) => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-title">Timetable</div>
+      <div className="cursor-pointer navbar-title text-title-md1 font-semibold text-primary dark:text-white centerholder" onClick={() => window.location.href = '/'}>Timetabulous✨</div>
       {renderActions()}
     </nav>
   );

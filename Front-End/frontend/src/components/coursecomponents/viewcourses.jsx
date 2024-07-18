@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../navigation';
 import { generalPatch, generalDelete, searchFunction,makeNotification } from '../reusable/functions';
+import { DeleteModal } from '../reusable/modals';
 
 const CourseTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [courses, setCourses] = useState([]);
     const [editCourseId, setEditCourseId] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteCourseId,setDeleteCourseId] = useState(null);
+    const [deleteCourseName,setDeleteCourseName] = useState(null);
+
     const [editFormData, setEditFormData] = useState({
         course_number: '',
         course_name: '',
@@ -63,19 +68,26 @@ const CourseTable = () => {
         }
     };
 
-    const handleDeleteClick = async (courseId) => {
-        try {
-            await generalDelete('viewsets/courses/', courseId);
-            await makeNotification(`Course ${editFormData.course_name} has been deleted by Scheduler`);
-            fetchData(); // Refresh the data
-        } catch (error) {
-            console.log(error);
-        }
+    const handleDeleteClick = async (courseId,courseName) => {
+        // try {
+        //     await generalDelete('viewsets/courses/', courseId);
+        //     await makeNotification(`Course ${editFormData.course_name} has been deleted by Scheduler`);
+        //     fetchData(); // Refresh the data
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        setDeleteCourseId(courseId)
+        setDeleteCourseName(courseName)
+        setShowDeleteModal(true)
+        fetchData();
     };
 
     return (
         <div>
             <Navbar title="Home" />
+            <div className="centerholder">
+                <DeleteModal show={showDeleteModal} id={deleteCourseId} name={deleteCourseName} endpoint={'viewsets/courses/'} onClose={() => setShowDeleteModal(false)} itemKind={'Course'}></DeleteModal>
+            </div>
             <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                 <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                     Courses
@@ -167,7 +179,7 @@ const CourseTable = () => {
                                         <button onClick={() => handleEditClick(course)} className="btn btn-warning">Edit</button>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <button onClick={() => handleDeleteClick(course.id)} className="btn btn-danger">Delete</button>
+                                        <button onClick={() => handleDeleteClick(course.id, course.course_name)} className="btn btn-danger">Delete</button>
                                     </div>
                                 </>
                             )}

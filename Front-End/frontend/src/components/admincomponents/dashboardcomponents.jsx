@@ -34,7 +34,7 @@ export const VisitsPerInstitutionChart = () => {
 
   return (
     <div>
-      <h2 className='centerholder'>Visits Per Institution</h2>
+      <h2 className='centerholder'>Most Active Institutions</h2>
       <Pie data={chartData} />
     </div>
   );
@@ -50,7 +50,7 @@ export const VisitsPerTableChart = () => {
           setChartData({
             labels: Object.keys(data),
             datasets: [{
-              label: 'Visits per Table',
+              label: 'Visits',
               data: Object.values(data),
               backgroundColor: '#36A2EB',
             }]
@@ -59,13 +59,39 @@ export const VisitsPerTableChart = () => {
       };
       fetchData();
     }, []);
-  
+    const options = {
+      scales: {
+          y: {
+              beginAtZero: false,
+              title: {
+                  display: true,
+                  text: 'Visits'
+              }
+          },
+          x: {
+              title: {
+                  display: true,
+                  text: 'Table'
+              }
+          }
+      },
+      responsive: true,
+      plugins: {
+          legend: {
+              position: 'top',
+          },
+          title: {
+              display: true,
+              text: 'Table Visits',
+          },
+      },
+    };
     if (!chartData) return <div>No Data Yet</div>;
   
     return (
       <div>
         <h2 className='centerholder'>Visits Per Table</h2>
-        <Bar data={chartData} />
+        <Bar data={chartData} options={options}/>
       </div>
     );
 };

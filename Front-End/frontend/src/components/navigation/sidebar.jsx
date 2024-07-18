@@ -107,6 +107,9 @@ const Sidebar = () => {
             );
         }
     } else {
+        if(localStorage.getItem("isLogged") === "false"){
+            return(<></>)
+        }
         return (
             <div className="hamburger centerholder" onClick={() => handleSideClick(open)}>
                 <FaBars />

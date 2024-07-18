@@ -12,6 +12,8 @@ from rest_framework.decorators import api_view, action
 from .email_functionality import send_email
 from rest_framework.parsers import MultiPartParser, FormParser
 from .timetable_functionality import generate_timetables
+from datetime import datetime, timedelta
+
 from .visit_functionality import *
 
 class RegisterView(GenericAPIView):
@@ -142,18 +144,130 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-class MeetingTimeViewSet(viewsets.ModelViewSet):
-    queryset = MeetingTime.objects.all()
-    serializer_class = MeetingTimeSerializer
+class TimeSetViewSet(viewsets.ModelViewSet):
+    queryset=TimeSet.objects.all()
+    serializer_class = TimeSetSerializer
+    #
+    def create(self, request, *args, **kwargs):
+        days={0:"Monday", 1:"Tuesday", 2:"Wednesday", 3:"Thursday", 4:"Friday", 5:"Saturday", 6:"Sunday"}
+        institution = self.request.user.institution
+        name = request.data.get('name')
+        timings = request.data.get('timings')
+        duration = int(request.data.get('duration'))
+        start_day_num = request.data.get('start_day_num')
+        end_day_num = request.data.get('end_day_num')
+        
+        if not institution:
+            return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if TimeSet.objects.filter(name=name, institution=institution).exists():
+            return Response({"detail": "Timeset already exists."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        data = request.data.copy()
+        data['institution'] = institution.id
+
+        serializer = TimeSetSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        new_timeset = TimeSet.objects.get(name=name)
+
+        for daynum in range(start_day_num, end_day_num+1):
+            start_time = datetime.strptime(request.data.get("start_time"), '%H:%M')
+            end_time = datetime.strptime(request.data.get("end_time"), '%H:%M')
+
+            iteration_time = start_time
+            while iteration_time <= end_time:
+                i_time_start = iteration_time.strftime('%H:%M')
+                i_time_end = (iteration_time + timedelta(minutes=duration)).strftime('%H:%M')
+                # print(i_time)
+                if datetime.strptime(i_time_end, '%H:%M') > end_time:
+                    i_time_end = end_time.strftime('%H:%M')                
+                MeetingTime.objects.create(time=f'{i_time_start} - {i_time_end}', day=days[daynum], institution=institution, timeset=new_timeset)
+
+                iteration_time += timedelta(minutes=duration)              
+          
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     def get_queryset(self):
-        queryset = MeetingTime.objects.all()
+        queryset = TimeSet.objects.all()
         institution = self.request.user.institution
         search_query = self.request.query_params.get('search', None)
         # institution = self.request.query_params.get('institution', None)
         if institution:
             queryset = queryset.filter(institution=institution)
         if search_query:
+            queryset = queryset.filter(name=search_query)
+        return queryset 
+    
+class MeetingTimeViewSet(viewsets.ModelViewSet):
+    queryset = MeetingTime.objects.all()
+    serializer_class = MeetingTimeSerializer
+
+    @action(detail=False, methods=['get'], url_path='availabletimings')
+    def available_timings(self, request):
+        queryset = MeetingTime.objects.all()
+        institution = self.request.user.institution
+        lesson_of_interest_id = self.request.query_params.get('lessonId', None)
+        lesson_of_interest = Lesson.objects.get(id=lesson_of_interest_id)
+
+        if institution:
+            if lesson_of_interest:
+                available_times = []
+                for mt in queryset:
+                    if not Lesson.objects.filter(meeting_time=mt).exists() and mt != lesson_of_interest:
+                        available_times.append(mt)
+                serializer = self.get_serializer(available_times, many=True)
+
+                return Response({"available_times": serializer.data}, status=status.HTTP_200_OK)    
+
+
+        return Response({"error": "Institution not provided"}, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=['get'], url_path='getslots')
+    def get_slots(self, request):
+        queryset = MeetingTime.objects.all()
+        institution = self.request.user.institution
+        timeset = self.request.query_params.get('timeset', None)
+
+        if institution:
+            if timeset:
+                print("C")
+                meeting_times = queryset.filter(institution=institution, timeset=timeset)
+                slots = {"days":set(), "times":set()}
+
+                for meeting_time in meeting_times:
+                    print(meeting_time)
+                    slots["days"].add(meeting_time.day)
+                    slots["times"].add(meeting_time.time)
+                
+                # slots["days"] = list(slots["days"])
+                # slots["times"] = list(slots["times"])
+                day_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                slots["days"] = sorted(list(slots["days"]), key=lambda x: day_order.index(x) if x in day_order else len(day_order))
+                slots["times"] = sorted(list(slots["times"]), key=lambda x: x[:5])
+                
+                print(slots)
+                print("D")
+                return Response(slots)
+
+            return Response({"error": "Timeset not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"error": "Institution not provided"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get_queryset(self):
+        queryset = MeetingTime.objects.all()
+        institution = self.request.user.institution
+        search_query = self.request.query_params.get('search', None)
+        timeset = self.request.query_params.get('timeset', None)
+        print("A")
+        # institution = self.request.query_params.get('institution', None)
+        if institution:
+            if timeset:
+                queryset = queryset.filter(institution=institution, timeset=timeset)
+            queryset = queryset.filter(institution=institution)
+
+        if search_query:
             queryset = queryset.filter(time__istartswith=search_query)
+
         return queryset 
     
     def create(self, request, *args, **kwargs):
@@ -194,6 +308,8 @@ class StreamViewSet(viewsets.ModelViewSet):
 
         data = request.data.copy()
         data['institution'] = institution.id
+        if Stream.objects.filter(institution=institution, code = data["code"], department=data["department"]).exists():
+            return Response({"detail":"Similar stream already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = StreamSerializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -216,10 +332,15 @@ class RoomViewSet(viewsets.ModelViewSet):
 
         if not institution:
             return Response({"detail": "Institution is required."}, status=status.HTTP_400_BAD_REQUEST)
-
+        
+        
         data = request.data.copy()
         data['institution'] = institution.id
 
+        if Room.objects.filter(r_number=data["r_number"], institution=institution).exists():
+            return Response({"detail": "Room With The Same Name Already Exists."},  status=status.HTTP_400_BAD_REQUEST)
+        
+        
         serializer = RoomSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -248,6 +369,12 @@ class CourseViewSet(viewsets.ModelViewSet):
         data = request.data.copy()
         data['institution'] = institution.id
         print(data["instructors"])
+
+        if Course.objects.filter(institution=institution, course_number=data["course_number"]).exists() or Course.objects.filter(institution=institution, course_name=data["course_name"]):
+            return Response({"detail": "Already exists"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            
+        
         # data["instructors"] = [int(instructor_id) for instructor_id in data["instructors"]]
 
         serializer = CourseSerializer(data=data)
@@ -347,7 +474,13 @@ class InstitutionViewSet(viewsets.ModelViewSet):
 
 @api_view(['GET'])
 def make_timetable(request):  
-    created_objects = generate_timetables(request.user)
+    timeset = request.query_params.get('timeset', None)
+
+    result = generate_timetables(request.user, timeset)
+    if "Error" in result:
+        return Response(result)
+    created_objects = result
+    print("Length of created objects: ",len(created_objects))
     serializer1 = TimetableSerializer(created_objects['created_schedule'])
     serializer2 = LessonDetailSerializer(created_objects['created_classes'], many=True)
     return Response({'schedule':serializer1.data,'schedule_classes': serializer2.data})
@@ -383,12 +516,14 @@ class TimetableViewSet(viewsets.ModelViewSet):
 class LessonDetailViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonDetailSerializer
+
+
     def get_queryset(self):
         queryset = Lesson.objects.all()
         institution = self.request.user.institution
         search_query = self.request.query_params.get('search', None)
         # institution = self.request.query_params.get('institution', None)
-        if institution:
+        if institution and search_query:
             queryset = queryset.filter(timetable=search_query)
         return queryset
 
@@ -407,7 +542,7 @@ class LessonDetailViewSet(viewsets.ModelViewSet):
 
         for stream in streams:
             print(streams)
-            stream_key = f"{stream.department.dept_name}--{stream.id}"
+            stream_key = f"{stream.department.dept_name}--{stream.code}"
             schedules[stream_key] = {}
             for meeting_time in meeting_times:
                 day_key = meeting_time.day
@@ -419,11 +554,12 @@ class LessonDetailViewSet(viewsets.ModelViewSet):
                 schedules[stream_key][day_key][time_key] = "No Lesson"
 
         for lesson in lessons:
-            stream_key = f"{lesson.stream.department.dept_name}--{lesson.stream.id}"
+            stream_key = f"{lesson.stream.department.dept_name}--{lesson.stream.code}"
             day_key = lesson.meeting_time.day
             time_key = lesson.meeting_time.time
             
             schedules[stream_key][day_key][time_key] = {
+                'id': lesson.id,
                 'course': lesson.course.course_name,
                 'instructor': lesson.instructor.email,
                 'room': lesson.room.r_number
@@ -563,6 +699,20 @@ class VoteViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
+class LessonUpdateViewSet(viewsets.ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+
+    def patch(self, request, *args, **kwargs):
+        print(f"Partial update request data: {request.data}")
+        instance = self.get_object()
+        serializer = LessonSerializer(instance, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            print(f"Updated Lesson with data: {serializer.validated_data}")
+        else:
+            print(f"Serializer errors: {serializer.errors}")
+        return Response(serializer.data)
 
 
 

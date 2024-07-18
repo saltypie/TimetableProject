@@ -61,13 +61,15 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class MeetingTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingTime
-        fields = ['id', 'time', 'day', 'institution']
+        # fields = ['id', 'time', 'day', 'institution']
+        fields = ['id', 'time', 'day', 'institution','timeset']
 
 class StreamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stream
         # fields = ['id', 'department', 'lessons_per_week', 'institution', 'course', 'meeting_time', 'room', 'instructor']
-        fields = ['id', 'department', 'lessons_per_week', 'institution']
+        # fields = ['id', 'department', 'lessons_per_week', 'institution']
+        fields = ['id', 'department', 'lessons_per_week', 'institution','code']
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
@@ -117,9 +119,10 @@ class TimetableSerializer(serializers.ModelSerializer):
     author = InstitutionMemberSerializer(read_only=True)
     class Meta:
         model = Timetable
-        fields = ['id', 'time_made','author','institution']
+        fields = ['id', 'time_made','author','institution','timeset']
 
 class LessonSerializer(serializers.ModelSerializer):
+    meeting_time = serializers.PrimaryKeyRelatedField(queryset=MeetingTime.objects.all())
     class Meta:
         model = Lesson
         fields = ['id', 'department', 'course', 'instructor', 'meeting_time', 'room', 'stream', 'timetable']
@@ -186,3 +189,9 @@ class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
         fields = ['id', 'voter', 'schedule', 'value']
+
+class TimeSetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSet
+        fields = ['id', 'name', 'duration', 'institution']
+        # fields = ['id', 'name', 'duration', 'institution', 'start_day', 'end_day', 'start_time', 'end_time']

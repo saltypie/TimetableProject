@@ -10,6 +10,7 @@ const AddSection = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [classesPerWeek, setClassesPerWeek] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [code, setCode] = useState('');
 
   useEffect(() => {
     fetchDepartments();
@@ -32,22 +33,35 @@ const AddSection = () => {
   const handleClassesPerWeekChange = (e) => {
     setClassesPerWeek(e.target.value);
   };
+  const handleCodeChange = (e)=>{
+    setCode(e.target.value)
+  }
 
   const submit = async (e) => {
     e.preventDefault();
-
+    if(classesPerWeek<=0){
+      setErrorMessage("classes can not be 0 or less.")
+      return
+    }
     const body = {
+      code: code,
       department: selectedDepartment,
       lessons_per_week: classesPerWeek
     };
 
 
     generalPost('viewsets/streams', body).then((response) =>{
-      if (response.Message) {
-        alert(response.Message);
-        setErrorMessage(response.Message);
+      if(!response){
+        alert("Problem adding stream try again")
+        console.log(response.data.detail)
+        setErrorMessage("Problem adding stream try again")
+      }else if (response["detail"]) {
+        alert(response.detail);
+        setErrorMessage(response.detail);
       } else {
-        window.location.href = '/Stream';
+        // window.location.href = '/Stream';
+        console.log("yo")
+        alert("Stream Added Successfuly")
       }
     }).catch((error) => {
       console.error('There was an error!', error);
@@ -60,7 +74,19 @@ const AddSection = () => {
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       <div className='wrapper'>
         <form onSubmit={submit}>
-          <h1>Add Section</h1>
+          <h1>Add Stream</h1>
+
+          <div className="input-box">
+            <label htmlFor="code">Code:</label>
+            <input
+              type="text"
+              id="code"
+              placeholder="Stream code"
+              value={code}
+              onChange={handleCodeChange}
+              required
+            />
+          </div>
 
           <div className="input-box">
             <label htmlFor="department">Department:</label>

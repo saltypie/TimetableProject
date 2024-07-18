@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../navigation';
 import { generalPatch, generalDelete, searchFunction, makeNotification } from '../reusable/functions';
+import { DeleteModal } from '../reusable/modals';
 
 const RoomTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [rooms, setRooms] = useState([]);
     const [editRoomId, setEditRoomId] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteRoomId,setDeleteRoomId] = useState(null);
+    const [deleteRoomName,setDeleteRoomName] = useState(null);
+
     const [editFormData, setEditFormData] = useState({
         r_number: '',
         seating_capacity: ''
@@ -23,6 +28,7 @@ const RoomTable = () => {
 
     useEffect(() => {
         fetchData();
+        console.log(showDeleteModal);
     }, [searchQuery]);
 
     const handleEditClick = (room) => {
@@ -61,19 +67,27 @@ const RoomTable = () => {
         }
     };
 
-    const handleDeleteClick = async (roomId) => {
-        try {
-            await generalDelete('viewsets/rooms/', roomId);
-            await makeNotification(`Room ${editFormData.r_number} has been removed by Scheduler`);
-            fetchData(); // Refresh the data
-        } catch (error) {
-            console.log(error);
-        }
+    const handleDeleteClick = async (roomId,roomName) => {
+        // try {
+        //     await generalDelete('viewsets/rooms/', roomId);
+        //     await makeNotification(`Room ${editFormData.r_number} has been removed by Scheduler`);
+        //     fetchData(); // Refresh the data
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        setDeleteRoomId(roomId)
+        setDeleteRoomName(roomName)
+        setShowDeleteModal(true)
+        fetchData();
+
     };
 
     return (
         <div>
             <Navbar title="Home" />
+            <div className="centerholder">
+                <DeleteModal show={showDeleteModal} id={deleteRoomId} name={deleteRoomName} endpoint={'viewsets/rooms/'} onClose={() => setShowDeleteModal(false)} itemKind={'Room'}></DeleteModal>
+            </div>
             <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                 <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                     Rooms
@@ -147,7 +161,8 @@ const RoomTable = () => {
                                         <button onClick={() => handleEditClick(room)} className="btn btn-warning">Edit</button>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <button onClick={() => handleDeleteClick(room.id)} className="btn btn-danger">Delete</button>
+                                        {/* <button onClick={() => handleDeleteClick(room.id)} className="btn btn-danger">Delete</button> */}
+                                        <button onClick={() => handleDeleteClick(room.id,room.r_number)} className="btn btn-danger">Delete</button>
                                     </div>
                                 </>
                             )}

@@ -118,7 +118,7 @@ useEffect(()=>{
           <Route path='/dashboard' element={<Dash/>}/>
           <Route path='/institutionprofile' element={<InstitutionProfile/>}/>
           <Route path='/schedules' element={<Timetables/>}/>
-          <Route path='/lessons/:timetableId' element={<Timetable/>}/>
+          <Route path='/lessons/:timetableId/:timeset' element={<Timetable/>}/>
           <Route path='/CommentSection' element={<CommentSection/>}/>
           <Route path='/changepassword' element={<ChangePassword/>}/>
           <Route path='/notifications' element={<Notifications/>}/>

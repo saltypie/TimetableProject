@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../Login.css';
 import axios from 'axios';
-import { generalPatch, searchFunction,makeNotification } from './functions';
+import { generalPatch, searchFunction,makeNotification, generalPost } from './functions';
 // import { Input } from "@material-tailwind/react";
 
 // Modal Component for Registering an Institution
@@ -99,7 +99,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
 
     const handleRegisterInstitution = async (institutionData) => {
         try {
-            await axios.post('/api/viewsets/institutions', institutionData);
+            await generalPost('/viewsets/institutions', institutionData);
             setIsModalOpen(false);
             fetchData();
         } catch (error) {
@@ -140,7 +140,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             return (
                 <div className=''>
                     <br /><hr />
-                    <div onClick={() => setIsModalOpen(true)} className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">Register Institution</div>
+                    <div onClick={() => setIsModalOpen(true)} className="cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">Register Institution</div>
                     <br />
                     <div className="search rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
                         <div>Search for Institution</div>
@@ -148,7 +148,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
                         <input onChange={handleInstitutionSearchChange} name="searchQuery" placeholder="Search Institution" />
                         <div className="results">
                             {searchResults.map((result) => (
-                                <div key={result.id} onClick={() => handleInstitutionClick(result.id)} className="search rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">{result.name}</div>
+                                <div key={result.id} onClick={() => handleInstitutionClick(result)} className="search rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">{result.name}</div>
                             ))}
                         </div>
                     </div>
@@ -197,7 +197,7 @@ const HomeTiles = ({ is_institution_approved, is_application_accepted, role, ins
             return (
                 <div>
                     <br /><hr /><br />
-                    <div className="cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/messages">Notifications(Coming Soon)</Link></div>
+                    <div className="cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark"><Link to="/notifications">Notifications</Link></div>
                     <br />
                     <div className="cursor-pointer rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark" ><Link to="/schedules">View Schedules</Link></div>
                 </div>

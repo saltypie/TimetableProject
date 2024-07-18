@@ -36,6 +36,21 @@ const TimetableVotesChart = () => {
     };
 
     const options = {
+        scales: {
+            y: {
+                beginAtZero: false,
+                title: {
+                    display: true,
+                    text: 'Votes'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Table ID'
+                }
+            }
+        },
         responsive: true,
         plugins: {
             legend: {

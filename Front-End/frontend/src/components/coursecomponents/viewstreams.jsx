@@ -2,12 +2,20 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../navigation';
 import { generalPatch, generalDelete, searchFunction,makeNotification } from '../reusable/functions';
+import { DeleteModal } from '../reusable/modals';
 
 const StreamTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [streams, setStreams] = useState([]);
     const [editStreamId, setEditStreamId] = useState(null);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteStreamId,setDeleteStreamId] = useState(null);
+    const [deleteStreamName,setDeleteStreamName] = useState(null);
+
+
     const [editFormData, setEditFormData] = useState({
+        code :'',
         lessons_per_week: ''
     });
 
@@ -27,6 +35,7 @@ const StreamTable = () => {
     const handleEditClick = (stream) => {
         setEditStreamId(stream.id);
         setEditFormData({
+            code: stream.code,
             lessons_per_week: stream.lessons_per_week
         });
     };
@@ -56,19 +65,28 @@ const StreamTable = () => {
         }
     };
 
-    const handleDeleteClick = async (streamId) => {
-        try {
-            await generalDelete('viewsets/streams/', streamId);
-            await makeNotification(`Stream ${streamId} has been removed by Scheduler`);
-            fetchData(); // Refresh the data
-        } catch (error) {
-            console.log(error);
-        }
+    const handleDeleteClick = async (streamId, streamName) => {
+        // try {
+        //     await generalDelete('viewsets/streams/', streamId);
+        //     await makeNotification(`Stream ${streamId} has been removed by Scheduler`);
+        //     fetchData(); // Refresh the data
+        // } catch (error) {
+        //     console.log(error);
+        // }
+
+        setDeleteStreamId(streamId)
+        setDeleteStreamName(streamName)
+        setShowDeleteModal(true)
+        fetchData();
     };
 
     return (
         <div>
             <Navbar title="Home" />
+            <div className="centerholder">
+                <DeleteModal show={showDeleteModal} id={deleteStreamId} name={deleteStreamName} endpoint={'viewsets/streams/'} onClose={() => setShowDeleteModal(false)} itemKind={'Stream'}></DeleteModal>
+            </div>
+
             <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                 <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                     Streams
@@ -100,7 +118,7 @@ const StreamTable = () => {
                     <div className="grid grid-cols-4 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4">
                         <div className="p-2.5 xl:p-5">
                             <h5 className="text-sm font-medium uppercase xsm:text-base">
-                                Stream ID
+                                Stream Code
                             </h5>
                         </div>
                         <div className="p-2.5 xl:p-5">
@@ -129,8 +147,15 @@ const StreamTable = () => {
                         >
                             {editStreamId === stream.id ? (
                                 <>
+
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black dark:text-white">{stream.id}</p>
+                                        <input
+                                            type="text"
+                                            name="code"
+                                            value={editFormData.code}
+                                            onChange={handleEditFormChange}
+                                            className="form-control"
+                                        />
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
                                         <input
@@ -149,7 +174,7 @@ const StreamTable = () => {
                             ) : (
                                 <>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <p className="text-black dark:text-white">{stream.id}</p>
+                                        <p className="text-black dark:text-white">{stream.code}</p>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
                                         <p className="text-black dark:text-white">{stream.lessons_per_week}</p>
@@ -158,7 +183,7 @@ const StreamTable = () => {
                                         <button onClick={() => handleEditClick(stream)} className="btn btn-warning">Edit</button>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <button onClick={() => handleDeleteClick(stream.id)} className="btn btn-danger">Delete</button>
+                                        <button onClick={() => handleDeleteClick(stream.id, stream.code)} className="btn btn-danger">Delete</button>
                                     </div>
                                 </>
                             )}

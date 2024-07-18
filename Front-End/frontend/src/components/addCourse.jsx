@@ -62,7 +62,7 @@ const AddCourse = () => {
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       <div className='wrapper'>
         <form onSubmit={submit}>
-          <h1>Add Course</h1>
+          <h1>Add Department</h1>
 
           <div className="input-box">
             <label htmlFor="courseName">Course Name:</label>
@@ -70,7 +70,7 @@ const AddCourse = () => {
               id="courseName"
               name="courseName"
               type="text" 
-              placeholder="Enter Course Name" 
+              placeholder="Enter Course Department Name" 
               value={courseName} 
               onChange={handleCourseNameChange} 
               required 
@@ -78,7 +78,7 @@ const AddCourse = () => {
           </div>
 
           <div className="input-box">
-            <label htmlFor="subjects">Subjects:</label>
+            <label htmlFor="subjects">Subjects/Courses:</label>
             <select
               id="subjects"
               multiple
@@ -91,7 +91,7 @@ const AddCourse = () => {
               ))}
             </select>
           </div>
-
+              <br /><br />
           <button type="submit">Add</button>
 
           <div className="warning centerholder">

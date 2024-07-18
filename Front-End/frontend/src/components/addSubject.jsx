@@ -56,9 +56,10 @@ const AddSubject = () => {
     };
 
     generalPost('viewsets/courses', body).then((response) => {
-      if (response.Message) {
-        alert(response.Message);
-        setErrorMessage(response.Message);
+      // if (response.Message) {
+      if (!response) {
+        // alert(response.Message);
+        setErrorMessage("Course/Unit with the same code and/or name already exists");
       } else {
         console.log(response);
         alert('Course Subject added successfully');
@@ -74,36 +75,40 @@ const AddSubject = () => {
     <div>
       <Navbar title="Home" isLoggedIn={localStorage.getItem('isLogged')} fname={localStorage.getItem('fname')} />
       
-      <div className='wrapper'>
+      <div className='rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark'>
         <form onSubmit={submit}>
-          <h1>Add Subject Unit</h1>
+          <h1 className='text-title-md2 font-semibold text-primary dark:text-white centerholder'>Add Subject Unit</h1>
 
           <div className="input-box">
             <label htmlFor="course_number">Course Code:</label>
-            <input 
-              id="course_number"
-              name="course_number"
-              type="text" 
-              placeholder="Enter Course Code/Number" 
-              value={courseCode} 
-              onChange={handleCourseCodeChange} 
-              required 
-            />
-            <span className="info" title="This is the code/number given to the course.">ℹ️</span>
+            <div className="centerholder">
+              <input 
+                id="course_number"
+                name="course_number"
+                type="text" 
+                placeholder="Enter Course Code/Number" 
+                value={courseCode} 
+                onChange={handleCourseCodeChange} 
+                required 
+              />
+              <span className="info inline" title="This is the code/number given to the course.">ℹ️</span>
+            </div>
           </div>
-
+          <div className="mb-1"></div>
           <div className="input-box">
             <label htmlFor="course">Course Name:</label>
-            <input 
-              id="course"
-              name="course"
-              type="text" 
-              placeholder="Enter Course Name" 
-              value={course} 
-              onChange={handleCourseChange} 
-              required 
-            />
-            <span className="info" title="This is the name given to the course.">ℹ️</span>
+            <div className="centerholder">
+              <input 
+                id="course"
+                name="course"
+                type="text" 
+                placeholder="Enter Course Name" 
+                value={course} 
+                onChange={handleCourseChange} 
+                required 
+              />
+              <span className="info inline" title="This is the name given to the course.">ℹ️</span>
+            </div>
           </div>
 
           <div className="input-box">
@@ -134,8 +139,9 @@ const AddSubject = () => {
               ))}
             </select>
           </div>
-
-          <button type="submit">Add</button>
+          <div className="centerholder">
+            <button className="justify-center inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" type="submit">Add</button>
+          </div>
 
           <div className="warning centerholder">
             {errorMessage && <p>{errorMessage}</p>}

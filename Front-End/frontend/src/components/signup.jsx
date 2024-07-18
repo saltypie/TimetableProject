@@ -81,11 +81,12 @@ const Signup = () => {
   return (
     <div>
       <Navbar />
-      <div className='wrapper'>
+      <div className='rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark'>
         <form action="" onSubmit={submit}>
-          <h1>Signup</h1>
-          <div className="input-box">
+          <h1 className='text-title-md2 font-semibold text-primary dark:text-white centerholder mb-2'>Signup</h1>
+          <div className="">
             <input 
+              className='mb-3 w-[50vw] rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
               name="email"
               type="email" 
               placeholder="Email" 
@@ -93,20 +94,27 @@ const Signup = () => {
               onChange={handleEmailChange} 
               required 
             />
-            <MdEmail className='icon'/>
-            <span className="info" title="Your email must be a valid email address.">ℹ️</span>
+            <MdEmail className='inline'/>
+            <span className="inline" title="Your email must be a valid email address.">ℹ️</span>
+          </div>
+          
+          <div className="centerholder">
+            <input
+            className='mr-2 w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+            name="fname" value={fname} onChange={handleFnameChange} type="text" placeholder="First Name" required 
+            />
+            <input
+            className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary' 
+            name="lname" value={lname} onChange={handleLnameChange} type="text" placeholder="Last Name" required 
+            />
           </div>
 
-          <div className="input-box">
-            <input name="fname" value={fname} onChange={handleFnameChange} type="text" placeholder="First Name" required />
-          </div>
+          {/* <div className="input-box">
+          </div> */}
 
-          <div className="input-box">
-            <input name="lname" value={lname} onChange={handleLnameChange} type="text" placeholder="Last Name" required />
-          </div>
-
-          <div className="input-box">
-            <input 
+          <div className="centerholder mt-5">
+            <input
+              className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary' 
               name="password"
               type="password" 
               placeholder="Password" 
@@ -116,22 +124,24 @@ const Signup = () => {
               pattern="^(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$" 
               title="Password must be at least 8 characters long and contain at least one symbol" 
             />
-            <FaLock className='icon'/>
-            <span className="info" title="Your password must be at least 8 characters long and contain at least one symbol.">ℹ️</span>
-          </div>
+          {/* </div>
 
-          <div className="input-box">
+          <div className="input-box"> */}
             <input 
+              className='ml-2 w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
               type="password" 
               placeholder="Confirm Password" 
               value={confirmPassword} 
               onChange={handleConfirmPasswordChange} 
               required 
             />
+            <FaLock className='icon inline'/>
+            <span className="info inline" title="Your password must be at least 8 characters long and contain at least one symbol.">ℹ️</span>
             {passwordMatch ? null : <span style={{ color: 'red' }}>Passwords do not match</span>}
           </div>
-
-          <button type="submit" disabled={!passwordMatch}>SignUp</button>
+          <div className="centerholder mt-3">
+            <button  className="justify-center inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10" type="submit" disabled={!passwordMatch}>SignUp</button>
+          </div>
 
           <div className="register-link">
             <p>Already have an account?<Link to="/Login">Login</Link></p>

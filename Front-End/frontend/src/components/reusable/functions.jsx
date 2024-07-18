@@ -58,8 +58,12 @@ export const generalPost = async (endpoint,data) => {
 
         return true;   
     } catch (error) {
+        if (error.response.data.detail) {
+            return error.response.data
+        }
         console.log(error);
         return false;
+
     }
 }
 
@@ -174,3 +178,25 @@ export const makeNotification = async (description) => {
 export const fomartDateTime = (date) => {
     return date.slice(0, 10) + " " + date.slice(11, 16)
 }
+
+export const generateTimesWithInterval = (startTime, endTime, intervalMinutes) => {
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+    const times = [];
+  
+    const startDate = new Date();
+    startDate.setHours(startHour, startMinute, 0, 0);
+    const endDate = new Date();
+    endDate.setHours(endHour, endMinute, 0, 0);
+  
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      const time = currentDate.toTimeString().slice(0, 5); // Format as HH:MM
+      times.push(time);
+  
+      currentDate.setMinutes(currentDate.getMinutes() + intervalMinutes);
+    }
+    return times;
+  }
+
+  

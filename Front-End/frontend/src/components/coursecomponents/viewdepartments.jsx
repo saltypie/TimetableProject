@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../navigation';
 import { generalPatch, generalDelete, searchFunction,makeNotification } from '../reusable/functions';
+import { DeleteModal } from '../reusable/modals';
+
 
 const DepartmentTable = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [departments, setDepartments] = useState([]);
     const [editDepartmentId, setEditDepartmentId] = useState(null);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteDepartmentId,setDeleteDepartmentId] = useState(null);
+    const [deleteDepartmentName,setDeleteDepartmentName] = useState(null);
+
     const [editFormData, setEditFormData] = useState({
         dept_name: ''
     });
@@ -57,24 +64,31 @@ const DepartmentTable = () => {
         }
     };
 
-    const handleDeleteClick = async (departmentId) => {
-        try {
-            await generalDelete('viewsets/departments/', departmentId);
-            await makeNotification(`Department ${editFormData.dept_name} has been removed by Scheduler`);
-            fetchData();
-        } catch (error) {
-            console.log(error);
-        }
+    const handleDeleteClick = async (departmentId,departmentName) => {
+        // try {
+        //     await generalDelete('viewsets/departments/', departmentId);
+        //     await makeNotification(`Department ${editFormData.dept_name} has been removed by Scheduler`);
+        //     fetchData();
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        setDeleteDepartmentId(departmentId)
+        setDeleteDepartmentName(departmentName)
+        setShowDeleteModal(true)
+        fetchData();
     };
 
     return (
         <div>
             <Navbar title="Home" />
+            <div className="centerholder">
+                <DeleteModal show={showDeleteModal} id={deleteDepartmentId} name={deleteDepartmentName} endpoint={'viewsets/departments/'} onClose={() => setShowDeleteModal(false)} itemKind={'Department'}></DeleteModal>
+            </div>
+
             <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                 <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
                     Departments
                 </h4>
-
                 <div className="flex flex-col">
                     <div className="grid grid-cols-2 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-3">
                         <div className="p-2.5 xl:p-5">
@@ -126,7 +140,7 @@ const DepartmentTable = () => {
                                         <button onClick={() => handleEditClick(department)} className="btn btn-warning">Edit</button>
                                     </div>
                                     <div className="flex items-center justify-center p-2.5 xl:p-5">
-                                        <button onClick={() => handleDeleteClick(department.id)} className="btn btn-danger">Delete</button>
+                                        <button onClick={() => handleDeleteClick(department.id,department.dept_name)} className="btn btn-danger">Delete</button>
                                     </div>
                                 </>
                             )}

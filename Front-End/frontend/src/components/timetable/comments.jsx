@@ -34,21 +34,25 @@ const CommentComponent = ({ scheduleId }) => {
 
     return (
         <div className="comments-container">
-            <h3 className="text-title-md2 font-semibold text-primary dark:text-white">Comments</h3>
-            <form onSubmit={handleSubmitComment} className="new-comment-form">
-                <textarea
-                    className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Write a comment..."
-                    required
-                /><br/>
-                <button type="submit"
-                    className="inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-                >
-                    Post Comment
-                </button>
-            </form>
+            <div className="centerholder">
+                <div>
+                    <h3 className="text-title-md2 font-semibold text-primary dark:text-white">Comments</h3>
+                    <form onSubmit={handleSubmitComment} className="new-comment-form">
+                        <textarea
+                            className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Write a comment..."
+                            required
+                        /><br/>
+                        <button type="submit"
+                            className="inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+                        >
+                            Post Comment
+                        </button>
+                    </form>       
+                </div>
+            </div>
             <div className="comments-list">
                 {comments.map((comment) => (
                     <div key={comment.id} className="cshadow-md rounded-lg p-4 break-words bg-white mb-2">

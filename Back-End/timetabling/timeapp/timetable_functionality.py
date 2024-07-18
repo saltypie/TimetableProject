@@ -14,9 +14,9 @@ TOURNAMENT_SELECTION_SIZE = 3
 MUTATION_RATE = 0.05
 
 class Data:
-    def __init__(self, institution):
+    def __init__(self, institution,timeset):
         self.rooms = Room.objects.filter(institution=institution)
-        self.meeting_times = MeetingTime.objects.filter(institution=institution)
+        self.meeting_times = MeetingTime.objects.filter(institution=institution, timeset=timeset)
         self.instructors = UserData.objects.filter(institution=institution, role__name="instructor")
         self.courses = Course.objects.filter(institution=institution)
         self.departments = Department.objects.filter(institution=institution)
@@ -195,10 +195,10 @@ class GeneticAlgorithm:
         tournament_population.get_schedules().sort(key=lambda x: x.get_fitness(), reverse=True)
         return tournament_population
 
-def add_sched_to_db(schedule,requester):
+def add_sched_to_db(schedule,requester,timeset):
     classes = schedule.get_classes()
-    # user_data_instance = UserData.objects.get(id=requester.id)
-    created_table = Timetable.objects.create(author=requester, institution=requester.institution)
+    
+    created_table = Timetable.objects.create(author=requester, institution=requester.institution,timeset=TimeSet.objects.get(id=timeset))
     for lesson in classes:
         Lesson.objects.create(
             department=lesson.get_department(),
@@ -211,9 +211,24 @@ def add_sched_to_db(schedule,requester):
         )
     return created_table
 
-def generate_timetables(requester):
+def generate_timetables(requester,timeset):
     institution = requester.institution
-    data = Data(institution)
+    print("Hello",timeset)
+    data = Data(institution, timeset)
+
+    if not data.get_meeting_times():
+        print("Error: No times available.")
+        return {"Error": "No meeting times available."}
+    if not data.get_courses():
+        print("Error: No courses available.")
+        return {"Error": "No courses available."}
+    if not data.get_rooms():
+        print("Error: No rooms available.")
+        return {"Error": "No rooms available."}
+    if not Stream.objects.filter(institution=institution).exists():
+        print("Error: No streams available.")
+        return {"Error": "No streams available."}
+
     population = Population(POPULATION_SIZE, data)
     generation_count = 0
     population.get_schedules().sort(key=lambda x: x.get_fitness(), reverse=True)
@@ -227,8 +242,11 @@ def generate_timetables(requester):
         population.get_schedules().sort(key=lambda x: x.get_fitness(), reverse=True)
         schedule = population.get_schedules()[0]
         print("Conflicts:", schedule.numberOfConflicts)
+
+    if len(schedule.get_classes()) <= 0 or schedule.get_fitness() !=1:
+        return {"Error": "Unfeasible Constraints"}
     created_objects = {}
-    created_objects["created_schedule"] = add_sched_to_db(schedule,requester)
+    created_objects["created_schedule"] = add_sched_to_db(schedule,requester,timeset)#Comment this out and begin experimentation
     created_objects["created_classes"] = Lesson.objects.filter(timetable=created_objects["created_schedule"])
     return created_objects
 
