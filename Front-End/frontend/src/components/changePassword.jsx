@@ -1,25 +1,24 @@
-// ChangePassword.js
 import React, { useState } from 'react';
 import './Login.css';
-import { useParams } from 'react-router-dom'; // Import useParams
 import { FaLock } from "react-icons/fa";
-import Navbar from './navigation.jsx';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
+import Navbar from './navigation';
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
-
+  // const [errorMessage, setErrorMessage] = useState(true);
+  const {id} = useParams();//Q?
+  
   const handleOldPasswordChange = (e) => {
     setOldPassword(e.target.value);
   };
-
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
   };
-
   const handleConfirmNewPasswordChange = (e) => {
     setConfirmNewPassword(e.target.value);
     setPasswordMatch(e.target.value === newPassword);
@@ -57,8 +56,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div>
-      <Navbar title="Home"/>
+    <div><Navbar title="Home"/>
       <div className='wrapper'>
         <form onSubmit={submit}>
           <h1>Reset Password</h1>
@@ -100,11 +98,12 @@ const ChangePassword = () => {
             />
             {passwordMatch ? null : <span style={{ color: 'red' }}>Passwords do not match</span>}
           </div>
-
           <button type="submit" disabled={!passwordMatch}>Submit</button>
           <span className="info" title="">ℹ️</span>
+
         </form>    
       </div>
+    
     </div>
   );
 };
